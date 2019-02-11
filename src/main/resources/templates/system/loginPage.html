@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="common/style_script::head('如意商城-登录','/static/bootstrap-3.3.7/css/bootstrap.css')">
+	<meta  charset="UTF-8"/>
+	<title>如意商场登录</title>
+	</head>
+	<body style="background-color:#F5F5F5">
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-3" style="font-size:50px;margin-top:20px;color:red;">
+				<font style="font-family:FZShuTi">RUYI&nbsp;&nbsp;如意</font>
+			</div>
+			<div class="col-md-8"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" style="background-color:#9F031B">
+				<div class="row">
+					<div class="col-md-8"></div>
+					<div class="col-md-4" style="background-color:#fff;
+						height:465px;width:340px;margin:30px 0px 30px 0px;
+						border-radius:10px;">
+						<div style="text-align:center;font-size:30px;margin-top:15px;letter-spacing:20px;"><strong>登录</strong></div>
+						<div style="margin-top:30px;width:100%">
+							<form id="login_form" action="/thy/sys/toLogin"  method="POST" 
+							class="bs-example bs-example-form" role="form" onsubmit="onLoginSubmit();">
+								<div class="form-group">
+									<div class="input-group">
+										<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+										<input type="text" id="username" name="username" class="form-control"  placeholder="用户名 "/>
+									</div>
+								</div>
+								<div class="form-group" style="margin-top:40px;">
+									<div class="input-group">
+										<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+										<input type="password" id="password" name="password" class="form-control"  placeholder="密码"/>
+									</div>	
+								</div>
+								<div class="form-group" style="margin-top:5px;width:100%;">
+									<span id="login_msg"></span>
+								</div>
+								<div class="input-group" style="margin-top:40px;width:100%">
+									<input style="width:100%" id="btn_submit" type="submit" class="btn btn-danger" value="登     录"/>
+								</div>
+								<div class="form-group" style="margin-top:15px;margin-left:140px;width:100%;">
+								  	<a>忘记密码</a>
+								  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								  	<a th:href="@{/thy/static/registerPage}">免费注册</a>
+								</div>
+							</form>
+						</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(function(){
+			$("#login_form").bootstrapValidator({
+				message:'This value is not valid',
+				feedbackIcons:{
+					valid: 'glyphicon glyphicon-ok',
+		            invalid: 'glyphicon glyphicon-remove',
+		            validating: 'glyphicon glyphicon-refresh'
+				},
+				fields:{
+					username:{
+						message:'用户名验证失败',
+						validators:{
+							notEmpty: {
+								message:'用户名不能为空'
+							}
+						}
+					},
+					password:{
+						validators:{
+							notEmpty: {
+								message:'密码不能为空'
+							}
+						}
+						
+					}
+				}
+			}).on('success.form.bv',function(){
+				//验证合格
+				var flag=$("#login_form").data("bootstrapValidator").isValid();
+				if(flag){
+					var $form=$("#login_form");
+					//使用Ajax提交form表单
+					$.ajax({
+						type:'POST',
+						url:$form.attr('action'),
+						data:$form.serialize(),
+						dataType:'json',
+						beforeSend:function(){
+							layer.msg('正在登陆......');
+						},
+						success:function(data){
+							/* window.open('/thy/shoppingPage','首页'); */
+							if(data.status==200){
+								window.location.href='/thy/shoppingPage';	
+							}else{
+								/* window.location.href='/thy/sys/toLoginPage'; */
+								$("#login_msg").html(data.message);
+							}
+						},
+						error:function(e){
+							console.log(e);
+							layer.msg('出错咯o(╥﹏╥)o,请与后台联系!',{
+                                btn:'我知道了'
+                            })
+						}
+					})
+				}
+			})
+		});
+	
+	</script>
+</html>

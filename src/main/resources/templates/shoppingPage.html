@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/style_script::head('首页','/static/bootstrap-3.3.7/css/bootstrap.css')">
+	<meta  charset="UTF-8"/>
+</head>
+	<link th:href="@{/static/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{/static/online.css}" rel="stylesheet"/>
+	<script th:src="@{/static/bootstrap-3.3.7/js/bootstrap.min.js}"  type="text/javascript" ></script>
+	<script th:src="@{/static/online.js}"  type="text/javascript" ></script>
+	<link th:href="@{/static/online.css}" rel="stylesheet"/>
+	<script th:src="@{/static/online.js}" type="text/javascript"></script>	
+	<body style="background-color:#F5F5F5">
+	<div class="container" style="width:100%">
+		<div th:replace="common/navbar :: navbar_top"></div>
+ 		<div style="margin-top:50px;width:100%">
+			<div class="row">
+				<div id="myCarousel" class="carousel slide">
+					<!-- 轮播(Carousel)指标 -->
+					<ol class="carousel-indicators">
+						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						<li data-target="#myCarousel" data-slide-to="1" th:each="lbt,lbtStat : ${Lbts}"></li>
+					</ol>
+					<!-- 轮播(Carousel)项目 -->
+					<div class="carousel-inner">
+						<div class="item active">
+							<img alt="" src="../static/img/2.jpg" style="width:100%;height:400px;"/>
+							<!-- <div class="carousel-caption">标题1</div> -->
+						</div>
+						<div class="item" th:each="lbt : ${Lbts}">
+							<img alt="" th:src="@{'/thy/getfile?id='+${lbt.id}}" style="width:100%;height:400px;"/>
+							<!-- <div class="carousel-caption">标题2</div> -->
+						</div>
+					</div>
+					<!-- 轮播(carousel)导航 -->
+					<a class="carousel-control left" href="#myCarousel"  role="button" data-slide="prev">
+						<span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="carousel-control right" href="#myCarousel" role="button" data-slide="next">
+						<span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+			</div>			
+		</div>
+		<div class="row" style="margin:20px;">
+			<div class="row">
+				<div class="col-lg-12">
+					<font style="font-size:40px;"><strong>衣物鞋帽</strong></font>
+				</div>
+			</div>
+			<div class="row" align="center">
+				
+				<div th:if="${Items !=null}">
+				<div class="col-lg-3"  th:each="item : ${Items}" >
+					<a class="thumbnail">
+						<img alt="" th:src="@{'/thy/getfile?id='+${item.id}}" class="img-rounded" style="width:300px;height:400px;"/>
+					</a>	
+					<div class="caption thumbnail">
+							<table style="width:100%">
+								<tr>
+									<td class="text-muted pull-left">【商品名】</td>
+									<td class="text-muted pull-left">
+										<span th:text="${item.title}"></span>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-top:10px;" class="text-muted pull-left">【价格】</td>
+									<td class="text-muted pull-left" style="padding-top:10px;">
+										$<span th:text="${item.price/100.0}"></span>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-top:10px;" class="text-muted pull-left">【卖点】</td>
+									<td class="text-muted pull-left" style="padding-top:10px;">
+										<span th:text="${item.sell_point}"></span>
+									</td>		
+								</tr>
+							</table>
+							<p style="margin-top:20px;">
+								<a href="/thy/gwc" class="btn btn-primary" role="button">立即购买</a>
+								<a href="#" class="btn btn-primary" role="button">商品详情</a>
+							</p>	
+					</div>
+				</div>
+				</div>
+				
+				<div th:if="${Items==null}">
+					<h3>商品正在上架中，等稍等.................</h3>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:20px;">
+			<div class="row">
+				<div class="col-lg-12">
+					<font style="font-size:40px;"><strong>生活家居</strong></font>
+				</div>
+			</div>
+			<div calss="row" align="center">
+				<div class="col-lg-3">
+					<img alt="" th:src="@{/static/img/7.jpg}" class="img-rounded" style="width:300px;height:485px;"/>
+				</div>
+				<div class="col-lg-3">
+					<img alt="" th:src="@{/static/img/7.jpg}" class="img-rounded" style="width:300px;height:485px;"/>
+				</div>
+				<div class="col-lg-3">
+					<img alt="" th:src="@{/static/img/7.jpg}" class="img-rounded" style="width:300px;height:485px;"/>
+				</div>
+				<div class="col-lg-3" >
+					<img alt="" th:src="@{/static/img/7.jpg}" class="img-rounded" style="width:300px;height:485px;"/>
+				</div>
+			</div>
+		</div>
+		<!-- <div th:replace="common/navbar :: navbar_bottom"></div> -->
+		<div>
+			<div th:include="item/kfPage :: kfPage"/>	
+		</div>
+	</div>
+	<div id="loginModal">
+	</div>
+	</body>
+</html>
+<script>
+	$(function(){
+		$("#myCarousel").carousel({
+			interval:3000
+		})
+	})
+</script>

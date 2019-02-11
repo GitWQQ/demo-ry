@@ -1,0 +1,87 @@
+<div id="panel_one"  class="panel panel-primary"  style="padding-bottom:0px; display:none" th:fragment="addItem">
+ 							<div class="panel-body panel_body_style">
+							<div class="row" style="margin:10px 50px 10px 10px;background-color:#FFF;">
+								<div class="col-md-6">
+									<form id="item_add_form" style="width:100%" class="bs-example bs-example-form" role="form" enctype="multipart/form-data">
+										<input type="hidden" id="image" name="image" value=""/>
+										<div class="input-group" style="width:100%;margin-top:30px;">
+											<div class="row">
+												<div class="col-md-2">
+													<span class="span-control">商品名称:</span>
+												</div>
+												<div class="col-md-8">
+													<input type="text" id="title" name="title" class="form-control"  placeholder="商品名称"/>
+												</div>
+												<div class="col-md-2"></div>
+											</div>
+										</div>
+										<div class="input-group" style="width:100%;margin-top:30px;">
+											<div class="row">
+												<div class="col-md-2">
+													<span class="span-control">商品类目:</span>
+												</div>
+												<div class="col-md-8">
+													<select id="splx" name="splx" class="form-control"></select>
+												</div>	
+												<div class="col-md-2"></div>
+											</div>
+										</div>
+										<div class="input-group" style="width:100%;margin-top:30px;">
+											<div class="row">
+												<div class="col-md-3">
+													<span class="span-control">尺寸/尺码:</span>
+												</div>
+												<div class="col-md-8">
+													
+												</div>	
+												<div class="col-md-1"></div>
+											</div>
+										</div>
+										<div class="input-group" style="width:100%;margin-top:30px;">
+											<div class="row">
+												<div class="col-md-2">
+													<span class="span-control">商品价格:</span>
+												</div>
+												<div class="col-md-8">
+													<input type="text" id="price" name="price" class="form-control" placeholder="0.00(￥)"/>
+												</div>	
+												<div class="col-md-2"></div>
+											</div>
+										</div>
+										<div class="input-group" style="width:100%;margin-top:30px;">
+											<div class="row">
+												<div class="col-md-2">
+													<span class="span-control">商品库存:</span>
+												</div>
+												<div class="col-md-8">
+													<input type="text" id="num" name="num" class="form-control"  placeholder="0(件)"/>
+												</div>	
+												<div class="col-md-2"></div>
+											</div>
+										</div>
+										<div style="width:100%;margin-top:30px;"><span><h4>商品卖点(描述):</h4></span></div>
+										<div class="input-group">
+											 <textarea class="form-control" id="sell_point" name="sell_point"  rows="6" style="width:600px;"></textarea>
+										</div>
+										<div style="width:100%;margin-top:30px;"><span><h4>商品图片:</h4></span></div>
+										<div class="input-group" style="width:600px;">
+											<input type="hidden" name="imglx" id="imglx" value="1"/>
+											<input type="file" name="img_file" id="img_file" multipart="multipart" class="file-loading" />
+										</div>
+										<br/>
+										<div class="input-group">
+											<div class="row">
+												<div class="col-md-1 pull-left">
+													<button type="button" name="submit" class="btn btn-primary" style="width:100px;" onclick="btn_submit();">提&nbsp;交</button>
+												</div>
+												<div class="col-md-1 pull-right">
+													<button type="reset" id="btn_cancel" class="btn btn-primary" style="width:100px;">取&nbsp;消</button>
+												</div>
+											</div>
+										</div>	
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+		

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta  charset="UTF-8"/>
+</head>
+<body>
+<div id="panel_four" class="panel panel-primary" style="padding-bottom:0px; display:none" th:fragment="manager">
+	<div class="panel-body panel_body_style">
+		<ul id="PageManager" class="nav nav-tabs">
+			<li class="active dropdown"> 
+				<a href="#" id="lunBoTu" class="dropdown-toggle" data-toggle="dropdown">轮播图管理
+					<b class="caret"></b>
+				</a>
+				 <ul class="dropdown-menu" role="menu" aria-labelledby="lunBoTu">
+           	 		<li><a  href="#preViewLBT" tabindex="-1" data-toggle="tab" onclick="preViewLBT();" >预览</a></li>
+           	 		<li><a  href="#addLBT" tabindex="-1" data-toggle="tab" onclick="">新增</a></li>
+        		</ul>
+			</li>
+			<li>
+				<a href="#xinWen" data-toggle="tab">新闻管理</a>
+			</li>
+			<li>
+				<a href="#Email" data-toggle="tab">邮件管理</a>
+			</li>
+			<li>
+				<a href="#Persion" data-toggle="tab">联系人信息管理</a>
+			</li>
+		</ul>
+		<div id="PageManagerContent" class="tab-content">
+			<div id="preViewLBT" class="tab-pane fade in active">
+				<div class="row">
+					<div class="col-md-2"><h5>---轮播图预览---</h5></div>
+				</div>
+			</div>
+			<div id="xinWen" class="tab-pane fade">
+				<div class="row">
+					新闻
+				</div>
+			</div>
+			<div id="Email" class="tab-pane fade">
+				<div class="row">
+					Email管理
+				</div>
+			</div>
+			<div id="Persion" class="tab-pane fade">
+				<div class="row">
+					联系人信息管理
+				</div>
+			</div>
+			
+			<div id="addLBT" class="tab-pane fade" style="height:450px;">
+					<div class="row">
+						<h5>---新增轮播图---</h5>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<form id="lbt_add_form" class="bs-example bs-example-form" role="form" enctype="multipart/form-data">
+								<input type="hidden" name="lbtlx" id="lbtlx" value="2"/>
+								<input type="file" name="lbt_file" id="lbt_file" multipart="multipart" class="file-loading"/>
+							</form>
+						</div>
+					</div>
+			</div>	
+		</div>
+	</div>
+	<div class="panel-footer">
+		
+	</div>
+</div>
+</body>
+</html>

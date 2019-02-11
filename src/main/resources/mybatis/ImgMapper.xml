@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ImgMapper">
+	<resultMap type="Img" id="imgMap">
+		<id column="ID" jdbcType="VARCHAR"  property="id" />
+		<result column="IMGLX" jdbcType="VARCHAR" property="imglx"/>
+		<result column="IMG" jdbcType="BLOB" property="img"/>
+		<result column="IMG_NAME" jdbcType="VARCHAR" property="img_name"/>
+		<result column="IMG2" jdbcType="BLOB" property="img2"/>
+		<result column="IMG2_NAME" jdbcType="VARCHAR" property="img2_name"/>
+		<result column="IMG3" jdbcType="BLOB" property="img3"/>
+		<result column="IMG3_NAME" jdbcType="VARCHAR" property="img3_name"/>
+		<result column="CREATED" jdbcType="VARCHAR" property="created"/>
+		<result column="GXSJC" jdbcType="VARCHAR" property="gxsjc"/>
+		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>		
+	</resultMap>
+	<sql id="columns">
+		ID,IMGLX,IMG,IMG_NAME,IMG2,IMG2_NAME,IMG3,IMG3_NAME,CREATED,GXSJC,YXX
+	</sql>
+	<sql id="queryByParameter">
+		<if test="id !=null and id!=''">
+		  	AND id=#{id,jdbcType=VARCHAR}
+		</if>
+		<if test="imglx !=null and imglx !=''">
+			AND imglx=#{imglx,jdbcType=VARCHAR}
+		</if>
+		<if test="img !=null">
+			AND	img=#{img,jdbcType=BLOB}
+		</if>
+		<if test="img_name !=null and img_name !=''">
+			AND img_name=#{img_name,jdbcType=VARCHAR}
+		</if>
+		<if test="img2 !=null">
+			AND img2=#{img2,jdbcType=BLOB}
+		</if>
+		<if test="img2_name !=null and img2_name !=''">
+			AND img2_name=#{img2_name,jdbcType=VARCHAR}
+		</if>
+		<if test="img3 !=null">
+			AND img3=#{img3,jdbcType=BLOB}
+		</if>
+		<if test="img3_name !=null and img3_name !=''">
+			AND img3_name=#{img3_name,jdbcType=VARCHAR}
+		</if>
+		<if test="created !=null and created !=''">
+			AND created=#{created,jdbcType=VARCHAR}
+		</if>
+		<if test="gxsjc !=null and gxsjc !=''">
+			AND gxsjc=#{gxsjc,jdbcType=VARCHAR}
+		</if>
+		<if test="yxx !=null and yxx!=''">
+			AND	yxx=#{yxx,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	<select id="getImgByParamMap" parameterType="java.util.Map" resultMap="imgMap">
+		SELECT
+			TB_IMG.ID,
+			TB_IMG.IMG,
+			TB_IMG.IMG_NAME,
+			TB_ITEM.TITLE,
+			TB_ITEM.PRICE,
+			TB_ITEM.SELL_POINT 
+		FROM TB_IMG,TB_ITEM
+		<where>
+			TB_IMG.IMG_NAME=TB_ITEM.IMAGE
+			AND TB_IMG.YXX=1
+			AND TB_ITEM.YXX=1
+			AND TB_ITEM.STATUS=1
+			AND TB_IMG.IMGLX=1
+			<if test="title !=null and title !=''">
+				AND title=#{title,jdbcType=VARCHAR}
+			</if>
+		</where> 
+	</select>
+	<select id="getImgByParamMap2" parameterType="java.util.Map" resultMap="imgMap">
+		SELECT 
+		<include refid="columns"/> FROM TB_IMG
+		<where>
+			<include refid="queryByParameter"/>
+		</where>
+	</select>
+	
+	<select id="getImgLBT" parameterType="java.util.Map" resultMap="imgMap">
+		SELECT 
+		<include refid="columns"/> FROM TB_IMG
+		<where>
+			<include refid="queryByParameter"/>
+		</where>
+	</select>
+	
+	<update id="updateById" parameterType="java.util.Map">
+		UPDATE  TB_IMG
+		<set>
+			<if test="imglx !=null and imglx !=''">
+				imglx=#{imglx,jdbcType=VARCHAR},
+			</if>
+			<if test="img !=null and img !=''">
+				img=#{img,jdbcType=BLOB},
+			</if>
+			<if test="img_name !=null and img_name !=''">
+				img_name=#{img_name,jdbcType=VARCHAR},
+			</if>
+			<if test="gxsjc !=null and gxsjc !=''">
+				gxsjc=#{gxsjc,jdbcType=VARCHAR},
+			</if>
+			<if test="yxx !=null and yxx !=''">
+				yxx=#{yxx,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE id=#{id,jdbcType=VARCHAR} 
+		AND imglx=#{imglx,jdbcType=VARCHAR}			
+	</update>
+
+	<insert id="insertImgRecord" parameterType="java.util.Map">
+		INSERT INTO TB_IMG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id !=null and id !=''">
+				ID,
+			</if>
+			<if test="imglx !=null and imglx !=''">
+				IMGLX,
+			</if>
+			<if test="img !=null and img !=''">
+				IMG,
+			</if>
+			<if test="img_name !=null and img_name !=''">
+				IMG_NAME,
+			</if>
+			<if test="img2 !=null and img2 !=''">
+				IMG2,
+			</if>
+			<if test="img2_name !=null and img2_name !=''">
+				IMG2_NAME,
+			</if>
+			<if test="img3 !=null and img3 !=''">
+				IMG3,
+			</if>
+			<if test="img3_name !=null and img3_name !=''">
+				IMG3_NAME,
+			</if>
+			<if test="created !=null and created !=''">
+				CREATED,
+			</if>
+			<if test="gxsjc !=null and gxsjc !=''">
+				GXSJC,
+			</if>
+			<if test="yxx !=null and yxx !=''">
+				YXX,
+			</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="id !=null and id !=''">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="imglx !=null and imglx !=''">
+				#{imglx,jdbcType=VARCHAR},
+			</if>
+			<if test="img !=null and img !=''">
+				#{img,jdbcType=BLOB},
+			</if>
+			<if test="img_name !=null and img_name !=''">
+				#{img_name,jdbcType=VARCHAR},
+			</if>
+			<if test="img2 !=null and img2 !=''">
+				#{img2,jdbcType=BLOB},
+			</if>
+			<if test="img2_name !=null and img2_name !=''">
+				#{img2_name,jdbcType=VARCHAR},
+			</if>
+			<if test="img3 !=null and img3 !=''">
+				#{img3,jdbcType=BLOB},
+			</if>
+			<if test="img3_name !=null and img3_name !=''">
+				#{img3_name,jdbcType=VARCHAR},
+			</if>
+			<if test="created !=null and created !=''">
+				#{created,jdbcType=VARCHAR},
+			</if>
+			<if test="gxsjc !=null and gxsjc !=''">
+				#{gxsjc,jdbcType=VARCHAR},
+			</if>
+			<if test="yxx !=null and yxx !=''">
+				#{yxx,jdbcType=VARCHAR},
+			</if>
+		</trim>	
+	</insert>
+	
+</mapper>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="common/style_script::head('如意商场-注册','/static/bootstrap-3.3.7/css/bootstrap.css')">
+	<meta  charset="UTF-8"/>
+	<title></title>
+	</head>
+	<body style="background-color:#F5F5F5">
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-3" style="font-size:50px;color:red;">
+				<font style="font-family:FZShuTi">RUYI&nbsp;&nbsp;如意</font>
+			</div>
+			<div class="col-md-8"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" style="background-color:#9F031B;">
+				<div class="row">
+					<div class="col-md-4"></div>
+					<div class="col-md-5" style="background-color:#fff;
+						height:500px;width:35%;margin:30px 0px 30px 0px;
+						border-radius:10px;">
+						<div style="text-align:center;font-size:30px;margin-top:15px;letter-spacing:20px;"><strong>注册</strong></div>
+						<div style="margin-top:30px;width:100%">
+							<form id="regeist_form" action="/thy/sys/toRegist"  method="POST" 
+							class="form-horizontal" role="form" onsubmit="onLoginSubmit();">
+								<div class="form-group">
+									<label class="col-md-3 col-lg-3 control-label">用户名:</label>
+									<div class="col-md-8">
+										<input type="text" id="username" name="username" class="form-control"  placeholder="用户名 "/>
+									</div>
+								</div>
+								<div class="form-group" style="margin-top:20px;">
+									<label class="col-md-3 col-lg-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+									<div class="col-md-8">
+										<input type="password" id="password" name="password" class="form-control"  placeholder="密码"/>
+									</div>	
+								</div>
+								<div class="form-group" style="margin-top:20px;">
+									<label class="col-md-3 col-lg-3 control-label">手机号:</label>
+									<div class="col-md-8 col-lg-8">
+										<input type="text" id="phone" name="phone" class="form-control" placeholder="手机号"/>
+									</div>
+								</div>
+								<div class="form-group" style="margin-top:20px;">
+									<label class="col-md-3 col-lg-3 control-label">邮&nbsp;&nbsp;&nbsp;&nbsp;箱:</label>
+									<div class="col-md-8">
+										<input type="text" id="email" name="email" class="form-control" placeholder="邮箱" />
+									</div>
+								</div>
+								<div class="form-group" style="margin-top:20px;">
+									<label class="col-md-3 col-lg-3 control-label">确认密码:</label>
+									<div class="col-md-8">
+										<input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="确认密码" />
+									</div>
+								</div>
+								<div class="input-group" style="margin-top:35px;width:100%;">
+									<input style="width:45%;float:left;letter-spacing:20px;" id="btn_regist" type="submit" class="btn btn-danger" value="注册"/>
+									<input style="width:45%;float:right;letter-spacing:20px;" id="btn_cancel" type="reset" class="btn btn-info" value="取消"/>
+								</div>
+								<div class="form-group" style="margin-top:15px;width:100%">
+								  	<a th:href="@{/thy/static/toLoginPage}" style="float:right;padding-right:50px;letter-spacing:20px;">登录</a>
+								</div>
+							</form>
+						</div>	
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+				<div class="row">
+					<div class="col"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(function(){
+			$("#regeist_form").bootstrapValidator({
+				message:'This value is not valid',
+				feedbackIcons:{
+					valid: 'glyphicon glyphicon-ok',
+		            invalid: 'glyphicon glyphicon-remove',
+		            validating: 'glyphicon glyphicon-refresh'
+				},
+				fields:{
+					username:{
+						message:'用户名验证失败',
+						validators:{
+							notEmpty: {
+								message:'用户名不能为空'
+							},
+							stringLength:{
+								min:2,
+								max:15,
+								message:'用户名长度必须在2到15位之间'
+							},
+							threshold:2,
+							//设置2个字符以上才发送请求,(默认input中输入一个字符就会向服务器发送请求，设置限制，6个字符以上才发送请求)
+							//ajax验证器,向服务器发送当前input name的值，获取一个json数据，返回的json格式应该是{'valid',true}
+							remote:{
+								message:'用户名已经被使用,请更换',
+								url:'/thy/sys/checkNameExist',
+								delay:1000,
+								//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type:'POST'//请求方式
+							}
+						}
+					},
+					password:{
+						validators:{
+							notEmpty: {
+								message:'密码不能为空'
+							}
+						}
+						
+					},
+					phone:{
+						validators:{
+							notEmpty:{
+								message:'手机号码不能为空!'
+							},
+							regexp:{
+								regexp:/^1[34578]\d{9}$/,
+								message:'手机号码格式有误!'
+							}
+						}
+					},
+					email:{
+						validators:{
+							regexp:{
+								regexp:/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
+								message:'邮箱格式有误!'
+							}
+						}
+					},
+					confirm_password:{
+						validators:{
+							notEmpty: {
+								message:'验证密码不能为空'
+							},
+							identical:{
+								field:'password',
+								message:'密码不一致!'
+							}
+						}
+					}
+				}
+			}).on('success.form.bv',function(){
+				//验证合格
+				var flag=$("#regeist_form").data("bootstrapValidator").isValid();
+				if(flag){
+					var $form=$("#regeist_form");
+					//使用Ajax提交form表单
+					$.ajax({
+						type:'POST',
+						url:$form.attr('action'),
+						data:$form.serialize(),
+						dataType:'json',
+						beforeSend:function(){
+							layer.msg('正在注册......');
+						},
+						success:function(data){
+							if(data.status==200){
+								window.location.href='/thy/shoppingPage';	
+							}
+						},
+						error:function(e){
+							console.log(e);
+							layer.msg('出错咯o(╥﹏╥)o,请与后台联系!',{
+                                btn:'我知道了'
+                            })
+						}
+					})
+				}
+			})
+		});
+	
+	</script>
+</html>

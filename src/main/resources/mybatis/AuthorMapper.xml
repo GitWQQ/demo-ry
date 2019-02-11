@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.AuthorMapper">
+	<!-- type为实体类Author，包名已经配置，可以直接写类名 -->
+	<resultMap type="Author" id="authorMap">
+		<id column="id" jdbcType="INTEGER"  property="id" />
+		<result column="real_name" jdbcType="VARCHAR" property="realName"/>
+		<result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+	</resultMap> 	
+	<sql id="columns">
+		id,real_name,nick_name
+	</sql>
+	<select id="findAuthor" parameterType="int"  resultMap="authorMap">
+		select 
+			<include refid="columns"/>
+		 from t_author where id=#{id}
+	</select>
+	<select id="getAllRecord" resultMap="authorMap">
+		select <include refid="columns"/> from t_author
+	</select>
+	
+</mapper>

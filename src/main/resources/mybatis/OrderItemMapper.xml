@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.OrderItemMapper">
+	<resultMap type="OrderItem" id="orderItemMap">
+		<id column="ID" jdbcType="VARCHAR" property="id"/>
+		<result column="ITEM_ID" jdbcType="VARCHAR" property="item_id"/>
+		<result column="ORDER_ID" jdbcType="VARCHAR" property="order_id"/>
+		<result column="NUM" jdbcType="INTEGER" property="num"/>
+		<result column="TITLE" jdbcType="VARCHAR" property="title"/>
+		<result column="PRICE" jdbcType="INTEGER" property="price"/>
+		<result column="TOTAL_FEE" jdbcType="INTEGER" property="total_fee"/>
+		<result column="PIC_PATH" jdbcType="VARCHAR" property="pic_path"/>
+		<result column="SFCL" jdbcType="VARCHAR" property="sfcl"/>
+		<result column="GXSJC" jdbcType="VARCHAR" property="gxsjc"/>
+		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>
+	</resultMap>
+	
+	<sql id="columns">
+		ID,ITEM_ID,ORDER_ID,NUM,TITLE,PRICE,TOTAL_FEE,PIC_PATH,YXX,SFCL,GXSJC
+	</sql>
+	
+	<sql id="queryByParameter">
+		<if test="id !=null and id !=''">
+			AND id=#{id,jdbcType=VARCHAR}
+		</if>
+		<if test="item_id !=null and item_id !=''">
+			AND item_id=#{item_id,jdbcType=VARCHAR}
+		</if>
+		<if test="order_id !=null and order_id !=''">
+			AND order_id=#{order_id,jdbcType=VARCHAR}
+		</if>
+		<if test="title !=null and title !=''">
+			AND title=#{title,jdbcType=VARCHAR}
+		</if>
+		<if test="num !=null and num !=''">
+			AND num=#{num,jdbcType=INTEGER}
+		</if>
+		<if test="price !=null and price !=''">
+			AND price=#{price,jdbcType=INTEGER}
+		</if>
+		<if test="total_fee !=null and total_fee !=''">
+			AND total_fee=#{total_fee,jdbcType=INTEGER}
+		</if>
+		<if test="pic_path !=null and pic_path !=''">
+			AND pic_path=#{pic_path,jdbcType=VARCHAR}
+		</if>
+		<if test="yxx !=null and yxx !=''">
+			AND yxx=#{yxx,jdbcType=VARCHAR}
+		</if>
+		<if test="sfcl !=null and sfcl !=''">
+			AND sfcl=#{sfcl,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	
+	<select id="getOrderItemRecordByParam" parameterType="java.util.Map" resultMap="orderItemMap">
+		SELECT 
+		<include refid="columns"/>
+		FROM TB_ORDER_ITEM
+		<where>
+			<include refid="queryByParameter"/>
+		</where> 
+	</select>
+	
+	<!-- 查询未处理订单总数 -->
+	<select id="getSendOrderCount" parameterType="java.util.Map" resultType="integer">
+		SELECT COUNT(ID) FROM TB_ORDER_ITEM
+		<where>
+			<include refid="queryByParameter"/>
+		</where>
+	</select>
+	
+	<!--删除订单,订单有效性失效-->
+	<update id="removeOrderItem" parameterType="java.util.Map">
+		UPDATE TB_ORDER_ITEM
+		<set>
+			<if test="yxx !=null and yxx !=''">
+				yxx=#{yxx,jdbcType=VARCHAR},
+			</if>
+			<if test="gxsjc !=null and gxsjc !=''">
+				gxsjc=#{gxsjc,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE id=#{id,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- -->
+	<update id="updateOrderItemByParam" parameterType="java.util.Map">
+		UPDATE TB_ORDER_ITEM
+		<set>
+			<if test="id !=null">
+				id=#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="item_id !=null">
+				item_id=#{item_id,jdbcType=VARCHAR},
+			</if>
+			<if test="num !=null">
+				num=#{num,jdbcType=INTEGER},
+			</if>
+			<if test="title !=null">
+				title=#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="price !=null">
+				price=#{price,jdbcType=INTEGER},
+			</if>
+			<if test="total_fee !=null">
+				total_fee=#{total_fee,jdbcType=INTEGER},
+			</if>
+			<if test="pic_path !=null">
+				pic_path=#{pic_path,jdbcType=VARCHAR},
+			</if>
+			<if test="sfcl !=null and sfcl !=''">
+				sfcl=#{sfcl,jdbcType=VARCHAR},
+			</if>
+			<if test="gxsjc !=null and gxsjc !=''">
+				gxsjc=#{gxsjc,jdbcType=VARCHAR},
+			</if>
+			<if test="yxx !=null and yxx !=''">
+				yxx=#{yxx,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE order_id=#{order_id,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

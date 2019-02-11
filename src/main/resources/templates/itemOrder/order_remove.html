@@ -1,0 +1,53 @@
+
+<form id="orderRemoveForm" class="bs-example bs-example-form" role="form" th:each="order : ${orders}">
+	<input type="hidden" name="czbs" id="czbs" value="2"/>
+	<div class="input-group">
+		<span class="input-group-addon">订单编号&nbsp;:</span>
+		<input type="text"  class="form-control" name="order_id" id="order_id"  readonly="readonly" th:value="${order.order_id}"/>
+		<span class="input-group-addon text-center">用户ID&nbsp;&nbsp;:</span>
+		<input type="text" class="form-control" name="user_id" id="user_id" readonly="readonly" th:value="${order.user_id}"/>
+	</div>
+	<div class="input-group" style="margin-top:10px;">
+		<span class="input-group-addon text-center">实付金额&nbsp;:</span>
+		<input type="text" class="form-control" name="payment" id="payment" readonly="readonly" th:value="${order.payment}"/>
+		<span class="input-group-addon text-center">֧支付类型&nbsp;:</span>
+		<input type="text" class="form-control" name="payment_type" id="payment_type" th:value="${order.payment==1?'在线支付':'线下支付'}"/>
+	</div>
+	<div class="input-group" style="margin-top:10px;">
+		<span class="input-group-addon text-center">֧支付状态&nbsp;</span>
+		<input type="text" class="form-control" name="status" id="status" th:value="${order.status==1?'未支付':'已支付'}"/>
+		<span class="input-group-addon text-center">支付时间&nbsp;<font color="red">*</font>:</span>
+		<input type="text" class="form-control" name="payment_time" id="payment_time" th:value="${order.payment_time}"/>
+	</div>
+	<div class="input-group" style="margin-top:10px;">
+		<span class="input-group-addon text-center">订单创建时间&nbsp;&nbsp;:</span>
+		<input type="text" class="form-control"  name="create_time" id="create_time" readonly="readonly" th:value="${order.create_time}"/>
+		<span class="input-group-addon text-center">订单更新时间&nbsp;&nbsp;:</span>
+		<input type="text" class="form-control" name="update_time" id="update_time" readonly="readonly" th:value="${order.update_time}"/>					
+	</div>
+	<div class="input-group" style="margin-top:10px;">
+		<span class="input-group-addon text-center">物流名称&nbsp;<font color="red">*</font>:</span>
+		<select name="shipping_name" id="shipping_name" class="form-control">
+		</select>
+		<span class="input-group-addon text-center">物流单号&nbsp;:</span>
+		<input type="text" class="form-control" name="shipping_code" id="shipping_code" th:value="${order.shipping_code}"/>
+	</div>
+	<div class="input-group" style="margin-top:10px;">
+		<span class="input-group-addon text-center">邮费&nbsp;&nbsp;:</span>
+		<input type="text" class="form-control" name="post-fee" id="post-fee" th:value="${order.post_fee}"/>
+		<span class="input-group-addon text-center">发货时间&nbsp;&nbsp;:</span>
+		<input type="text" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"  
+							style="height:35px;" name="consign_time" id="consign_time"/>
+	</div>
+	<div class="input-group" style="margin-top:10px;">
+		<span class="input-group-addon text-center">交易关闭时间&nbsp;&nbsp;:</span>
+		<input type="text" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" 
+			style="height:35px;" name="close_time" id="close_time" th:value="${order.close_time}"/>
+		<span class="input-group-addon text-center">买家昵称&nbsp;&nbsp;:</span>
+		<input type="text" class="form-control" name="buyer_nick" id="buyer_nick" readonly="readonly" th:value="${order.buyer_nick}"/>					
+	</div>
+	<div class="input-group" style="margin-top:10px;">
+		<span class="input-group-addon text-center">买家留言&nbsp;&nbsp;:</span>
+		<textarea rows="2" class="form-control" name="buyer_message" id="buyer_message" readonly="readonly" th:value="${order.buyer_message}"/>
+	</div>
+</form>

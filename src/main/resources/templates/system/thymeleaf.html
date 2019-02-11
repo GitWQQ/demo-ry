@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+	</head>
+	<body>
+		<table>
+			<thead>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr th:each="thymeleaf:${test}">
+					<!-- 判断成绩 -->
+					<td th:text="${thymeleaf.name}"></td>
+					<td th:if="${thymeleaf.score} gt 0 and ${thymeleaf.score} lt 60">差 
+						<span th:text="${thymeleaf.score}"></span>
+					</td>
+					<td th:if="${thymeleaf.score} gt 60 and ${thymeleaf.score} lt 80">良好
+						<span th:text="${thymeleaf.score}"></span>
+					</td>
+					<td th:if="${thymeleaf.score} gt 80 and ${thymeleaf.score} lt 100">优秀
+						<span th:text="${thymeleaf.score}"></span>
+					</td>
+					<td th:switch="${thymeleaf.male}">
+						<span th:case="1">男</span>
+						<span th:case="2">女</span>
+						<span th:case="*">未知</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div th:replace="system/footer::footer"></div>
+	</body>
+	
+</html>

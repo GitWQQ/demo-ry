@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.thymeleaf.org" >
+<head></head>
+<body>
+<div id="panel_five" class="panel panel-primary" style="padding-bottom:0px; display:none" th:fragment="orderForm">
+	<div class="panel-body panel_body_style">
+		<ul id="myTabOrder" class="nav nav-tabs">
+			<li class="active">
+				<a href="#ordering" data-toggle="tab" onclick="Fun_ordering();">
+					待处理订单 &nbsp;<span id="ordering_count" class="badge" style="background-color:red"></span>
+				</a>	
+			</li>
+			<li>
+				<a href="#ordered" data-toggle="tab" onclick="Fun_ordered();">
+					已处理订单<span class="badge" style="background-color:red"></span>
+				</a>	
+			</li>
+			<li>
+				<a href="#home" data-toggle="tab">
+					
+				</a>	
+			</li>
+			<li>
+			 	<a href="#" id="MyTabDrop1" class="dropdown-toggle" 
+			 	data-toggle="dropdown">
+			 		<b class="caret"></b>
+			 	</a>
+			 	<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+					<li>
+						<a href="#jmeter" tabindex="-1" data-toggle="tab">jmeter</a>
+					</li>
+					<li>
+						<a href="#ejb" tabindex="-1" data-toggle="tab">ejb</a>
+					</li>			 		
+			 	</ul>
+			</li>
+		</ul>
+		<div id="myTabContent" class="tab-content">
+			<div class="row">
+				<div class="col-xs-12">
+					<form id="formSearch" class="form-horizontal" onsubmit="submit_check();">
+						<div class="form-group" style="margin-top:15px;">
+							<label class="control-label col-md-1" for="txt_search_title" >商品名称</label>
+							<div class="col-md-3 pull-left" >
+								<input type="text"  name="title" class="form-control" id="txt_search_title"/>
+							</div>
+							<div class="control-label col-md-1 pull-left" for="txt_search_mh" style="text-align:left">
+								<span><input type="checkbox" id="mhcx" name="mhcx"/></span>
+								<span>模糊</span>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-xs-12">
+					<div id="orderingListTool" class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button type="button" class="btn btn-info" onclick="btn_order_search();">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+								<span class="glyphicon glyphicon-search"></span>
+								查询
+							</button>
+							<button type="button" class="btn btn-danger" onclick="btn_order_remove();">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+								<span class="glyphicon glyphicon-remove"></span>
+								删除
+							</button>
+							<button id="btn_download" type="button" class="btn btn-primary" onclick="btn_export();">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+								<span class="glyphicon glyphicon-export"></span>
+								导出Excel
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="ordering" class="tab-pane fade in active">
+				<div class="row">
+					<div class="col-md-12 col-xs-12">
+						<!-- 未处理订单 -->
+						<table id="orderingListTable"></table>
+					</div>
+				</div>	
+			</div>
+			<div id="ordered" class="tab-pane fade">
+				<div class="row">
+					<div class="col-md-12 col-xs-12">
+						<!-- 已处理订单 -->
+						<table id="orderedListTable"></table>
+					</div>
+				</div>	
+			</div>
+			<div id="jmeter" class="tab-pane fade">
+				JMETER
+			</div>
+			<div id="ejb" class="tab-pane fade">
+				EJB
+			</div>
+		</div>
+	</div>
+	<div class="panel-footer" >
+	
+	</div>
+</div>
+<div id="myOrderSendModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+th:fragment="orderSend_modal"  style="">
+	<div class="modal-dialog" role="document" style="width:55%">                                                                     		
+		<div class="modal-content">                                                                                		
+			<div class="modal-header">                                                                             		
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">                       		
+						<span aria-hidden="true" style="font-size:40px;">&times;</span>                                		
+				</button>                                                                                          		
+				<h4 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-edit"></i>【发货订单】</h4>      		
+			</div>                                                                                                 		
+			<div id="orderSendModalBody" class="modal-body">                                                      		
+				                                                                                                      		
+			</div>                                                                                                 		
+			<div class="modal-footer">                                                                             		
+				<button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="btn_sendOrder();">     		
+					<span class="glyphicon glyphicon-ok"></span>                                                   		
+						发货                                                                                           		
+				</button>                                                                                          		
+				<button type="button" class="btn green" data-dismiss="modal">                                      		
+					<span class="glyphicon glyphicon-remove"></span>                                                   		
+						取消                                                                                             		
+				</button>                                                                                          		
+			</div>                                                                                                 		
+		</div>                                                                                                     		
+	</div>	                                                                                                       		
+</div>
+<!-- 订单详情Modal -->
+<div id="myOrderDetailModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+th:fragment="orderDetail_modal"  style="">
+	<div class="modal-dialog" role="document" style="width:51%">                                                                     		
+		<div class="modal-content">                                                                                		
+			<div class="modal-header">                                                                             		
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">                       		
+						<span aria-hidden="true" style="font-size:40px;">&times;</span>                                		
+				</button>                                                                                          		
+				<h4 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-th"></i>【订单详情】</h4>      		
+			</div>                                                                                                 		
+			<div id="orderDetailModalBody" class="modal-body">                                                      		
+				                                                                                                      		
+			</div>                                                                                                 		
+			<div class="modal-footer">                                                                             		                                                                                          		
+				<button type="button" class="btn green" data-dismiss="modal">                                      		
+					<span class="glyphicon glyphicon-remove"></span>                                                   		
+						关闭                                                                                             		
+				</button>                                                                                          		
+			</div>                                                                                                 		
+		</div>                                                                                                     		
+	</div>	                                                                                                       		
+</div>
+
+</body>
+</html>

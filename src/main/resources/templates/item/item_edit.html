@@ -1,0 +1,37 @@
+
+<form id="editform" class="bs-example bs-example-form" role="form" th:each="item : ${list}">
+					<input type="hidden" name="czbs" id="czbs" value="2"/>			
+					<input type="hidden" name="id" id="id" th:value="${item.id}"/>
+					<div class="input-group" style="margin-top:20px;">
+						<span class="input-group-addon text-center">商品标题&nbsp;<font color="red">*</font>:</span>
+						<input type="text" class="form-control" name="title" id="" th:value="${item.title}"/>
+					</div>
+					<div class="input-group" style="margin-top:20px;">
+						<span class="input-group-addon text-center">商品卖点&nbsp;&nbsp;:</span>
+						<input type="text" class="form-control" name="sell_point" id="" th:value="${item.sell_point}"/>
+					</div>
+					<div class="input-group" style="margin-top:20px;">
+						<span class="input-group-addon text-center">商品价格&nbsp;<font color="red">*</font>:</span>
+						<input type="text" class="form-control" name="price" id="price1" th:value="${item.price/100}"/>
+						<span class="input-group-addon text-center">商品库存&nbsp;<font color="red">*</font>:</span>
+						<input type="text" class="form-control" name="num" id="" th:value="${item.num}"/>
+					</div>
+					<div class="input-group" style="margin-top:20px;">
+						<span class="input-group-addon text-center">商品类目:</span>
+						<select id="splx_edit" name="splx" class="form-control" style="width:274px;">
+							<option></option>
+						</select>
+						<span class="input-group-addon text-center">商品状态:</span>
+						<input type="text" class="form-control" name="status" id="" style="width:274px;"
+						th:value="${item.status=='1'?'已上架':'已下架'}"/>	
+						<!-- <select id="status_edit" name="status" class="form-control" style="width:274px;">
+						</select>		 -->
+					</div>
+					<div class="input-group" style="margin-top:20px;">
+						<span class="input-group-addon text-center">创建时间&nbsp;&nbsp;:</span>
+						<input type="text" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})"  
+							style="height:35px;" name="created" id="" th:value="${item.created}"/>
+						<span class="input-group-addon text-center">修改时间&nbsp;&nbsp;:</span>
+						<input type="text" class="form-control" name="created" id=""/>
+					</div>
+</form>

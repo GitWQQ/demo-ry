@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/style_script::head('首页','/static/bootstrap-3.3.7/css/bootstrap.css')">
+	<meta  charset="UTF-8"/>
+	<style type="text/css">
+		#backstage_left_bar :hover{
+			
+		}
+	</style>
+</head>
+	<script th:src="@{/static/fileupload.js}" type="text/javascript"></script>
+	<script th:src="@{/static/backstage.js}" type="text/javascript"/>
+	<script th:src="@{/static/order.js}" type="text/javascript"/>
+	<script type="text/javascript">
+		$(function(){
+			$("#backstage_left_bar").mouseover(function(){
+				//$("#backstage_left_bar_main").css("display","block");
+				$("#backstage_left_bar_main").show(600);
+			})	
+			$("#backstage_left_bar_main").mouseleave(function(){
+				$("#backstage_left_bar_main").hide(600);
+			})
+		})
+	</script>
+	<body style="position:relative;">
+		<div th:include="common/backstage_navbar :: backstage_navbar"/>
+		<div th:include="common/backstage_left_navbar :: backstage_left_navbar"/>
+		<div class="main-container" style="width:100%;">
+			<div>
+					<div th:replace="item/addItem :: addItem"/>
+					<div th:replace="yxqs/yxqs :: yxqs"/>
+					<div th:replace="item/itemList :: itemList"/>
+					<div th:replace="item/itemList :: detail_modal"/>
+					<div th:replace="item/itemList :: edit_modal"/>
+					<div th:replace="sys/manager :: manager"/>
+					<div th:replace="itemOrder/orderForm :: orderForm"/>
+					<div th:replace="itemOrder/orderForm :: orderSend_modal"/>
+					<div th:replace="itemOrder/orderForm :: orderDetail_modal"></div>
+					<div th:replace="WelcomePage :: welcomePage"/>
+			</div>
+		</div>
+			
+	</body>
+</html>

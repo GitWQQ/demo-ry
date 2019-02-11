@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/style_script::head('首页','/static/bootstrap-3.3.7/css/bootstrap.css')">
+	<meta  charset="UTF-8"/>
+</head>
+	<script type="text/javascript">
+		$(function(){
+			$("#backstage_left_bar").mouseover(function(){
+				//$("#backstage_left_bar_main").css("display","block");
+				$("#backstage_left_bar_main").show(600);
+			})	
+			$("#backstage_left_bar_main").mouseleave(function(){
+				$("#backstage_left_bar_main").hide(600);
+			})
+		})
+	</script>
+<body>
+	<div style="position:relative;" th:fragment="backstage_left_navbar">
+		<div class="main-container" style="position:absolute;z-index:998;">
+			<div class="row clearfix main-container-inner">
+				<div id="backstage_left_bar" class="column sidebar" style="float:left;margin-left:0px;position:fixed;">
+					<div class="btn-group btn-group-md btn-group-vertical">
+						<button class="btn btn-primary" type="button" style="height:50px">
+						<h5></h5>
+						</button>
+						<button class="btn btn-primary" type="button">
+						 &nbsp;&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-home"></h5>
+						</button>
+						<button class="btn btn-primary" type="button">
+						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-plus-sign"></h5>
+						</button>
+						<button class="btn btn-primary" type="button">
+						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-signal"></h5>
+						</button>
+						<button class="btn btn-primary" type="button">
+						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-th-list"></h5>
+						</button>
+						<button class="btn btn-primary" type="button">
+						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-cog"></h5>
+						</button>
+						<button class="btn btn-primary" type="button">
+						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-cog"></h5>
+						</button>
+						<button class="btn btn-primary" type="button" style="display:none"> 
+						&nbsp;&nbsp;&nbsp;<h5>1</h5>
+						</button>
+						<button class="btn btn-primary" type="button">
+						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-user"></h5>
+						</button>
+					</div>
+				</div>
+				<div id="backstage_left_bar_main" class="col-md-1 column sidebar" style="margin-left:53px;display:none;position:fixed;">
+					<div  class="btn-group btn-group-md btn-group-vertical" style="margin-left:-16px;margin-top:-2px;">
+						<button class="btn btn-primary" type="button">
+							<h5>首&nbsp;&nbsp;页</h5>
+						</button>
+						<button id="btn_six" class="btn btn-primary" type="button">
+							<h5>首&nbsp;&nbsp;页</h5>
+						</button>
+						<button id="btn_one" class="btn btn-primary" type="button">
+							<h5>&nbsp;发布商品</h5>
+						</button>
+						<button id="btn_two" class="btn btn-primary" type="button">
+							<h5>&nbsp;营销趋势</h5>
+						</button>
+						<button id="btn_three" class="btn btn-primary" type="button">
+							<h5>&nbsp;商品列表</h5>
+						</button>
+						<button id="btn_four" class="btn btn-primary" type="button">
+							<h5>&nbsp;商城管理</h5>
+						</button>
+						<button id="btn_five" class="btn btn-primary" type="button">
+							<h5>&nbsp;订单管理</h5>
+						</button>
+						<button class="btn btn-primary" type="button"> 
+							<h5>个人信息</h5>
+						</button>
+						<button class="btn btn-primary" type="button" style="display:none"> 
+							<h5>1</h5>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</body>
+</html>		

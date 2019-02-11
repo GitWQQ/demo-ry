@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ItemMapper">
+	<resultMap type="Item" id="itemMap">
+		<id column="ID" jdbcType="VARCHAR"  property="id" />
+		<result column="SPLX" jdbcType="VARCHAR" property="splx"/>
+		<result column="TITLE" jdbcType="VARCHAR" property="title"/>
+		<result column="SELL_POINT" jdbcType="VARCHAR" property="sell_point"/>
+		<result column="PRICE" jdbcType="INTEGER" property="price"/>
+		<result column="NUM" jdbcType="VARCHAR" property="num"/>
+		<result column="BARCODE" jdbcType="VARCHAR" property="barcode"/>
+		<result column="IMAGE" jdbcType="BLOB" property="image"/>
+		<result column="CID" jdbcType="VARCHAR" property="cid"/>
+		<result column="STATUS" jdbcType="VARCHAR" property="status"/>
+		<result column="CREATED" jdbcType="VARCHAR" property="created"/>
+		<result column="UPDATED" jdbcType="VARCHAR" property="updated"/>
+		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>
+	</resultMap>
+	<sql id="columns">
+		ID,SPLX,TITLE,SELL_POINT,PRICE,NUM,BARCODE,IMAGE,CID,STATUS,CREATED,UPDATED,YXX
+	</sql>
+	
+	<sql id="queryByParameter">
+		<if test="id !=null and id!=''">
+		  	AND id=#{id,jdbcType=VARCHAR}
+		</if>
+		<if test="splx !=null and splx !=''">
+			AND splx=#{splx,jdbcType=VARCHAR}
+		</if>
+		<if test="title !=null and title !=''">
+		  	AND title=#{title,jdbcType=VARCHAR}
+		</if>
+		<if test="title_like !=null and title_like !=''">
+			AND title like CONCAT('%',#{title_like,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="sell_point !=null">
+		 	AND sell_point=#{sell_point,jdbcType=VARCHAR}
+		</if>
+		<if test="price !=null and price !=''">
+			AND	price=#{price,jdbcType=INTEGER}
+		</if>
+		<if test="num !=null and num !=''">
+			AND	num=#{num,jdbcType=VARCHAR}
+		</if>
+		<if test="barcode !=null">
+			AND	barcode=#{barcode,jdbcType=VARCHAR}
+		</if>
+		<if test="image !=null">
+			AND	image=#{image,jdbcType=VARCHAR}
+		</if>
+		<if test="cid !=null and cid !=''">
+			AND	cid=#{cid,jdbcType=VARCHAR}
+		</if>
+		<if test="status !=null and status !=''">
+			AND	status=#{status,jdbcType=VARCHAR}
+		</if>
+		<if test="created !=null and created !=''">
+			AND	created=#{created,jbdcType=VARCHAR}
+		</if>
+		<if test="updated !=null and updated !=''">
+			AND	updated=#{updated,jdbcType=VARCHAR}
+		</if>
+		<if test="yxx !=null and yxx!=''">
+			AND	yxx=#{yxx,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	
+	<select id="getAllItemRecord" parameterType="java.util.Map" resultMap="itemMap">
+		SELECT 
+		<include refid="columns"/> FROM TB_ITEM
+		<where>
+			<include refid="queryByParameter"/>
+		</where>
+	</select>
+	
+	<select id="updateById" parameterType="java.util.Map">
+		UPDATE  TB_ITEM
+		<set>
+			<if test="yxx !=null and yxx !=''">
+				yxx=#{yxx,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE id=#{id,jdbcType=VARCHAR} 			
+	</select>
+	
+	<update id="updateByParamsSelective" parameterType="java.util.Map">
+	  	UPDATE TB_ITEM
+	  	<set>
+	  		<if test="id !=null and id !=''">
+	  			id=#{id,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="splx !=null and splx !=''">
+	  			splx=#{splx,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="title !=null and title !=''">
+	  			title=#{title,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="price !=null and price !=''">
+	  			price=#{price,jdbcType=INTEGER},
+	  		</if>
+	  		<if test="num !=null and num !=''">
+	  			num=#{num,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="sell_point !=null">
+	  			sell_point=#{sell_point,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="status !=null and status !=''">
+	  			status=#{status,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="created !=null">
+	  			created=#{created,jdbcType=VARCHAR},
+	  		</if>
+	  		<if test="updated !=null and updated !=''">
+	  			updated=#{updated,jdbcType=VARCHAR},
+	  		</if>
+	  	</set>
+	  	WHERE id=#{id,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getItemRecordByParam" parameterType="java.util.Map" resultMap="itemMap">
+		select 
+		<include refid="columns"/> 
+		from tb_item
+		<where>
+			<include refid="queryByParameter"/>
+		</where>
+	</select>
+	
+	<insert id="insertItemRecord" parameterType="java.util.Map">
+		INSERT INTO TB_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id !=null and id !=''">
+				ID,
+			</if>
+			<if test="splx !=null and splx !=''">
+				SPLX,
+			</if>
+			<if test="title !=null and title !=''">
+				TITLE,
+			</if>
+			<if test="sell_point !=null and sell_point !=''">
+				SELL_POINT,
+			</if>
+			<if test="price !=null and price !=''">
+				PRICE,
+			</if>
+			<if test="num !=null and num !=''">
+				NUM,
+			</if>
+			<if test="barcode !=null and barcode !=''">
+				BARCODE,
+			</if>
+			<if test="image !=null and image !=''">
+				IMAGE,
+			</if>
+			<if test="cid !=null and cid !=''">
+				CID,
+			</if>
+			<if test="status !=null and status !=''" >
+				STATUS,
+			</if>
+			<if test="created !=null and created !=''">
+				CREATED,
+			</if>
+			<if test="updated !=null and updated !=''">
+				UPDATED,
+			</if>
+			<if test="yxx !=null and yxx !=''">
+				YXX,
+			</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="id !=null and id !=''">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="splx !=null and splx !=''">
+				#{splx,jdbcType=VARCHAR},
+			</if>
+			<if test="title !=null and title !=''">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="sell_point !=null and sell_point !=''">
+				#{sell_point,jdbcType=VARCHAR},
+			</if>
+			<if test="price !=null and price !=''">
+				#{price,jdbcType=INTEGER},
+			</if>
+			<if test="num !=null and num !=''">
+				#{num,jdbcType=VARCHAR},
+			</if>
+			<if test="barcode !=null and barcode !=''">
+				#{barcode,jdbcType=VARCHAR},
+			</if>
+			<if test="image !=null and image !=''">
+				#{image,jdbcType=VARCHAR},
+			</if>
+			<if test="cid !=null and cid !=''">
+				#{cid,jdbcType=VARCHAR},
+			</if>
+			<if test="status !=null and status !=''">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="created !=null and created !=''">
+				#{created,jdbcType=VARCHAR},
+			</if>
+			<if test="updated !=null and updated !=''">
+				#{updated,jdbcType=VARCHAR},
+			</if>
+			<if test="yxx !=null and yxx !=''">
+				#{yxx,jdbcType=VARCHAR},
+			</if>
+		</trim>	
+	</insert>
+	
+</mapper>

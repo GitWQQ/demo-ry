@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta  charset="UTF-8"/>
+</head>
+<body>
+	<div class="row">
+		<div class="col-md-2"><h5>---轮播图预览---</h5></div>
+	</div>	
+	<div class="row">
+		<div class="col-md-6" th:each="lbt,lbtStat : ${Lbts}">
+			<button class="btn btn-warning btn-xs btn-circle" onclick="removeLBT(this);">删除</button>	
+			<input id="id" name="id" type="hidden" th:value="${lbt.id}"/>
+			<img  class="img-rounded" alt="" th:src="@{'/thy/getfile?id='+${lbt.id}}" style="width:100%;height:177px;" />
+		</div>
+	</div>
+</body>
+</html>
