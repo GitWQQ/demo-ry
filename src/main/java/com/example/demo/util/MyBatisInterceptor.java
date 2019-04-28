@@ -39,7 +39,6 @@ public class MyBatisInterceptor implements Interceptor {
 		Object returnValue=null;
 		returnValue=invocation.proceed();
 		String exexcSql = getRuntimeExeSql(configuration, boundSql);
-		
 		System.out.println("Sql:"+exexcSql);
 		return returnValue;
 

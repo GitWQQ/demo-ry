@@ -3,7 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.ImgMapper">
 	<resultMap type="Img" id="imgMap">
-		<id column="ID" jdbcType="VARCHAR"  property="id" />
+		<id column="IMG_ID" jdbcType="VARCHAR"  property="img_id" />
+		<result column="ITEM_ID" jdbcType="VARCHAR" property="item_id"/>
 		<result column="IMGLX" jdbcType="VARCHAR" property="imglx"/>
 		<result column="IMG" jdbcType="BLOB" property="img"/>
 		<result column="IMG_NAME" jdbcType="VARCHAR" property="img_name"/>
@@ -16,11 +17,14 @@
 		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>		
 	</resultMap>
 	<sql id="columns">
-		ID,IMGLX,IMG,IMG_NAME,IMG2,IMG2_NAME,IMG3,IMG3_NAME,CREATED,GXSJC,YXX
+		IMG_ID,ITEM_ID,IMGLX,IMG,IMG_NAME,IMG2,IMG2_NAME,IMG3,IMG3_NAME,CREATED,GXSJC,YXX
 	</sql>
 	<sql id="queryByParameter">
-		<if test="id !=null and id!=''">
-		  	AND id=#{id,jdbcType=VARCHAR}
+		<if test="img_id !=null and img_id!=''">
+		  	AND img_id=#{img_id,jdbcType=VARCHAR}
+		</if>
+		<if test="item_id !=null">
+			AND item_id=#{item_id,jdbcType=VARCHAR}
 		</if>
 		<if test="imglx !=null and imglx !=''">
 			AND imglx=#{imglx,jdbcType=VARCHAR}
@@ -55,7 +59,8 @@
 	</sql>
 	<select id="getImgByParamMap" parameterType="java.util.Map" resultMap="imgMap">
 		SELECT
-			TB_IMG.ID,
+			TB_IMG.IMG_ID,
+			TB_IMG.ITEM_ID,
 			TB_IMG.IMG,
 			TB_IMG.IMG_NAME,
 			TB_ITEM.TITLE,
@@ -108,15 +113,22 @@
 				yxx=#{yxx,jdbcType=VARCHAR},
 			</if>
 		</set>
-		WHERE id=#{id,jdbcType=VARCHAR} 
+		WHERE img_id=#{img_id,jdbcType=VARCHAR} 
 		AND imglx=#{imglx,jdbcType=VARCHAR}			
 	</update>
 
 	<insert id="insertImgRecord" parameterType="java.util.Map">
+		<!-- 返回最近插入的数据的ID -->
+		<!-- <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="item_id">
+			SELECT LAST_INSERT_ID() as ID
+		</selectKey> -->
 		INSERT INTO TB_IMG
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id !=null and id !=''">
-				ID,
+			<if test="img_id !=null and img_id !=''">
+				IMG_ID,
+			</if>
+			<if test="item_id !=null and item_id !=''">
+				ITEM_ID,
 			</if>
 			<if test="imglx !=null and imglx !=''">
 				IMGLX,
@@ -150,8 +162,11 @@
 			</if>
 		</trim>
 		<trim prefix="values(" suffix=")" suffixOverrides=",">
-			<if test="id !=null and id !=''">
-				#{id,jdbcType=VARCHAR},
+			<if test="img_id !=null and img_id !=''">
+				#{img_id,jdbcType=VARCHAR},
+			</if>
+			<if test="item_id !=null and item_id !=''">
+				#{item_id,jdbcType=VARCHAR},
 			</if>
 			<if test="imglx !=null and imglx !=''">
 				#{imglx,jdbcType=VARCHAR},

@@ -9,7 +9,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.Sha512Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ByteSource;
 
 import com.example.demo.domain.User;
 
@@ -119,7 +121,16 @@ public class CommonUtil {
 		 String salt=secureRandomNumberGenerator.nextBytes().toBase64();
 		 return salt;
 	 }
-	 
+	 /**
+	  * 根据用户名生成盐
+	  * @param userName
+	  * @return
+	  */
+	 @SuppressWarnings("static-access")
+	public static ByteSource getSalt(String userName){
+		ByteSource credentialsSalt=new ByteSource.Util().bytes(userName);
+		return credentialsSalt;
+	 }
 	 /**
 	  * 加密密码=MD5(明文加密)+盐
 	  * @param args
@@ -128,6 +139,11 @@ public class CommonUtil {
 		 Md5Hash md5=new Md5Hash(password,salt,1024);
 		 String newPassword=md5.toHex();
 		 return newPassword;
+	 }
+	 
+	 public static String md5(String saltSource,String password){
+		 ByteSource salt=new Md5Hash(saltSource);
+		 return new SimpleHash("MD5",password,saltSource,1024).toString();
 	 }
 	 
 	 /**
@@ -171,10 +187,14 @@ public class CommonUtil {
 		 String tstamp=format.format(date);
 		 return tstamp;
 	 }
-	public static void main(String[] args) {
+	 
+	public static void main(String[] args){
 		String salt=getSalt();
-		System.out.println("salt:"+salt);
-		String password=encodePassphrase(salt,"123456");
-		System.out.println("passWord:"+password);
+		System.out.println(salt);
+		ByteSource credentialSalt=new Md5Hash(salt);
+		System.out.println(credentialSalt);
+		System.out.println(md5(salt,"123456"));
+		System.out.println(getSaltPassword(salt,"123456"));
+		System.out.println(encodePassphrase(salt,"123456"));
 	}
 }	

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="common/style_script::head('首页','/static/bootstrap-3.3.7/css/bootstrap.css')">
+<head th:replace="common/style_script::head('预约订单','/static/bootstrap-3.3.7/css/bootstrap.css')">
 	<meta  charset="UTF-8"/>
 </head>
 	<link th:href="@{/static/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
@@ -9,18 +9,19 @@
 		<div class="container" style="width:100%">
 			<div th:replace="common/navbar :: navbar_top"></div>
 			<div style="width:100%;margin-top:50px;">
-				<div class="row" style="float:left;width:40%;background-color:#f5f5f5;margin:10px 10px 10px 0px;">
+			<form id="order_form" class="bs-example bs-example-form" role="form" th:each="item : ${items}">
+				<div class="row" style="float:left;width:40%;background-color:#f5f5f5;margin:20px 5px 30px 0px;">
 					<div class="col-md-12 col-lg-12 col-ms-12" style="margin:50px 20px 10px 60px;">
 						<div>
-							<img alt="" th:src="@{/static/img/7.jpg}" class="img-rounded" style="width:376px;height:500px;"/>
+							<img alt="" th:src="@{'/thy/getfile?img_id='+${img_id}}" class="img-rounded" style="width:376px;height:500px;"/>
 						</div>
 					</div>
 				</div>	
-				<div class="row" style="float:right;width:60%;background-color:#f5f5f5;">
-					<div class="col-md-12 col-lg-12 col-ms-12" style="margin:50px 20px 10px 60px;">
+				<div class="row" style="float:right;width:57%;background-color:#f5f5f5;margin:20px 5px 30px 0px;">
+					<div class="col-md-12 col-lg-12 col-ms-12" style="">
 						<div class="row">
 							<div class="col-md-12">
-								<span><h3><strong>劳保专供毛皮大衣</strong></h3></span>
+								<h3><strong><span th:text="${item.title}"></span></strong></h3>
 							</div>
 						</div>
 						<div class="row">
@@ -28,13 +29,13 @@
 								<div class="row">
 									<div class="col-md-2" style=""><h5>购买数量:</h5></div>
 									<div class="col-md-1">
-										<button class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
+										<button id="btn_plus" class="btn btn-primary btn-xs" onclick="return false"><span class="glyphicon glyphicon-plus"></span></button>
 									</div>
 									<div class="col-md-2">
-										<input type="text" class="form-control" value="1" readonly="readonly"/>
+										<input id="btn_num" name="num" type="text" class="form-control" value="1" onclick="return false"/>
 									</div>
 									<div class="col-md-1">
-										<button class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
+										<button id="btn_minus" class="btn btn-primary btn-xs" onclick="return false"><span class="glyphicon glyphicon-minus"></span></button>
 									</div>
 								</div>
 							</div>
@@ -46,7 +47,7 @@
 										<h5>商品单价:</h5>
 									</div>
 									<div class="col-md-2">
-										<span><h4>500￥</h4></span>
+										<h4><span id="single_price" th:text="${item.price/100.0}"></span>￥</h4>
 									</div>
 								</div>
 							</div>
@@ -58,7 +59,7 @@
 										<h5>商品总价:</h5>
 									</div>
 									<div class="col-md-2">
-										<span><h4>500￥</h4></span>
+										<h4><span id="total_price"></span>￥</h4>
 									</div>
 								</div>
 							</div>
@@ -69,20 +70,20 @@
 									<div class="col-md-2" style="">
 										<h5>商品尺寸:</h5>
 									</div>
-									<div class="col-md-2">
-										<h5></h5>
+									<div class="col-md-4">
+										<input id="" name="size" type="text" class="form-control" placeholder="尺寸备注"/>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" style="margin-top:15px;">
 							<div class="col-md-12">
 								<div class="row">
 									<div class="col-md-2" style="">
 										<h5>收货电话:</h5>
 									</div>
 									<div class="col-md-4">
-										<input class="form-control" type="text" placeholder="收货电话"/>
+										<input id="phone" name="phone" class="form-control" type="text" placeholder="收货电话"/>
 									</div>
 								</div>
 							</div>
@@ -94,13 +95,13 @@
 						</div>
 						<div class="row" style="margin-top:10px;">
 							<div class="col-md-3">
-								<select class="form-control"></select>							
+								<select id="province" class="form-control" onchange="provinceChange();"></select>							
 							</div>
 							<div class="col-md-3">
-								<select class="form-control"></select>							
+								<select id="city" class="form-control" onchange="cityChange();"></select>							
 							</div>
 							<div class="col-md-3">
-								<select class="form-control"></select>							
+								<select id="county" class="form-control"></select>							
 							</div>
 						</div>
 						<div class="row" style="margin-top:20px;">
@@ -110,34 +111,103 @@
 						</div>
 						<div class="row" style="margin-top:10px;">
 							<div class="col-md-8">
-							<input class="form-control" type="text" placeholder="乡镇街道"/>
+								<input id="address" name="address" class="form-control" type="text" placeholder="乡镇街道"/>
 							</div>
 						</div>
 						<div class="row" style="margin-top:20px;">
 							<div class="col-md-2">
-							留言:
+							备注:
 							</div>
 						</div>
 						<div class="row" style="margin-top:10px;">
 							<div class="col-md-8">
-							<textarea rows="3" style="width:100%"></textarea>
+							<textarea id="bz" name="bz" rows="3" style="width:100%"></textarea>
 							</div>
 						</div>
 						<div class="row" style="margin-top:30px;">
 							<div class="col-md-2"></div>
 							<div class="col-md-4">
-								<button class="btn btn-primary" >提交订单</button>
+								<button type="submit" class="btn btn-primary" >提交订单</button>
 							</div>
 							<div class="col-md-4">
-								<button class="btn btn-primary" >取消订单</button>
+								<button type="reset" class="btn btn-primary" >取消订单</button>
 							</div>
 							<div class="col-md-2"></div>
 						</div>
 						
 					</div>
 				</div>
+				</form>	
 			</div>
 		</div>
 		
 	</body>
+	<script type="text/javascript">
+		$(function(){
+			//数量
+			var num=1;
+			//单价
+			var single_price;
+			//总价
+			var total_price;
+			
+			total_price=$("#single_price").html();
+			//设置默认商品为1件
+			$("#btn_num").val(num);
+			$("#total_price").html(total_price);
+			//===增加商品数量
+			$("#btn_plus").click(function(){
+				num++;
+				$("#btn_num").val(num);
+				single_price=$("#single_price").html()*num;
+				$("#total_price").html(single_price);
+			})
+			//===减少商品数量
+			$("#btn_minus").click(function(){
+				if(num>1){
+					num--;
+					$("#btn_num").val(num);
+					single_price=$("#single_price").html()*num;
+					$("#total_price").html(single_price);	
+				}else{
+					$("#btn_num").val('1');				
+				}
+			})
+			//====失去焦点时,计算总费用
+			$("#btn_num").blur(function(){
+				var num=$("#btn_num").val();
+				var single_price=$("#single_price").html()*num;
+				if(num>1){
+					$("#total_price").html(single_price);	
+				}else{
+					$("#btn_num").val("1");	
+					$("#total_price").html(single_price);
+				}
+			})
+			//===============================================
+		   $("#order_form").bootstrapValidator({
+			    message:'This value is not valid',
+			    feedbackIcons:{
+					valid: 'glyphicon glyphicon-ok',
+            		invalid: 'glyphicon glyphicon-remove',
+            		validating: 'glyphicon glyphicon-refresh'
+				},
+				fields:{
+					num:{
+						message:'数量值不少数字',
+						validators:{
+							regexp:{
+								regexp:/^\d+$/,
+								message:'数量值不是数字'
+							}
+						}
+					}
+					
+				}
+		   })
+		})
+	</script>
+	<script type="text/javascript">
+		
+	</script>
 </html>	

@@ -19,11 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.servlet.http.HttpSession;
+import org.apache.shiro.web.session.HttpServletSession;
 import org.hibernate.validator.internal.util.privilegedactions.GetResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +50,8 @@ import com.example.demo.service.ItemService;
 import com.example.demo.service.ThmeleafService;
 import com.example.demo.service.ZdService;
 import com.example.demo.util.BaseController;
+import com.example.demo.util.CommonUtil;
 import com.example.demo.util.ResponseResult;
-import com.sun.tools.corba.se.idl.constExpr.And;
 
 @Controller
 @RequestMapping("/thy")
@@ -83,7 +82,14 @@ public class ThymeleafController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/gwc")
-	public String toGwc(){
+	public String toGwc(HttpServletRequest request,Model model){
+		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
+		List item=itemService.getItemRecordByParam(paramMap);
+		if(item !=null && !"".equals(item)){
+			model.addAttribute("items",item);
+		}
+		String img_id=paramMap.get("img_id").toString();
+		model.addAttribute("img_id",img_id);
 		return "gwc";
 	}
 	
@@ -158,7 +164,6 @@ public class ThymeleafController extends BaseController{
 				model.addAttribute("list",list);
 			}			
 		}
-		System.out.println("list:"+list);
 		if("detail".equals(paramMap.get("action"))){
 			return "item/item_detail";
 		}else{
@@ -240,6 +245,7 @@ public class ThymeleafController extends BaseController{
 	@ResponseBody
 	public Map<String,Object> uploadImg(@RequestParam(value="img_file",required=false)MultipartFile file,HttpServletRequest request) throws IOException{
 		Map<String,Object> resultMap=new HashMap<>();
+		String img_id=CommonUtil.getID();
 		if(file==null){
 			logger.info("文件不存在");
 		}else{
@@ -255,16 +261,17 @@ public class ThymeleafController extends BaseController{
 				//创建新文件名
 				fileName=new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+"_"+new Random().nextInt(1000)+fileF;
 				paramMap.put("img_name",fileName);
+				paramMap.put("img_id",img_id);
 			}
-			resultMap.put("fileName",fileName);
 			imgService.insertImgRecord(paramMap);
+			resultMap.put("fileName",fileName);
+			resultMap.put("img_id",img_id);
 		}
-		
 		resultMap.put("success",true);
 		resultMap.put("msg","上传成功了");
 		return resultMap;
 	}
-	
+
 	@RequestMapping("/LbtFileUpload")
 	@ResponseBody
 	public Map<String,Object> uploadLBTImg(@RequestParam(value="lbt_file",required=false)MultipartFile file,HttpServletRequest request) throws IOException{

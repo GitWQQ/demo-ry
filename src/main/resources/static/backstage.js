@@ -71,7 +71,7 @@ function modifyPassWord(){
             validating: 'glyphicon glyphicon-refresh'
 		},
 		fields:{
-			oldPassword:{
+			password:{
 				validators:{
 					notEmpty: {
 						message:'原始密码不能为空!'
@@ -114,7 +114,7 @@ function modifyPassWord(){
 					
 				},
 				success:function(data){
-					
+					layer.msg('密码修改成功！')
 				},
 				error:function(e){
 					console.log(e);
@@ -662,8 +662,9 @@ function addLBT(){
 	alert('添加轮播图');
 }
 function removeLBT(){
-	var id=$("input[name='id']").val();
-	var param={"id":id};
+	var id=$("input[name='img_id123']").val();
+	var param={"img_id":id};
+	alert(id);
 	$.ajax({
 		type:'POST',
 		url:'/thy/updateLbtByParam',
@@ -687,3 +688,81 @@ function register(){
 	alert('register')
 }
 
+$(function(){
+	var sel=$("#province");
+	var param={"zddm":"XZQH","parentid":'000000'};
+	$.ajax({
+		type:'GET',
+		url:'/thy/getZd',
+		data:param,
+		dataType:'json',
+		contentType: "application/json; charset=utf-8",
+		success:function(data){
+			var num2=data.length;
+			for(var i=0;i<num2;i++){
+				for(var i=0;i<data.length;i++){//外循环，循环有几种字典类
+					for(var j=0;j<data[i].length;j++){//内循环，循环没个字典类中有几个字典项
+						sel.append("<option value='"+data[i][j].dm+"'>"+data[i][j].mc+"</option>");
+					}	
+				} 
+			}
+		},
+		error:function(e){
+			
+		}
+	});
+})
+
+function provinceChange(){
+	var options=$("#province option:selected");
+	var sel=$("#city");
+	sel.find("option").remove();
+	var param={"zddm":"XZQH","parentid":options.val()};
+	$.ajax({
+		type:'GET',
+		url:'/thy/getZd',
+		data:param,
+		dataType:'json',
+		contentType: "application/json; charset=utf-8",
+		success:function(data){
+			var num2=data.length;
+			for(var i=0;i<num2;i++){
+				for(var i=0;i<data.length;i++){//外循环，循环有几种字典类
+					for(var j=0;j<data[i].length;j++){//内循环，循环没个字典类中有几个字典项
+						sel.append("<option value='"+data[i][j].dm+"'>"+data[i][j].mc+"</option>");
+					}	
+				} 
+			}
+		},
+		error:function(e){
+			
+		}
+	});
+}
+
+function cityChange(){
+	var options=$("#city option:selected");
+	var sel=$("#county");
+	sel.find("option").remove();
+	var param={"zddm":"XZQH","parentid":options.val()};
+	$.ajax({
+		type:'GET',
+		url:'/thy/getZd',
+		data:param,
+		dataType:'json',
+		contentType: "application/json; charset=utf-8",
+		success:function(data){
+			var num2=data.length;
+			for(var i=0;i<num2;i++){
+				for(var i=0;i<data.length;i++){//外循环，循环有几种字典类
+					for(var j=0;j<data[i].length;j++){//内循环，循环没个字典类中有几个字典项
+						sel.append("<option value='"+data[i][j].dm+"'>"+data[i][j].mc+"</option>");
+					}	
+				} 
+			}
+		},
+		error:function(e){
+			
+		}
+	});
+}

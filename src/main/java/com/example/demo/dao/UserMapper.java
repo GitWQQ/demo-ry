@@ -25,4 +25,10 @@ public interface UserMapper {
 	 */
 	public void addUserInfoselective(Map<String,Object> paramMap);
 	
+	/**
+	 * 根据参数修改用户信息（如:修改密码）
+	 * @param paramMap
+	 */
+	public void updateUserInfoByParam(Map<String,Object> paramMap);
+	
 }

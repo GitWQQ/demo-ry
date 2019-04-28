@@ -3,14 +3,16 @@ package com.example.demo.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.UserMapper;
+import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
 import com.example.demo.util.CommonUtil;
 import com.mysql.fabric.xmlrpc.base.Param;
-import com.sun.tools.corba.se.idl.constExpr.And;
 
 @Service
 public class UserServiceImpl  implements UserService{
@@ -40,23 +42,25 @@ public class UserServiceImpl  implements UserService{
 	/**
 	 * 添加新用户（有盐值方法）
 	 */
-	/*@Override
+	@Override
 	public void addUserInfoselective(Map<String,Object> paramMap) {
+		String username=paramMap.get("username").toString();
 		paramMap.put("id",CommonUtil.getID());
-		paramMap.put("salt",CommonUtil.getSalt());//获取盐
+		String salt=CommonUtil.getSalt().toString();
+		System.out.println(salt);
+		paramMap.put("salt",salt);//获取盐
 		String password=paramMap.get("password").toString();
 		if(password !=null && !"".equals(password)){
-			paramMap.put("password",CommonUtil.encodePassphrase(paramMap.get("salt").toString(),password));
+			paramMap.put("password",CommonUtil.md5(paramMap.get("salt").toString(),password));
 		}
 		paramMap.put("created",CommonUtil.getNowDate());
 		paramMap.put("updated",CommonUtil.getNowDate());
 		userMapper.addUserInfoselective(paramMap);
-	}*/
-	
+	}
 	
 	/**
 	 * 添加新用户(无盐值)
-	 */
+	 *//*
 	@Override
 	public void addUserInfoselective(Map<String,Object> paramMap) {
 		paramMap.put("id",CommonUtil.getID());
@@ -67,5 +71,22 @@ public class UserServiceImpl  implements UserService{
 		paramMap.put("created",CommonUtil.getNowDate());
 		paramMap.put("updated",CommonUtil.getNowDate());
 		userMapper.addUserInfoselective(paramMap);
+	}
+*/
+	/**
+	 * 根据条件修改用户信息
+	 */
+	@Override
+	public void updateUserInfoByParam(Map<String, Object> paramMap) {
+		//获取当前用户
+		Subject subject=SecurityUtils.getSubject();
+		User user=(User)subject;
+		//给新密码加密加盐
+		String newPassWord=paramMap.get("newPassword").toString();
+		newPassWord=CommonUtil.encodePassphrase(user.getSalt(),newPassWord);
+		paramMap.put("password",newPassWord);
+		paramMap.put("username",user.getUsername());
+		paramMap.put("created",CommonUtil.getNowDate());
+		userMapper.updateUserInfoByParam(paramMap);
 	}
 }

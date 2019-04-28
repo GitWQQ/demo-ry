@@ -26,20 +26,20 @@
 								<div class="form-group">
 									<div class="input-group">
 										<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-										<input type="text" id="username" name="username" class="form-control"  placeholder="用户名 "/>
+										<input type="text" id="username" name="username" class="form-control"   placeholder="用户名 "/>
 									</div>
 								</div>
 								<div class="form-group" style="margin-top:40px;">
 									<div class="input-group">
 										<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-										<input type="password" id="password" name="password" class="form-control"  placeholder="密码"/>
+										<input type="password" id="password" name="password" class="form-control" required="required"  placeholder="密码"/>
 									</div>	
 								</div>
 								<div class="form-group" style="margin-top:5px;width:100%;">
 									<span id="login_msg"></span>
 								</div>
 								<div class="input-group" style="margin-top:40px;width:100%">
-									<input style="width:100%" id="btn_submit" type="submit" class="btn btn-danger" value="登     录"/>
+									<input style="width:100%" id="btn_submit" type="button" class="btn btn-danger" value="登     录"/>
 								</div>
 								<div class="form-group" style="margin-top:15px;margin-left:140px;width:100%;">
 								  	<a>忘记密码</a>
@@ -56,7 +56,7 @@
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		$(function(){
 			$("#login_form").bootstrapValidator({
 				message:'This value is not valid',
@@ -117,5 +117,36 @@
 			})
 		});
 	
+	</script> -->
+	
+	<script>
+	$(function(){
+		$("#btn_submit").click(function(){
+			var $form=$("#login_form");
+			//使用Ajax提交form表单
+			$.ajax({
+				type:'POST',
+				url:$form.attr('action'),
+				data:$form.serialize(),
+				dataType:'json',
+				beforeSend:function(){
+					/* layer.msg('正在登陆......'); */
+				},
+				success:function(data){
+					if(data.status==200){
+						window.location.href='/thy/shoppingPage';	
+					}else{
+						$("#login_msg").html(data.message);
+					}
+				},
+				error:function(e){
+					console.log(e);
+					layer.msg('出错咯o(╥﹏╥)o,请与后台联系!',{
+                        btn:'我知道了'
+                    })
+				}
+			})
+		})
+	})
 	</script>
 </html>

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
 import com.example.demo.service.ZdService;
+import com.example.demo.util.CommonUtil;
 import com.example.demo.util.UserInfoLoginToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,9 +54,15 @@ public class SysController {
 	@RequestMapping("/getZdInfo")
 	@ResponseBody
 	public List getZdInfo(HttpServletRequest request,Model model){
+		System.err.println("====================ZdInfo=");
 		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
 		Map<String,Object> resultMap=new HashMap<>();
 		List list=zdService.getZdInfo(paramMap);
+		String zddm=paramMap.get("zddm").toString();
+		if(zddm!=null &&"XZQH".equals(zddm)){
+			
+		}
+		
 		System.out.println("list:"+list);
 		return list;
 	}
@@ -69,47 +76,51 @@ public class SysController {
 	@ResponseBody
 	public Map<String,Object> login(HttpServletRequest httpRequest,Model model){
 		System.out.println("==================登录============================");
+		Subject subject=SecurityUtils.getSubject();
 		Map<String,Object> paramMap=getParamMap(httpRequest.getParameterMap());
 		Map<String,Object> result=new HashMap<>();
 		String username=paramMap.get("username").toString();
 		String password=paramMap.get("password").toString();
 		UserInfoLoginToken token=null;
-		/*if(!"".equals(username)){*/
-			token=new UserInfoLoginToken(username,password);
-			Subject subject=SecurityUtils.getSubject();
+		if(subject.isAuthenticated()){
+			System.err.println("已经登录过嘞");
+		}else{
+			System.out.println("还没登录...");
 			try{
-				//登录
-				subject.login(token);
-				
-				User currentUser=(User)subject.getPrincipal();
-				//存session
-				subject.getSession().setAttribute("token",token);
-				subject.getSession().setAttribute("username",currentUser.getUsername());
-				subject.getSession().setAttribute("user",currentUser);
-				subject.getSession().setTimeout(30*60*1000);//设置session过期时间为30分钟
-				subject.getSession().setAttribute("ip",getIpValue(subject.getSession().getHost(),httpRequest));
-				result.put("status",200);
-				result.put("message","登录成功");
+				if(!"".equals(username)&& username !=null){
+					token=new UserInfoLoginToken(username, password);
+					subject.login(token);
+					User currentUser=(User)subject.getPrincipal();
+					//存session
+					subject.getSession().setAttribute("token",token);
+					subject.getSession().setAttribute("username",currentUser.getUsername());
+					subject.getSession().setAttribute("user",currentUser);
+					subject.getSession().setTimeout(30*60*1000);//设置session过期时间30分钟
+					subject.getSession().setAttribute("ip",getIpValue(subject.getSession().getHost(),httpRequest));
+					result.put("status",200);
+					result.put("message","登录成功");
+				}
 			}catch(UnknownAccountException uae){
-				System.out.println("用户不存在");
-				log.error("用户不存在");
-				result.put("status",201);
-				result.put("message","用户不存在");
+					System.out.println("用户不存在");
+					log.error("用户不存在");
+					result.put("status",201);
+					result.put("message","用户不存在");
 			}catch(IncorrectCredentialsException ice){
-				System.out.println("密码不正确");
-				log.error("密码不正确");
-				result.put("status",202);
-				result.put("message","密码不正确");
+					System.out.println("密码不正确");
+					log.error("密码不正确");
+					result.put("status",202);
+					result.put("message","密码不正确");
 			}catch(LockedAccountException lae){
-				System.out.println("账号被锁定");
-				log.error("账号被锁定");
-				result.put("status",203);
-				result.put("message","账号被锁定");
+					System.out.println("账号被锁定");
+					log.error("账号被锁定");
+					result.put("status",203);
+					result.put("message","账号被锁定");
 			}catch(ExcessiveAttemptsException eae){
-				log.error("密码尝试限制");
-				result.put("status",204);
-				result.put("message","密码尝试限制");
+					log.error("密码尝试限制");
+					result.put("status",204);
+					result.put("message","密码尝试限制");
 			}
+		}
 		return result;
 	}
 	
@@ -200,14 +211,37 @@ public class SysController {
 	
 	@RequestMapping("/modifyPass")
 	@ResponseBody
-	public String modifyPass(HttpServletRequest request){
-		Map<String,Object>  paramMap=getParamMap(request.getParameterMap());
+	public Map<String,Object> modifyPass(HttpServletRequest request){
+		Map<String,Object> result=new HashMap<>();
+		//获取当前登录用户信息
 		Subject subject=SecurityUtils.getSubject();
 		User user=(User)subject.getPrincipal();
-		System.out.println("user:"+user);
-		return "common/modifyPassWord";
+		Map<String,Object>  paramMap=getParamMap(request.getParameterMap());
+		//获取前台传来的参数password（明文密码），进行加密加盐
+		String password=paramMap.get("password").toString();
+		if(password !=null && !"".equals(password)){
+			if(user.getSalt()!=null && !"".equals(user.getSalt())){
+				password=CommonUtil.encodePassphrase(user.getSalt(),password);
+			}	
+		}
+		//获取当登录前用户的密码
+		String oldPassWord="";
+		if(user !=null){
+			oldPassWord=user.getPassword();
+		}
+		//前台传来的密码加密后与当前用户密码对比，如果相等，则允许修改密码，否则不能修改密码
+		if(oldPassWord.equals(password)){
+			//如果输入的原始密码和从数据库查询出来的密码一致，则允许修改密码
+			userService.updateUserInfoByParam(paramMap);
+			result.put("msg","修改成功!");
+			return result;
+		}else{
+			result.put("msg","原始密码不正确!");
+			return result;
+		}
 	}
-	/**
+	
+	/**ModifyPass
 	 * @param ip
 	 * @param request
 	 * @return
@@ -263,4 +297,11 @@ public class SysController {
 		} 
 	    return paramMap;
 	 }
+	//salt:4bV+oJuheKcajXKPujbBYw==
+	//qnTixwgqh9FTUmkR1XZOXkR82idFVZEjEYB/1zo6SL05oe3rkhnf6FGgzEetENeHQTL2iGb7Ugo7KpEyPGqb1A==
+	public static void main(String[] args) {
+		String salt=CommonUtil.getSalt();
+		System.out.println("salt:"+salt);
+		System.out.println(CommonUtil.encodePassphrase("4bV+oJuheKcajXKPujbBYw==","123456"));
+	}
 }

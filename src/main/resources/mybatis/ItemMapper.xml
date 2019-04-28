@@ -4,6 +4,7 @@
 <mapper namespace="com.example.demo.dao.ItemMapper">
 	<resultMap type="Item" id="itemMap">
 		<id column="ID" jdbcType="VARCHAR"  property="id" />
+		<result column="IMG_ID" jdbcType="VARCHAR" property="img_id"/>
 		<result column="SPLX" jdbcType="VARCHAR" property="splx"/>
 		<result column="TITLE" jdbcType="VARCHAR" property="title"/>
 		<result column="SELL_POINT" jdbcType="VARCHAR" property="sell_point"/>
@@ -18,12 +19,15 @@
 		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>
 	</resultMap>
 	<sql id="columns">
-		ID,SPLX,TITLE,SELL_POINT,PRICE,NUM,BARCODE,IMAGE,CID,STATUS,CREATED,UPDATED,YXX
+		ID,IMG_ID,SPLX,TITLE,SELL_POINT,PRICE,NUM,BARCODE,IMAGE,CID,STATUS,CREATED,UPDATED,YXX
 	</sql>
 	
 	<sql id="queryByParameter">
 		<if test="id !=null and id!=''">
 		  	AND id=#{id,jdbcType=VARCHAR}
+		</if>
+		<if test="img_id !=null and img_id !=''">
+			AND img_id=#{img_id,jdbcType=VARCHAR}
 		</if>
 		<if test="splx !=null and splx !=''">
 			AND splx=#{splx,jdbcType=VARCHAR}
@@ -90,6 +94,9 @@
 	  		<if test="id !=null and id !=''">
 	  			id=#{id,jdbcType=VARCHAR},
 	  		</if>
+	  		<if test="img_id !=null and img_id !=''">
+	  			img_id=#{img_id,jdbcType=VARCHAR},
+	  		</if>
 	  		<if test="splx !=null and splx !=''">
 	  			splx=#{splx,jdbcType=VARCHAR},
 	  		</if>
@@ -133,6 +140,9 @@
 			<if test="id !=null and id !=''">
 				ID,
 			</if>
+			<if test="img_id !=null and img_id !=''">
+				IMG_ID,
+			</if>
 			<if test="splx !=null and splx !=''">
 				SPLX,
 			</if>
@@ -173,6 +183,9 @@
 		<trim prefix="values(" suffix=")" suffixOverrides=",">
 			<if test="id !=null and id !=''">
 				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="img_id !=null and img_id !=''">
+				#{img_id,jdbcType=VARCHAR},
 			</if>
 			<if test="splx !=null and splx !=''">
 				#{splx,jdbcType=VARCHAR},

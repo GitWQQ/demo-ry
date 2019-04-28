@@ -1,40 +1,65 @@
 <table  th:each="item : ${list}" style="font-family:'Microsoft YaHei', Arial, Helvetica;font-size:17px;background-color: #ffffff; 
  border-collapse:separate;border-spacing:10px">
-					<tr>
-						<td style="width:6%;background-color:#81B4FF">商品编号:</td>
-						<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="5"><h5 th:text="${item.id}"></h5></td>
-					</tr>
-					<tr>
-						<td style="width:6%;background-color:#81B4FF">商品名称:</td>
-						<td style="width:60%;border-bottom:1px dashed #81B4FF" colspan="5"><h5 th:text="${item.title}"></h5></td>
-					</tr>
-					<tr>
-						<td style="width:6%;background-color:#81B4FF">商品卖点:</td>
-						<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="5"><h5 th:text="${item.sell_point}"></h5></td>
-					</tr>
-					<tr>
-						<td style="width:10%;background-color:#81B4FF">商品价格:</td>
-						<td style="width:15%;border-bottom:1px dashed #81B4FF"><h5 th:text="${item.price/100.0}"></h5></td>
-						<td style="width:10%;background-color:#81B4FF">商品库存:</td>
-						<td style="width:10%; border-bottom:1px dashed #81B4FF"><h5 th:text="${item.num}"></h5></td>
-						<td style="width:10%;background-color:#81B4FF">商品状态:</td>
-						<td style="width:20%; border-bottom:1px dashed #81B4FF">
-							<h5 th:if="${item.status=='1'}">已上架</h5>
-							<h5 th:if="${item.status=='0'}">已下架</h5>
-						</td>
-					</tr>
-					<tr>
-						<td style="width:6%;background-color:#81B4FF">上架日期:</td>
-						<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="2"><h5 th:text="${item.created}"></h5></td>
-						<td style="width:6%;background-color:#81B4FF">下架日期:</td>
-						<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="2"></td>
-					</tr>
-					<!-- <tr>
-						<td style="width:7%;">条形码:</td>
-						<td style="width:10%;border-bottom:1px dashed #81B4FF "></td>
-					</tr> -->
-					<tr>
-						<td style="width:7%;background-color:#81B4FF">商品图片:</td>
-						<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="5"></td>
-					</tr>
+	<tr>                                                                                                              				
+		<td style="width:6%;background-color:#81B4FF">商品编号:</td>                                                      				
+		<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="5"><h5 th:text="${item.id}"></h5></td>        				
+	</tr>                                                                                                             				
+	<tr>                                                                                                              				
+		<td style="width:6%;background-color:#81B4FF">商品名称:</td>                                                      				
+		<td style="width:60%;border-bottom:1px dashed #81B4FF" colspan="5"><h5 th:text="${item.title}"></h5></td>     				
+	</tr>                                                                                                             				
+	<tr>                                                                                                              				
+		<td style="width:6%;background-color:#81B4FF">商品卖点:</td>                                                      				
+		<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="5"><h5 th:text="${item.sell_point}"></h5></td>				
+	</tr>                                                                                                             				
+	<tr>                                                                                                              				
+		<td style="width:10%;background-color:#81B4FF">商品价格:</td>                                                     				
+		<td style="width:15%;border-bottom:1px dashed #81B4FF"><h5 th:text="${item.price/100.0}"></h5></td>           				
+		<td style="width:10%;background-color:#81B4FF">商品库存:</td>                                                     				
+		<td style="width:10%; border-bottom:1px dashed #81B4FF"><h5 th:text="${item.num}"></h5></td>                  				
+		<td style="width:10%;background-color:#81B4FF">商品状态:</td>                                                     				
+		<td style="width:20%; border-bottom:1px dashed #81B4FF">                                                      				
+			<h5 th:if="${item.status=='1'}">已上架</h5>                                                                  				
+			<h5 th:if="${item.status=='0'}">已下架</h5>                                                                  				
+		</td>                                                                                                         				
+	</tr>                                                                                                             				
+	<tr>                                                                                                              				
+		<td style="width:6%;background-color:#81B4FF">上架日期:</td>                                                      				
+		<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="2"><h5 th:text="${item.created}"></h5></td>   				
+		<td style="width:6%;background-color:#81B4FF">下架日期:</td>                                                      				
+		<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="2"></td>                                      				
+	</tr>                                                                                                             				
+	<!-- <tr>                                                                                                         				
+		<td style="width:7%;">条形码:</td>                                                                               				
+		<td style="width:10%;border-bottom:1px dashed #81B4FF "></td>                                                 				
+	</tr> -->                                                                                                         				
+	<tr>                                                                                                              				
+		<td style="width:7%;background-color:#81B4FF">商品图片:</td>                                                      				
+		<td style="width:10%;border-bottom:1px dashed #81B4FF" colspan="5">                                           				
+			<button class="btn btn-link btn-lg" data-toggle="modal" data-target="#img_modal">点击查看图片</button>                                 				
+		</td>                                                                                                         				
+	</tr>                                                                                                             				
 </table>
+<div class="modal fade" id="img_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-picture"></i>&nbsp;&nbsp;商品图片</h4>
+			</div>
+			<div class="modal-body">
+				<div style="margin:0 auto;width:100%;text-align:center" th:each="item : ${list}">
+				<img alt="" th:src="@{'/thy/getfile?img_id='+${item.img_id}}" class="img-rounded" style="width:40%"/>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		$('#img_modal').draggable();
+	})
+</script>

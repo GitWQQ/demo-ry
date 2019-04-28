@@ -14,14 +14,40 @@
 	<sql id="columns">
 		ZDDM,MC,DM,PARENTID,YXX
 	</sql>
+	<sql id="queryByParameter">
+		<if test="zddm !=null and zddm !=''">
+			AND zddm=#{zddm,jdbcType=VARCHAR}
+		</if>
+		<if test="mc !=null and mc !=''">
+			AND mc=#{mc,jdbcType=VARCHAR}
+		</if>
+		<if test="dm !=null and dm !=''">
+			AND dm=#{dm,jdbcType=VARCHAR}
+		</if>
+		<if test="parentid !=null and parentid !=''">
+			AND parentid=#{parentid,jdbcType=VARCHAR}
+		</if>
+		<if test="yxx !=null and yxx !=''">
+			AND yxx=#{yxx,jdbcType=VARCHAR}
+		</if>
+	</sql>
 	
 	<select id="getZdInfo" parameterType="java.util.Map" resultMap="ZdMap">
 		SELECT 
 		<include refid="columns"/>
 		FROM TB_ZD
-		WHERE 
-		YXX='1'
-		AND ZDDM=#{zddm,jdbcType=VARCHAR}
+		<where>
+			<include refid="queryByParameter"/>
+		</where>
 	</select>
+<!-- 	<select id="getZdXZQH" parameterType="java.util.Map" resultMap="ZdMap">
+		SELECT 
+		<include refid="columns"/>
+		FROM TB_ZD
+		WHERE 
+		yxx=#{yxx,jdbcType=VARCHAR}
+		AND parentid=#{parentid,jdbcType=VARCHAR}
+		AND zddm=#{}
+	</select> -->
 	
 </mapper>

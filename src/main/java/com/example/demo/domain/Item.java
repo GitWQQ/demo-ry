@@ -8,6 +8,7 @@ public class Item {
 	
 	private String id;
 	private String splx;
+	private String img_id;
 	private String title;
 	private String sell_point;
 	private Integer price;
@@ -22,6 +23,12 @@ public class Item {
 	
 	public String getId() {
 		return id;
+	}
+	public String getImg_id() {
+		return img_id;
+	}
+	public void setImg_id(String img_id) {
+		this.img_id = img_id;
 	}
 	public String getTitle() {
 		return title;
@@ -115,11 +122,5 @@ public class Item {
 	public void setId(String id) {
 		this.id = id;
 	}
-	@Override
-	public String toString() {
-		return "Item [id=" + id + ", splx=" + splx + ", title=" + title + ", sell_point=" + sell_point + ", price="
-				+ price + ", num=" + num + ", barcode=" + barcode + ", image=" + Arrays.toString(image) + ", cid=" + cid
-				+ ", status=" + status + ", created=" + created + ", updated=" + updated + ", yxx=" + yxx + "]";
-	}
-
+	
 }

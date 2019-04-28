@@ -36,6 +36,7 @@ $(document).ready(function(){
 				
 				//导入文件上传完成后的事件
 				$("#img_file").on('fileuploaded',function(event,data,previewId,index){
+					$("#img_id").val(data.response.img_id);
 					$("#image").val(data.response.fileName)
 				})
 			}
@@ -90,4 +91,6 @@ $(document).ready(function(){
 	onSubmit:function(){
 		alert();
 	}
-	}
+}
+
+

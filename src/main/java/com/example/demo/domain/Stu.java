@@ -2,7 +2,12 @@ package com.example.demo.domain;
 
 import java.io.Serializable;
 
-public class Stu implements Serializable {
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+@Component
+@ConfigurationProperties(prefix="Stu")
+public class Stu{
 	
 	private String id;
 	

@@ -17,7 +17,7 @@
 				<div class="row">
 					<div class="col-md-4"></div>
 					<div class="col-md-5" style="background-color:#fff;
-						height:500px;width:35%;margin:30px 0px 30px 0px;
+						width:35%;margin:30px 0px 30px 0px;
 						border-radius:10px;">
 						<div style="text-align:center;font-size:30px;margin-top:15px;letter-spacing:20px;"><strong>注册</strong></div>
 						<div style="margin-top:30px;width:100%">
@@ -53,6 +53,15 @@
 										<input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="确认密码" />
 									</div>
 								</div>
+								<div class="form-group" style="margin-top:20px;">
+									<label class="col-md-3 col-lg-3 control-label">验证码:</label>
+									<div class="col-md-4">
+										<input type="text" id="vcode" name="vcode" class="form-control" placeholder="验证码" />
+									</div>
+									<div class="col-md-4" id="checkCode">
+										<img alt="" th:src="@{/thy/check/getVCode}"/>
+									</div>
+								</div>
 								<div class="input-group" style="margin-top:35px;width:100%;">
 									<input style="width:45%;float:left;letter-spacing:20px;" id="btn_regist" type="submit" class="btn btn-danger" value="注册"/>
 									<input style="width:45%;float:right;letter-spacing:20px;" id="btn_cancel" type="reset" class="btn btn-info" value="取消"/>
@@ -73,6 +82,14 @@
 	</body>
 	<script type="text/javascript">
 		$(function(){
+			$("#checkCode").on("click",'img',function(){
+				var i = new Image();
+				i.src = '/thy/check/getVCode?'  + Math.random();
+				$(i).replaceAll(this);
+				return false;
+			});
+			
+			/////////////////////////////////////
 			$("#regeist_form").bootstrapValidator({
 				message:'This value is not valid',
 				feedbackIcons:{

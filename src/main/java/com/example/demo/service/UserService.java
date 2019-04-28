@@ -11,4 +11,6 @@ public interface UserService {
 	public List getAllUsers();
 	
 	public void addUserInfoselective(Map<String,Object> paramMap);
+	
+	public void updateUserInfoByParam(Map<String,Object> paramMap);
 }

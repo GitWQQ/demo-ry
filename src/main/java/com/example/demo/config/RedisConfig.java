@@ -13,11 +13,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
-@PropertySource("classpath:config/redis.properties")
+@PropertySource(value={"classpath:config/redis.properties"},encoding="UTF-8",ignoreResourceNotFound=false)
 public class RedisConfig {
 
 	@Autowired
 	private Environment env;
+	
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory(){
 		JedisPoolConfig jedisPoolConfig=new JedisPoolConfig();

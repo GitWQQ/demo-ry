@@ -19,7 +19,6 @@ public class ImgServiceImpl  implements ImgService{
 
 	@Override
 	public void insertImgRecord(Map<String, Object> paramMap) {
-		paramMap.put("id",CommonUtil.getID());
 		paramMap.put("gxsjc",CommonUtil.getTstamp());
 		paramMap.put("created",CommonUtil.getNowDate());
 		paramMap.put("yxx","1");

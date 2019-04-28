@@ -3,7 +3,8 @@ package com.example.demo.domain;
 import java.util.Arrays;
 
 public class Img  extends Item{
-	private String id;
+	private String img_id;
+	private String item_id;
 	private String imglx;
 	private byte[] img;
 	private byte[] img2;
@@ -15,11 +16,11 @@ public class Img  extends Item{
 	private String gxsjc;
 	private String yxx;
 	
-	public String getId() {
-		return id;
+	public String getImg_id() {
+		return img_id;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setImg_id(String img_id) {
+		this.img_id = img_id;
 	}
 	public byte[] getImg() {
 		return img;
@@ -82,12 +83,19 @@ public class Img  extends Item{
 	public void setYxx(String yxx) {
 		this.yxx = yxx;
 	}
+	
+	public String getItem_id() {
+		return item_id;
+	}
+	public void setItem_id(String item_id) {
+		this.item_id = item_id;
+	}
 	@Override
 	public String toString() {
-		return "Img [id=" + id + ", imglx=" + imglx + ", img=" + Arrays.toString(img) + ", img2="
-				+ Arrays.toString(img2) + ", img3=" + Arrays.toString(img3) + ", img_name=" + img_name + ", img2_name="
-				+ img2_name + ", img3_name=" + img3_name + ", created=" + created + ", gxsjc=" + gxsjc + ", yxx=" + yxx
-				+ "]";
+		return "Img [img_id=" + img_id + ", item_id=" + item_id + ", imglx=" + imglx + ", img=" + Arrays.toString(img)
+				+ ", img2=" + Arrays.toString(img2) + ", img3=" + Arrays.toString(img3) + ", img_name=" + img_name
+				+ ", img2_name=" + img2_name + ", img3_name=" + img3_name + ", created=" + created + ", gxsjc=" + gxsjc
+				+ ", yxx=" + yxx + "]";
 	}
 	
 }

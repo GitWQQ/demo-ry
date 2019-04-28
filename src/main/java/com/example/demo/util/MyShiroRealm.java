@@ -11,13 +11,14 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.example.demo.domain.shiroEntity.SysPermission;
 import com.example.demo.domain.shiroEntity.SysRole;
 import com.example.demo.domain.User;
@@ -68,23 +69,17 @@ public class MyShiroRealm extends AuthorizingRealm{
 				for (User user: resultList) {
 					if(!"".equals(password) || password!=null){
 						//从数据库中查询出来的密码
-						String password2=user.getPassword();
-						info=new SimpleAuthenticationInfo(user,password2.toCharArray(),getName());
-						//ByteSource credentialsSalt=ByteSource.Util.bytes(user.getUsername()+user.getPassword());
-						/*info=new SimpleAuthenticationInfo(
-								user.getUsername(),
-								user.getPassword(),
-								credentialsSalt,
-								getName()
-								);*/
-						if(user.getSalt()!=null && !"".equals(user.getSalt())){
-							info.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
-						}
+						ByteSource credentialsSalt=new Md5Hash(user.getSalt()); 
+						info=new SimpleAuthenticationInfo(user,user.getPassword(),credentialsSalt,getName());
+						HashedCredentialsMatcher md5CredentialsMatcher=new HashedCredentialsMatcher();
+						md5CredentialsMatcher.setHashAlgorithmName("MD5");
+						md5CredentialsMatcher.setHashIterations(1024);
+						boolean passwordTrueFlag=md5CredentialsMatcher.doCredentialsMatch(userInfoToken,info);
+						System.out.println("passwordTrueFlag:"+passwordTrueFlag);
 					}
 				}
 			}
 		}
 		return info;
 	}
-
 }

@@ -24,7 +24,8 @@ public class ZdServiceImpl implements ZdService {
 	 	String []zd=zddm.split(",");   //[ZT,WLXX]
 	 	for(int i=0;i<zd.length;i++){
 	 		paramMap.put("zddm",zd[i]);
-	 		list.add(zdMapper.getZdInfo(paramMap)); 
+	 		paramMap.put("yxx","1");
+	 		list.add(zdMapper.getZdInfo(paramMap));
 	 	}
 	 	return list;
 	}

@@ -6,4 +6,5 @@ import java.util.Map;
 public interface ZdService {
 
 	public List getZdInfo(Map<String,Object> paramMap);
+	
 }
