@@ -1,19 +1,10 @@
 package com.example.demo.controller;
 
-import java.awt.Dialog.ModalExclusionType;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,37 +12,27 @@ import java.util.Map;
 import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.shiro.web.session.HttpServletSession;
-import org.hibernate.validator.internal.util.privilegedactions.GetResource;
+
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-import com.example.demo.domain.Author;
 import com.example.demo.domain.Img;
-import com.example.demo.domain.Item;
-import com.example.demo.domain.ThymeleafVo;
-import com.example.demo.domain.shiroEntity.SysPermission;
 import com.example.demo.service.ImgService;
 import com.example.demo.service.ItemService;
-import com.example.demo.service.ThmeleafService;
 import com.example.demo.service.ZdService;
 import com.example.demo.util.BaseController;
 import com.example.demo.util.CommonUtil;
-import com.example.demo.util.ResponseResult;
 
 @Controller
 @RequestMapping("/thy")
@@ -60,27 +41,26 @@ public class ThymeleafController extends BaseController{
 	private static Logger logger=LoggerFactory.getLogger(ThymeleafController.class);
 	
 	@Autowired
-	private ThmeleafService thmeleafService;
-	
-	@Autowired
 	private ItemService itemService;
 	
 	@Autowired
 	private ImgService imgService;
 	
-	@Autowired
-	private ZdService zdService;
 	
 	
-	@RequestMapping("/")
-	public String page(){
-		return "system/index";
+	/**
+	 * 登录后台管理主页
+	 * @return
+	 */
+	@RequestMapping("/backstage")
+	public String toIndex(){
+		return "backstage";
 	}
-	
 	/**
 	 * 购物车
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping("/gwc")
 	public String toGwc(HttpServletRequest request,Model model){
 		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
@@ -93,46 +73,9 @@ public class ThymeleafController extends BaseController{
 		return "gwc";
 	}
 	
-	/**
-	 * 登录后台管理主页
-	 * @return
-	 */
-	@RequestMapping("/backstage")
-	public String toIndex(){
-		return "backstage";
-	}
-	
-	@RequestMapping("/redirect")
-	public String page2(){
-		return "redirect/redirect";
-	}
-	
-	
-	@RequestMapping("/model")
-	public String page3(Model model){
-		model.addAttribute("name","seawater");
-		return "hello";
-	}
-	
-	@RequestMapping("/thPage")
-	public String thPage(){
-		return "ThPage";
-	}
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/greeting")
-	public ModelAndView test(ModelAndView mv){
-		List result=thmeleafService.getAllRecord();
-		for (Object object : result) {
-			System.out.println("object:"+object);
-		}
-		mv.setViewName("/greeting");
-		mv.addObject("result",result);
-		return mv;
-	}
-	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/getAllItemRecord",method=RequestMethod.GET)
-	@ResponseBody
+	@ResponseBody 	
 	public List getAllItemRecord(HttpServletRequest request){
 		Map<String,Object> resultMap=new HashMap<String,Object>();
     	Map<String, Object> paramMap=getParamMap(request.getParameterMap());
@@ -189,7 +132,7 @@ public class ThymeleafController extends BaseController{
 		return "item/item_detail";
 	}
 	
-	
+	@RequiresPermissions(value="delete")
 	@RequestMapping("/deleteById")
 	@ResponseBody
 	public Map<String,Object> deleteById(HttpServletRequest request){
@@ -214,6 +157,7 @@ public class ThymeleafController extends BaseController{
 		return resultMap;
 	}
 	
+	@RequiresPermissions(value={"add"})
 	@RequestMapping("/insertItemRecord")
 	@ResponseBody
 	public Map<String,Object> insertItemRecord(HttpServletRequest request
@@ -230,6 +174,7 @@ public class ThymeleafController extends BaseController{
 	 * @param request
 	 * @return
 	 */
+	@RequiresPermissions(value={"update"})
 	@RequestMapping("/updateItemRecord")
 	@ResponseBody
 	public Map<String,Object> updateItemRecord(HttpServletRequest request){
@@ -241,6 +186,7 @@ public class ThymeleafController extends BaseController{
 		return resultMap;
 	}
 	
+	@RequiresPermissions(value="add")
 	@RequestMapping("/fileUpload")
 	@ResponseBody
 	public Map<String,Object> uploadImg(@RequestParam(value="img_file",required=false)MultipartFile file,HttpServletRequest request) throws IOException{
@@ -271,7 +217,8 @@ public class ThymeleafController extends BaseController{
 		resultMap.put("msg","上传成功了");
 		return resultMap;
 	}
-
+	
+	@RequiresPermissions(value="add")
 	@RequestMapping("/LbtFileUpload")
 	@ResponseBody
 	public Map<String,Object> uploadLBTImg(@RequestParam(value="lbt_file",required=false)MultipartFile file,HttpServletRequest request) throws IOException{
@@ -301,7 +248,7 @@ public class ThymeleafController extends BaseController{
 		return resultMap;
 	}
 	
-	@RequestMapping("/getfile")
+	/*@RequestMapping("/getfile")
 	public String getFile(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
 		Img img=(Img)imgService.getImgByParamMap2(paramMap);
@@ -317,8 +264,8 @@ public class ThymeleafController extends BaseController{
 		}
 		is.close();
 		os.close();
-		return "shoppingPage";
-	}
+		return "";
+	}*/
 	/*@RequestMapping("/fileUpload")
 	@ResponseBody
 	public void uploadImg(@RequestParam(value="file",required=false)MultipartFile file,HttpServletRequest request,
@@ -409,7 +356,6 @@ public class ThymeleafController extends BaseController{
 		}else{		
 			return "shoppingPage";
 		}
-		//webRequest.setAttribute("Imgs",list,RequestAttributes.SCOPE_REQUEST);
 		
 	}
 	/**
@@ -417,20 +363,8 @@ public class ThymeleafController extends BaseController{
 	 * @param request
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	@RequestMapping("/getZd")
-	@ResponseBody
-	public List getZdInfo(HttpServletRequest request){
-		Map<String,Object> resultMap=new HashMap<String,Object>();
-		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
-		List list=zdService.getZdInfo(paramMap);
-		resultMap.put("data",list);
-		resultMap.put("success",true);
-		resultMap.put("msg","请求成功");
-		return list;
-	}
 	
-	
+	@RequiresPermissions(value="update")
 	@RequestMapping("/updateLbtByParam")
 	@ResponseBody
 	public Map<String,Object> updateLbtByParam(HttpServletRequest request){

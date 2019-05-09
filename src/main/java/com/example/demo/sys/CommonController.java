@@ -1,18 +1,13 @@
 package com.example.demo.sys;
 
 import java.io.IOException;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.example.demo.util.LoggerUtils;
 import com.example.demo.util.TokenManager;
 import com.example.demo.util.verifyCodeUtils.VerifyCodeUtils;
@@ -23,9 +18,14 @@ import com.example.demo.util.verifyCodeUtils.vcode.SpecCaptcha;
 
 
 @Controller
-@RequestMapping("/thy/check")
+@RequestMapping("/thy/static/check")
 public class CommonController {
-
+	
+	/**
+	 * 获取普通验证码
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping(value="getVCode",method=RequestMethod.GET)
 	public void getVCode(HttpServletRequest request,HttpServletResponse response){
 		response.setHeader("Pragma", "No-cache");
@@ -50,7 +50,7 @@ public class CommonController {
 	
 	
 	/**
-	 * ��ȡ��֤�루Gif�汾��
+	 * 获取gif验证码
 	 * @param response
 	 */
 	@RequestMapping(value="getGifCode.shtml",method=RequestMethod.GET)
@@ -60,15 +60,10 @@ public class CommonController {
 			 response.setHeader("Cache-Control", "no-cache");  
 			 response.setDateHeader("Expires", 0);  
 			 response.setContentType("image/gif");  
-			 /**
-			  * gif��ʽ������֤��
-			  * 	���ߣ�λ����
-			  */
 			 Captcha captcha = new GifCaptcha(146,42,4);
 			 ServletOutputStream out=response.getOutputStream();
 			 captcha.out(out);
 			 out.flush();
-			 //����Shiro�Ựsession  
 	         TokenManager.setSessionValue(VerifyCodeUtils.V_CODE, captcha.text().toLowerCase());
 		 } catch (IOException e) {
 			e.printStackTrace();
@@ -77,7 +72,7 @@ public class CommonController {
 	}
 	
 	/**
-	 * ��ȡ��֤�루jpg�汾��
+	 * jgp验证码
 	 * @param response
 	 */
 	@RequestMapping(value="getJPGCode.shtml",method=RequestMethod.GET)
@@ -87,10 +82,7 @@ public class CommonController {
 			response.setHeader("Cache-Control", "no-cache");  
 			response.setDateHeader("Expires", 0);  
 			response.setContentType("image/jpg");  
-			/**
-			 * jgp��ʽ��֤��
-			 * ���ߣ�λ����
-			 */
+			
 			Captcha captcha = new SpecCaptcha(146,33,4);
 			//���
 			captcha.out(response.getOutputStream());

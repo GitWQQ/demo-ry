@@ -76,10 +76,10 @@ body,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,p,form,th,td{margin:0;padding:0;}table{
 	#onlineMessage{min-height:80px; _height:80px;}
 	#onlineMessage small{top:30px;}
 	  #onlineMessage dl{padding-top:15px;}
-	  #onlineMessage dt textarea{width:310px; height:70px; padding:4px; border:1px solid #bfbfbf;}
-	  #onlineMessage dd{height:30px;}
-	  #onlineMessage dd.text_length{text-align:right; line-height:30px;}
-	  #onlineMessage label{display:block; width:60px; line-height:26px; float:left;}
-	  #onlineMessage .text_input{height:22px; border:1px solid #bfbfbf; width:158px; line-height:22px; margin-top:1px;}
+	  #onlineMessage dt textarea{width:310px;font-size:14px; height:70px; padding:4px; border:1px solid #bfbfbf;}
+	  #onlineMessage dd{height:30px}
+	  #onlineMessage dd .text_length{text-align:right; line-height:30px;}
+	  #onlineMessage label{line-height:30px; text-align:left;font-size:12px;}
+	  #onlineMessage .text_input{height:22px; border:1px solid #bfbfbf; width:168px; line-height:22px; margin-top:1px;}
 	  #onlineMessage .submitBut{width:84px; height:25px; background-position:0px -186px; border:0px; color:#383838; margin-left:10px; cursor:pointer;}
 	  #onlineMessage .submitBut:hover{ background-position:0px -212px;}

@@ -23,6 +23,7 @@ public class UserServiceImpl  implements UserService{
 	/**
 	 * 根据条件获取指定的用户信息
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getUserByParam(Map<String,Object> param) {
 		return userMapper.getUserByParam(param);

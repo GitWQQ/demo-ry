@@ -1,12 +1,15 @@
 package com.example.demo.sys;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -54,7 +57,6 @@ public class SysController {
 	@RequestMapping("/getZdInfo")
 	@ResponseBody
 	public List getZdInfo(HttpServletRequest request,Model model){
-		System.err.println("====================ZdInfo=");
 		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
 		Map<String,Object> resultMap=new HashMap<>();
 		List list=zdService.getZdInfo(paramMap);
@@ -74,7 +76,7 @@ public class SysController {
 	 */
 	@RequestMapping("/toLogin")
 	@ResponseBody
-	public Map<String,Object> login(HttpServletRequest httpRequest,Model model){
+	public Map<String,Object> login(HttpServletRequest httpRequest,HttpServletResponse httpResponse,Model model){
 		System.out.println("==================登录============================");
 		Subject subject=SecurityUtils.getSubject();
 		Map<String,Object> paramMap=getParamMap(httpRequest.getParameterMap());
@@ -82,10 +84,9 @@ public class SysController {
 		String username=paramMap.get("username").toString();
 		String password=paramMap.get("password").toString();
 		UserInfoLoginToken token=null;
-		if(subject.isAuthenticated()){
+		/*if(subject.isAuthenticated()){
 			System.err.println("已经登录过嘞");
-		}else{
-			System.out.println("还没登录...");
+		}else{*/
 			try{
 				if(!"".equals(username)&& username !=null){
 					token=new UserInfoLoginToken(username, password);
@@ -99,6 +100,11 @@ public class SysController {
 					subject.getSession().setAttribute("ip",getIpValue(subject.getSession().getHost(),httpRequest));
 					result.put("status",200);
 					result.put("message","登录成功");
+					try {
+						httpResponse.sendRedirect("/thy/backstage");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}catch(UnknownAccountException uae){
 					System.out.println("用户不存在");
@@ -120,7 +126,7 @@ public class SysController {
 					result.put("status",204);
 					result.put("message","密码尝试限制");
 			}
-		}
+		/*}*/
 		return result;
 	}
 	
@@ -199,14 +205,17 @@ public class SysController {
 	/**
 	 * 登出
 	 * @return 
+	 * @throws IOException 
+	 * @throws ServletException 
 	 */
 	@RequestMapping("/logout")
-	public String logout(){
+	public void logout(HttpServletRequest request,HttpServletResponse response) throws  ServletException, IOException{
 		Subject subject=SecurityUtils.getSubject();
 		if(subject!=null && subject.getSession()!=null){
 			subject.logout();
 		}
-		return "";
+		//request.getRequestDispatcher("/thy/shoppingPage").forward(request, response);
+		response.sendRedirect("/thy/shoppingPage");
 	}
 	
 	@RequestMapping("/modifyPass")
@@ -297,8 +306,7 @@ public class SysController {
 		} 
 	    return paramMap;
 	 }
-	//salt:4bV+oJuheKcajXKPujbBYw==
-	//qnTixwgqh9FTUmkR1XZOXkR82idFVZEjEYB/1zo6SL05oe3rkhnf6FGgzEetENeHQTL2iGb7Ugo7KpEyPGqb1A==
+	
 	public static void main(String[] args) {
 		String salt=CommonUtil.getSalt();
 		System.out.println("salt:"+salt);

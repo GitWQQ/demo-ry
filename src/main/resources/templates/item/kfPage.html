@@ -33,7 +33,7 @@
             <span class="pic"><a href=""><img th:src="@{/static/img/online_email.png}" /></a></span>
             <span class="name">&#21457;&#36865;&#37038;&#20214;</span>
           </div>
-                    <div id="onlineTelTab" class="online_tab">
+          <div id="onlineTelTab" class="online_tab">
             <div class="online_boxs">
             <div class="boxs_t"><span class="boxs_t_l"></span><span class="boxs_t_m"></span><span class="boxs_t_r"></span></div>
               <div class="boxs_m_l">
@@ -90,10 +90,12 @@
                     <small class="sanjiao"></small><small class="tab_close"></small>
                       <dl>
                         <dt><textarea onfocus="h_con()" onblur="s_con()" name="content2" id="content2" onkeyup="checkLen(this,200)"></textarea></dt>
-                        <dd class="text_length">还可输入字符<b>200</b>（限制字符200）</dd>
+                        <dd class="text_length" style="text-align:right">还可输入字符<b>200</b>（限制字符200）</dd>
                         <dd><label>您的姓名：</label><input type="text" class="text_input" name="name" id="name"  maxlength="20"/></dd>
                         <dd><label>您的邮箱：</label><input type="text" class="text_input" name="e_mail" id="e_mail" maxlength="50"/></dd>
-                        <dd><label>您的电话：</label><input type="text" class="text_input" name="tel" id="tel" maxlength="30"/><input type="button" class="submitBut" value="提交" onclick="sub_check(446632)" /></dd>
+                        <dd><label>您的电话：</label><input type="text" class="text_input" name="tel" id="tel" maxlength="30"/></dd>
+                        <dd>
+                        <input style="float:right" type="button" class="submitBut" value="提交" onclick="sub_check(446632)" /></dd>
                       </dl>
                     </div>
                   </div>

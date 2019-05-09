@@ -21,26 +21,26 @@
 							</a>
 						</li>
 						<li>
-							<a href="#shop">
-								<span class="glyphicon glyphicon-shopping-cart">&nbsp;购买</span>
+							<a th:href="@{/thy/static/registerPage}">
+								<span class="glyphicon glyphicon-comment">&nbsp;注册</span>
 							</a>
 						</li>
 						<li>
 							<a th:href="@{/thy/static/toLoginPage}">
-								<span class="glyphicon glyphicon-globe">
-									<span th:if="${session.user==null}">										
-									   登录
-									 </span>
-									<span th:if="${session.user !=null}">
-									  <!-- 【<span th:text="${session.username}"></span>】已登录 -->
-									  已登录
-									 </span> 
+								
+								<span class="glyphicon glyphicon-log-in">
+									 <shiro:guest>
+									 	登录
+									 </shiro:guest>
+									 <shiro:user>    
+										【<shiro:principal property="username"/>】已登录  
+									 </shiro:user>
 								</span>
 							</a>
 						</li>
 						<li>
-							<a th:href="@{/thy/static/registerPage}">
-								<span class="glyphicon glyphicon-comment">&nbsp;注册</span>
+							<a th:href="@{/thy/sys/logout}">
+								<span class="glyphicon glyphicon-log-out">退出</span>				
 							</a>
 						</li>
 						</ul>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.OnlineMesgMapper">
+
+	<resultMap type="OnlineMesg" id="mesgMap">
+		<id column="XH"  jdbcType="VARCHAR" property="xh"/>
+		<result column="NAME" jdbcType="VARCHAR" property="name"/>
+		<result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+		<result column="PHONE" jdbcType="VARCHAR" property="phone"/>
+		<result column="CONTENT" jdbcType="VARCHAR" property="content"/>
+		<result column="CREATETIME" jdbcType="DATE" property="createtime"/>
+	</resultMap>
+	
+	<sql id="columns">
+		XH,NAME,EMAIL,PHONE,CONTENT,CREATETIME
+	</sql>
+	
+	<sql id="queryByParameter">
+		<if test="xh !=null">
+		 	AND xh=#{xh,jdbcType=VARCHAR}
+		</if>
+		<if test="name !=null">
+			AND name =#{name,jdbcType=VARCHAR}
+		</if>
+		<if test="email !=null">
+			AND email=#{email,jdbcType=VARCHAR}
+		</if>
+		<if test="phone !=null">
+			AND phone =#{phone,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	
+	<insert id="sendOnlineMesg" parameterType="java.util.Map">
+		INSERT INTO TB_MSG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="xh !=null">
+				XH,
+			</if>	
+			<if test="name !=null" >
+				NAME,
+			</if>
+			<if test="email !=null">
+				EMAIL,
+			</if>
+			<if test="content !=null">
+				CONTENT,
+			</if>
+			<if test="phone !=null">
+				PHONE,
+			</if>
+				CREATETIME,
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="xh !=null">
+				#{xh,jdbcType=VARCHAR},
+			</if>
+			<if test="name !=null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="email !=null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="content !=null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="phone !=null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+				NOW(),
+		</trim>
+	</insert>
+	
+</mapper>

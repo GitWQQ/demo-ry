@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" 
+		 xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+		
 <head th:replace="common/style_script::head('首页','/static/bootstrap-3.3.7/css/bootstrap.css')">
 	<meta  charset="UTF-8"/>
 </head>
@@ -22,13 +24,12 @@
 					</ol>
 					<!-- 轮播(Carousel)项目 -->
 					<div class="carousel-inner">
-						<div class="item active">
-							<img alt="" src="../static/img/2.jpg" style="width:100%;height:400px;"/>
+						<div class="item active" style="dispion:none;width:100%;height:400px;">
+							<img alt="" th:src="@{/static/img/2.jpg}" style="width:100%;height:400px;"/>
 							<!-- <div class="carousel-caption">标题1</div> -->
 						</div>
 						<div class="item" th:each="lbt : ${Lbts}">
-							<img alt="" th:src="@{'/thy/getfile?img_id='+${lbt.img_id}}" style="width:100%;height:400px;"/>
-							<!-- <div class="carousel-caption">标题2</div> -->
+							<img alt="" th:src="@{'/thy/static/getfile?img_id='+${lbt.img_id}}" style="width:100%;height:400px;"/>
 						</div>
 					</div>
 					<!-- 轮播(carousel)导航 -->
@@ -54,7 +55,7 @@
 				<div th:if="${Items !=null}">
 				<div class="col-lg-3"  th:each="item : ${Items}" >
 					<a class="thumbnail">
-						<img alt="" th:src="@{'/thy/getfile?img_id='+${item.img_id}}" class="img-rounded" style="width:300px;height:400px;"/>
+						<img alt="" th:src="@{'/thy/static/getfile?img_id='+${item.img_id}}" class="img-rounded" style="width:300px;height:400px;"/>
 					</a>	
 					<div class="caption thumbnail">
 							<table style="width:100%">

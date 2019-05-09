@@ -693,7 +693,7 @@ $(function(){
 	var param={"zddm":"XZQH","parentid":'000000'};
 	$.ajax({
 		type:'GET',
-		url:'/thy/getZd',
+		url:'/thy/static/getZd',
 		data:param,
 		dataType:'json',
 		contentType: "application/json; charset=utf-8",
@@ -720,7 +720,7 @@ function provinceChange(){
 	var param={"zddm":"XZQH","parentid":options.val()};
 	$.ajax({
 		type:'GET',
-		url:'/thy/getZd',
+		url:'/thy/static/getZd',
 		data:param,
 		dataType:'json',
 		contentType: "application/json; charset=utf-8",
@@ -747,7 +747,7 @@ function cityChange(){
 	var param={"zddm":"XZQH","parentid":options.val()};
 	$.ajax({
 		type:'GET',
-		url:'/thy/getZd',
+		url:'/thy/static/getZd',
 		data:param,
 		dataType:'json',
 		contentType: "application/json; charset=utf-8",

@@ -162,12 +162,12 @@ public class CommonUtil {
 	 }
 	 
 	 /**
-	  * Id=年月日+四位随机数
+	  * Id=年月日时分秒+三位随机数
 	  * @return
 	  */
 	 public static String getID(){
 		 Date date=new Date();
-		 SimpleDateFormat format=new SimpleDateFormat("yyMMdd");
+		 SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
 		 String id=format.format(date.getTime());
 		 Random random=new Random();
 		 for(int i=0;i<4;i++){
@@ -189,12 +189,6 @@ public class CommonUtil {
 	 }
 	 
 	public static void main(String[] args){
-		String salt=getSalt();
-		System.out.println(salt);
-		ByteSource credentialSalt=new Md5Hash(salt);
-		System.out.println(credentialSalt);
-		System.out.println(md5(salt,"123456"));
-		System.out.println(getSaltPassword(salt,"123456"));
-		System.out.println(encodePassphrase(salt,"123456"));
+		System.out.println(getID());
 	}
 }	

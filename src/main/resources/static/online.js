@@ -6,13 +6,7 @@ $(function(){
 			});
 		$(this).hide();
 		});
-	/*$("#onService_panel").mouseout(function(){
-		var onService_panel=$("#onService_panel");
-		onService_panel.animate({right:-102});
-		onService_panel.find(".online_tab").fadeOut(100);
-		$("#onlineOpen").show();
-		
-	})*/
+	
 	$("#onlineClose").click(function(){
 		var onService_panel=$("#onService_panel");
 			onService_panel.animate({right:-102});
@@ -50,5 +44,23 @@ function checkLen(obj,maxs){
     $(obj).parents("dl").find(".text_length b").text(curr.toString());
 } 
 function sub_check(){
-	alert();
+	
+	var content=$("#content2").val().trim();
+	var name=$("#name").val().trim();
+	var email=$("#e_mail").val().trim();
+	var tel=$("#tel").val().trim();
+	var param={"content":content,"name":name,"email":email,"phone":tel};
+	$.ajax({
+		type:'POST',
+		url:'/kf/sendOnlineMesg',
+		data:param,
+		dataType:'json',
+		success:function(data){
+			$("#onService_panel .tab_close").parents(".online_tab").fadeOut(1500);
+			layer.msg(data.msg);
+		},
+		error:function(){
+			
+		}
+	})
 }

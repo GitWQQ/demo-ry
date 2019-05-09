@@ -1,0 +1,10 @@
+<shiro:guest>
+	游客访问
+</shiro:guest>
+
+user标签 用户已经通过认证
+<shiro:user>
+	<shiro:principal/>
+</shiro:user>
+
+	
