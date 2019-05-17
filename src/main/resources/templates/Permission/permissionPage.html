@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.thymeleaf.org" >
+<head></head>
+<body>
+	<div id="panel_six"  class="panel panel-primary" style="padding-bottom:0px; display:none;" 
+	th:fragment="permissionList">
+ 		<div class="panel-body panel_body_style">
+ 			<ul id="myTabOrder" class="nav nav-tabs">
+ 				<li class="active">
+					<a href="#power_user_List" data-toggle="tab" onclick="">
+						用户权限管理&nbsp;<span id="ordering_count" class="badge"></span>
+					</a>	
+				</li>
+				<li>
+					<a href="#power_manager" data-toggle="tab" onclick="">
+						权限信息管理<span class="badge"></span>
+					</a>	
+				</li>
+				<li>
+					<a href="#roles_manager" data-toggle="tab" onclick="">
+						角色信息管理<span class="badge"></span>
+					</a>	
+				</li>
+ 			</ul>
+ 			<div id="myTabContent" class="tab-content">
+ 				<div id="power_user_List" class="tab-pane fade in active">
+					<div>
+						<ul class="breadcrumb">
+    						<li><a href="#">首页</a></li>
+    						<li><a href="#">权限管理</a></li>
+    						<li class="active">用户管理</li>
+						</ul>
+					</div>
+					<div class="row">
+						 <div class="col-md-12 col-xs-12">
+							<table id="role_user_Tab"></table>
+						 </div>
+					</div>	
+				</div>
+				<div id="power_manager" class="tab-pane fade">
+					<div>
+						<ul class="breadcrumb">
+    						<li><a href="#">首页</a></li>
+    						<li><a href="#">权限管理</a></li>
+    						<li class="active">权限信息管理</li>
+						</ul>
+					</div>
+					<div class="row">
+						 <div class="col-md-12 col-xs-12">
+							<table id="permission_Tab"></table>
+						 </div>
+					</div>
+				</div>
+				<div id="roles_manager" class="tab-pane fade">
+					<div>
+						<ul class="breadcrumb">
+    						<li><a href="#">首页</a></li>
+    						<li><a href="#">权限管理</a></li>
+    						<li class="active">角色信息管理</li>
+						</ul>
+					</div>
+					<div class="row">
+						 <div class="col-md-12 col-xs-12">
+							<table id="roles_Tab"></table>
+						 </div>
+					</div>
+				</div>				
+ 			</div>			
+ 		</div>
+	</div>
+	
+	<div id="roleUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" th:fragment="roleUser_edit_Modal">
+		<div class="modal-dialog" role="document" style="width:55%">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true" style="font-size:40px;">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-th"></i>【用户授权】</h4>
+				</div>
+				<div id="myModal_body" class="modal-body" style="padding:10px 30px 30px 50px;">
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						关闭
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+		

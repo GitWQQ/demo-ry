@@ -25,7 +25,7 @@ public class ShiroConfig {
 		//设置securityManager
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		// 配置登录的url,如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-		shiroFilterFactoryBean.setLoginUrl("/thy/static/toLoginPage");
+		shiroFilterFactoryBean.setLoginUrl("/thy/static/toBackStageLogin");
 		// 配置登录成功的url,登录成功后要跳转的链接
 		shiroFilterFactoryBean.setSuccessUrl("/thy/static/main");
 		//未授权界面;
@@ -41,6 +41,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/kf/**","anon");
 		filterChainDefinitionMap.put("/static/**", "anon");
 		filterChainDefinitionMap.put("/thy/static/**","anon");
+		filterChainDefinitionMap.put("/thy/order/**","anon");
 		filterChainDefinitionMap.put("/thy/sys/**","anon");
 		filterChainDefinitionMap.put("/item_Img/**","anon");
 		//<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;

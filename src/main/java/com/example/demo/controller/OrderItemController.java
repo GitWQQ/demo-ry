@@ -82,7 +82,7 @@ public class OrderItemController {
 		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
 		Map<String,Object> resultMap=new HashMap<>();
 		Integer count=(Integer)orderItemService.getSendOrderCount(paramMap);
-		resultMap.put("count",count);
+		resultMap.put("count",count.toString());
 		return resultMap;
 	}
 	

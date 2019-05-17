@@ -162,7 +162,7 @@ public class CommonUtil {
 	 }
 	 
 	 /**
-	  * Id=年月日时分秒+三位随机数
+	  * Id=年月日+三位随机数
 	  * @return
 	  */
 	 public static String getID(){
@@ -176,6 +176,7 @@ public class CommonUtil {
 		 return id;
 	 }
 	 
+	
 	 /**
 	  * 获取更新时间戳
 	  * @param args
@@ -189,6 +190,6 @@ public class CommonUtil {
 	 }
 	 
 	public static void main(String[] args){
-		System.out.println(getID());
+	
 	}
 }	

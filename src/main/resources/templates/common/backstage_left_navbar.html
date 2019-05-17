@@ -22,30 +22,29 @@
 				<div id="backstage_left_bar" class="column sidebar" style="float:left;margin-left:0px;position:fixed;">
 					<div class="btn-group btn-group-md btn-group-vertical">
 						<button class="btn btn-primary" type="button" style="height:50px">
-						
 						</button>
 						<button class="btn btn-primary" type="button">
 						 &nbsp;&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-home"></h5>
 						</button>
-						<button shiro:hasRole="admin" class="btn btn-primary" type="button">
+						<button shiro:hasAnyRoles="superadmin,admin" class="btn btn-primary" type="button">
 							&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-plus-sign"></h5>
 						</button>
-						<button class="btn btn-primary" type="button">
+						<button   shiro:hasAnyRoles="superadmin,admin" class="btn btn-primary" type="button">
 						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-signal"></h5>
 						</button>
-						<button class="btn btn-primary" type="button">
+						<button  shiro:hasAnyRoles="superadmin,admin" class="btn btn-primary" type="button">
 						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-th-list"></h5>
 						</button>
-						<button class="btn btn-primary" type="button">
+						<button  shiro:hasAnyRoles="superadmin,admin" class="btn btn-primary" type="button">
 						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-cog"></h5>
 						</button>
-						<button class="btn btn-primary" type="button">
+						<button  shiro:hasAnyRoles="superadmin,admin" class="btn btn-primary" type="button">
 						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-cog"></h5>
 						</button>
-						<button class="btn btn-primary" type="button" style="display:none"> 
+						<button  shiro:hasAnyRoles="superadmin,admin" class="btn btn-primary" type="button" style="display:none"> 
 						&nbsp;&nbsp;&nbsp;<h5>1</h5>
 						</button>
-						<button class="btn btn-primary" type="button">
+						<button shiro:hasAnyRoles="superadmin,admin" class="btn btn-primary" type="button">
 						&nbsp;&nbsp;&nbsp;<h5 class="glyphicon glyphicon-user"></h5>
 						</button>
 					</div>
@@ -55,26 +54,26 @@
 						<button class="btn btn-primary" type="button">
 							<h5>首&nbsp;&nbsp;页</h5>
 						</button>
-						<button id="btn_six" class="btn btn-primary" type="button">
+						<button  id="btn_zero" class="btn btn-primary" type="button">
 							<h5>首&nbsp;&nbsp;页</h5>
 						</button>
-						<button shiro:hasRole="admin" id="btn_one" class="btn btn-primary" type="button">
+						<button shiro:hasAnyRoles="superadmin,admin" id="btn_one" class="btn btn-primary" type="button">
 							<h5>&nbsp;发布商品</h5>
 						</button>
-						<button id="btn_two" class="btn btn-primary" type="button">
+						<button shiro:hasAnyRoles="superadmin,admin" id="btn_two" class="btn btn-primary" type="button">
 							<h5>&nbsp;营销趋势</h5>
 						</button>
-						<button id="btn_three" class="btn btn-primary" type="button">
+						<button shiro:hasAnyRoles="superadmin,admin" id="btn_three" class="btn btn-primary" type="button">
 							<h5>&nbsp;商品列表</h5>
 						</button>
-						<button id="btn_four" class="btn btn-primary" type="button">
+						<button shiro:hasAnyRoles="superadmin,admin" id="btn_four" class="btn btn-primary" type="button">
 							<h5>&nbsp;商城管理</h5>
 						</button>
-						<button id="btn_five" class="btn btn-primary" type="button">
+						<button shiro:hasAnyRoles="superadmin,admin" id="btn_five" class="btn btn-primary" type="button">
 							<h5>&nbsp;订单管理</h5>
 						</button>
-						<button class="btn btn-primary" type="button"> 
-							<h5>个人信息</h5>
+						<button  shiro:hasAnyRoles="superadmin,admin" id="btn_six" class="btn btn-primary" type="button"> 
+							<h5>&nbsp;权限管理</h5>
 						</button>
 						<button class="btn btn-primary" type="button" style="display:none"> 
 							<h5>1</h5>
@@ -85,4 +84,12 @@
 		</div>
 	</div>	
 </body>
+	<script type="text/javascript">
+		$(function(){
+			alert("权限管理");
+			$("#btn_five").click(function(){
+				alert('six');
+			})
+		})
+	</script>
 </html>		

@@ -12,15 +12,16 @@ public class Permission {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private String id;
 	private String permission;
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Role role;
 	
-	public Long getId() {
+	
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getPermission() {

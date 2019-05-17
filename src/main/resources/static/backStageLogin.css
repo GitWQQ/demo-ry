@@ -132,9 +132,6 @@ button{
 	width: 24px;
 	height: 24px;
 	background-image: url("img/rememberPassword1.png");
-	-webkit-appearance: none;
-    -moz-appearance: none;
-    -o-appearance:none;
     padding-left: 0px;
     border-radius: 0px;
     background-color: rgba(0,0,0,0);
@@ -143,9 +140,9 @@ button{
     margin-right: 5px;
     margin-top: 0px;
 }
-.remember input:checked{	
+/* .remember input:checked{	
 	background-image: url("img/rememberPassword2.png");
-}
+} */
 .remember,.regist{
 	float: left;
 	font-size: 15px;
@@ -178,4 +175,28 @@ footer p{
 	text-align: center;
 	font-size: 13px;
 	margin-top: 10px;
+}
+
+#onlineMsg_warning{
+	width:250px;
+	height:100px;
+	margin-top:-30px;
+	position: relative;
+	background-image:url("img/online_warning.jpg");
+	border-radius:15px;
+	float:right;
+	z-index:111;
+	font-size:12px;
+	transform: rotate(-6.5deg);   
+	box-shadow:3px 1px 10px #000
+}
+
+#onlineMsg_warning a{
+	color:#CD2626;
+	font-size:15px;
+	padding-top:10px;
+}
+#onlineMsg_warning font{
+	padding-left:10px;
+	font-size:14px;
 }

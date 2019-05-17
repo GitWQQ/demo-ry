@@ -10,10 +10,14 @@
 		<result column="PHONE" jdbcType="VARCHAR" property="phone"/>
 		<result column="CONTENT" jdbcType="VARCHAR" property="content"/>
 		<result column="CREATETIME" jdbcType="DATE" property="createtime"/>
+		<result column="RNAME" jdbcType="VARCHAR" property="rname"/>
+		<result column="RTIME" jdbcType="DATE" property="rtime"/>
+		<result column="STATUS" jdbcType="VARCHAR" property="status"/>
+		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>		
 	</resultMap>
 	
 	<sql id="columns">
-		XH,NAME,EMAIL,PHONE,CONTENT,CREATETIME
+		XH,NAME,EMAIL,PHONE,CONTENT,CREATETIME,RNAME,RTIME,STATUS,YXX
 	</sql>
 	
 	<sql id="queryByParameter">
@@ -28,6 +32,21 @@
 		</if>
 		<if test="phone !=null">
 			AND phone =#{phone,jdbcType=VARCHAR}
+		</if>
+		<if test="content !=null">
+			AND content =#{content,jdbcType=VARCHAR}
+		</if>
+		<if test="rname !=null">
+			AND rname =#{rname,jdbcType=VARCHAR}
+		</if>
+		<if test="rtime !=null">
+			AND rtime =#{rtime,jdbcType=DATE}
+		</if>
+		<if test="status!=null">
+			AND status =#{status,jdbcType=VARCHAR}
+		</if>
+		<if test="yxx !=null">
+			AND yxx =#{yxx,jdbcType=VARCHAR}
 		</if>
 	</sql>
 	
@@ -49,7 +68,14 @@
 			<if test="phone !=null">
 				PHONE,
 			</if>
+			<if test="yxx !=null">
+				YXX,
+			</if>
+			<if test="status !=null">
+				STATUS,
+			</if>
 				CREATETIME,
+				
 		</trim>
 		<trim prefix="values(" suffix=")" suffixOverrides=",">
 			<if test="xh !=null">
@@ -67,8 +93,62 @@
 			<if test="phone !=null">
 				#{phone,jdbcType=VARCHAR},
 			</if>
+			<if test="yxx !=null">
+				#{yxx,jdbcType=VARCHAR},
+			</if>
+			<if test="status !=null">
+				#{status,jdbcType=VARCHAR},
+			</if>
 				NOW(),
 		</trim>
 	</insert>
+	
+	<select id="getOnlineMesg" parameterType="java.util.Map" resultMap="mesgMap">
+		SELECT 
+		<include refid="columns"/>
+		FROM TB_MSG
+		WHERE 1=1 
+		<include refid="queryByParameter"/>	
+	</select>
+	
+	<select id="getOnlineCount" parameterType="java.util.Map" resultType="integer">
+		SELECT 
+		count(xh)
+		FROM TB_MSG
+		WHERE 1=1 
+		<include refid="queryByParameter"/>	
+	</select>
+	
+	<update id="updateByParam" parameterType="java.util.Map">
+		UPDATE TB_MSG 
+		<set>
+			<if test="name !=null">
+				name=#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="email !=null">
+				email=#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="content !=null">
+				content=#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="phone !=null">
+				phone=#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="rname !=null">
+				rname=#{rname,jdbcType=VARCHAR},
+			</if>
+			<if test="rtime !=null">
+				rtime=#{rtime,jdbcType=DATE},
+			</if>
+			<if test="status!=null">
+				status=#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="yxx !=null">
+				yxx=#{yxx,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE yxx=1 
+		AND xh=#{xh,jdbcType=VARCHAR}
+	</update>
 	
 </mapper>

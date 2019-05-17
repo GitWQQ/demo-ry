@@ -83,10 +83,10 @@ public class SysController {
 		Map<String,Object> result=new HashMap<>();
 		String username=paramMap.get("username").toString();
 		String password=paramMap.get("password").toString();
+		String bs=paramMap.get("bs").toString();
+		/*boolean remember=Boolean.parseBoolean(paramMap.get("remember").toString());
+		System.out.println("remember:========"+remember);*/
 		UserInfoLoginToken token=null;
-		/*if(subject.isAuthenticated()){
-			System.err.println("已经登录过嘞");
-		}else{*/
 			try{
 				if(!"".equals(username)&& username !=null){
 					token=new UserInfoLoginToken(username, password);
@@ -100,11 +100,6 @@ public class SysController {
 					subject.getSession().setAttribute("ip",getIpValue(subject.getSession().getHost(),httpRequest));
 					result.put("status",200);
 					result.put("message","登录成功");
-					try {
-						httpResponse.sendRedirect("/thy/backstage");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
 				}
 			}catch(UnknownAccountException uae){
 					System.out.println("用户不存在");
@@ -126,7 +121,6 @@ public class SysController {
 					result.put("status",204);
 					result.put("message","密码尝试限制");
 			}
-		/*}*/
 		return result;
 	}
 	

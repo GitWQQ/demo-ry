@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.UserRoleMapper">
+	<resultMap type="UserRole" id="userRoleMap">
+		<id column="XH" jdbcType="VARCHAR" property="xh"/>
+		<result column="UID" jdbcType="VARCHAR" property="uid"/>
+		<result column="RID" jdbcType="VARCHAR" property="rid"/>
+	</resultMap>
+	
+	<insert id="addUserRole" parameterType="java.util.Map">
+		INSERT INTO TB_USER_ROLE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="xh !=null">
+				XH,
+			</if>
+			<if test="uid !=null">
+				UID,
+			</if>
+			<if test="rid !=null">
+				RID,
+			</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="xh !=null">
+				#{xh,jdbcType=VARCHAR},
+			</if>
+			<if test="uid !=null">
+				#{uid,jdbcType=VARCHAR},
+			</if>
+			<if test="rid !=null">
+				#{rid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		
+	</insert>
+</mapper>

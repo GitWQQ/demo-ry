@@ -46,8 +46,6 @@ public class ThymeleafController extends BaseController{
 	@Autowired
 	private ImgService imgService;
 	
-	
-	
 	/**
 	 * 登录后台管理主页
 	 * @return
@@ -73,46 +71,6 @@ public class ThymeleafController extends BaseController{
 		return "gwc";
 	}
 	
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/getAllItemRecord",method=RequestMethod.GET)
-	@ResponseBody 	
-	public List getAllItemRecord(HttpServletRequest request){
-		Map<String,Object> resultMap=new HashMap<String,Object>();
-    	Map<String, Object> paramMap=getParamMap(request.getParameterMap());
-    	List result=itemService.getAllItemRecord(paramMap);
-    	resultMap.put("success",true);
-    	resultMap.put("data",result);
-    	return result;
-	}
-	
-	@SuppressWarnings({ "rawtypes", "unused" })
-	@RequestMapping("/getItemRecordByParam")
-	@ResponseBody
-	public List getItemRecordByParam(HttpServletRequest request){
-		Map<String,Object> resultMap=new HashMap<String,Object>();
-		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
-		List result=itemService.getItemRecordByParam(paramMap);
-		return result;
-	}
-	
-	
-	@SuppressWarnings("rawtypes")
-	@RequestMapping("/getRecordDetailOrEdit")
-	public String getRecordDetail(HttpServletRequest request,Model model){
-		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
-		List list=null;
-		if (paramMap.get("id")!=null && !"".equals(paramMap.get("id"))) {
-			 list=itemService.getAllItemRecord(paramMap);
-			if(list!=null && !list.isEmpty()){
-				model.addAttribute("list",list);
-			}			
-		}
-		if("detail".equals(paramMap.get("action"))){
-			return "item/item_detail";
-		}else{
-			return "item/item_edit";
-		}	
-	}
 	
 	@SuppressWarnings({ "rawtypes", "unused" })
 	@RequestMapping("/getRecordEdit")
@@ -132,59 +90,6 @@ public class ThymeleafController extends BaseController{
 		return "item/item_detail";
 	}
 	
-	@RequiresPermissions(value="delete")
-	@RequestMapping("/deleteById")
-	@ResponseBody
-	public Map<String,Object> deleteById(HttpServletRequest request){
-		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
-		Map<String,Object> resultMap=new HashMap<String,Object>();
-		itemService.updateById(paramMap);
-		resultMap.put("msg","删除成功！");
-		return resultMap;
-	}
-	
-	@RequestMapping("/updateByParamsSelective")
-	@ResponseBody
-	public Map<String,Object> updateByParams(HttpServletRequest request){
-		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
-		Map<String,Object> resultMap=new HashMap<>();
-		itemService.updateByParamsSelective(paramMap);
-		if(paramMap.get("status")=="0"){
-			resultMap.put("msg","下架成功");
-		}else{
-			resultMap.put("msg","上架成功");
-		}
-		return resultMap;
-	}
-	
-	@RequiresPermissions(value={"add"})
-	@RequestMapping("/insertItemRecord")
-	@ResponseBody
-	public Map<String,Object> insertItemRecord(HttpServletRequest request
-	) throws IOException{
-		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
-		Map<String,Object> resultMap=new HashMap<String,Object>();
-		itemService.insertItemRecord(paramMap);
-		resultMap.put("success",true);
-		resultMap.put("msg","新增商品成功!");
-		return resultMap;
-	}
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@RequiresPermissions(value={"update"})
-	@RequestMapping("/updateItemRecord")
-	@ResponseBody
-	public Map<String,Object> updateItemRecord(HttpServletRequest request){
-		Map<String,Object> resultMap=new HashMap<String,Object>();
-		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
-		itemService.updateByParamsSelective(paramMap);
-		resultMap.put("success",true);
-		resultMap.put("msg","修改成功!");
-		return resultMap;
-	}
 	
 	@RequiresPermissions(value="add")
 	@RequestMapping("/fileUpload")
@@ -339,7 +244,7 @@ public class ThymeleafController extends BaseController{
 	 * @param webRequest
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@RequestMapping("/shoppingPage")
 	public String queryShopping(Model model,HttpServletRequest request,WebRequest webRequest){
 		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
@@ -357,7 +262,7 @@ public class ThymeleafController extends BaseController{
 			return "shoppingPage";
 		}
 		
-	}
+	}*/
 	/**
 	 * 获取字典
 	 * @param request

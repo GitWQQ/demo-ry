@@ -15,7 +15,17 @@ public class OnlineMesg {
 	//email
 	private String email;
 	//创建日期
-	private Date createTime;
+	private Date createtime;
+	
+	//阅读人
+	private String rname;
+	
+	//
+	private Date rtime;
+	
+	private String status;
+	
+	private String yxx;
 	
 	
 	public String getXh() {
@@ -59,13 +69,44 @@ public class OnlineMesg {
 		this.email = email;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
+	public Date getCreatetime() {
+		return createtime;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
-	
-	
+
+	public String getRname() {
+		return rname;
+	}
+
+	public void setRname(String rname) {
+		this.rname = rname;
+	}
+
+	public Date getRtime() {
+		return rtime;
+	}
+
+	public void setRtime(Date rtime) {
+		this.rtime = rtime;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getYxx() {
+		return yxx;
+	}
+
+	public void setYxx(String yxx) {
+		this.yxx = yxx;
+	}
+
 }

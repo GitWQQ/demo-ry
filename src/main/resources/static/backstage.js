@@ -10,13 +10,17 @@ $(function(){
 		
 		$("#splx").on('change',function(){
 			var index=$("#splx").find('option:selected').attr('selectedIndex');
-			alert(index);
 		});
 		
 		$("#navbar_Photo").mouseout(function(){
 			$("#groupItem").css("display","none");  
 		})
 		
+		$("#panel_zero").click(function(){
+			$("#panel_zero").css('display','');
+			$("#panel_zero").siblings().css("display","none");
+		});
+
 		$("#btn_one").click(function(){
 			$("#panel_one").css("display","");
 			$("#panel_one").siblings().css("display","none");
@@ -37,7 +41,8 @@ $(function(){
 		$("#btn_four").click(function(){
 			$("#panel_four").css("display","");
 			$("#panel_four").siblings().css("display","none");
-			getLBTFile('1','/thy/shoppingPage');
+			getLBTFile('1','/thy/static/main');
+			initBootStrap();
 		})
 		$("#btn_five").click(function(){
 			$("#panel_five").css("display","");
@@ -46,17 +51,11 @@ $(function(){
 			order_czbs="1";
 			sendOrderCount();
 		})
-		$("#btn_six").click(function(){
-			$("#panel_six").css("display","");
-			$("#panel_six").siblings().css("display","none");
-		})
 		$("#radio1").attr("checked",true);
 		setInterval("getTime()",1000);
 		
 		//修改密码函数function
 		modifyPassWord();
-		
-		
 })
 
 /**
@@ -163,85 +162,86 @@ function getLBTFile(czbs,url){
 //初始化bootstrap表格
 function initBootStrap(){
 	//--------------------------------------
-	/*$("#exampleTable").bootstrapTable({
+	$("#onLineMsgTab").bootstrapTable({
 		method:'GET',//服务器数据的请求方式
-		url:'/thy/getAllItemRecord',
+		url:'/kf/getOnlineMesg',
 		iconSize:'outline',
+		dataType:'json',                                         
+		contentType:'application/x-www-form-urlencoded',
 		toolbar:'#exampleToolbar',
-		striped:true,//设置为true会有隔行变色效果
-		dataType:'json',//服务器返回的数据类型
-		pagination:true,//设置为true会在底部有分页
-		singleSelect:false,//设置为true将禁止多选
-		//contentType:"application/x-www-form-urlencoded",
-		pageSize:10,//如果设置了分页，每页数据条数
-		pageNumber:1,//如果设置了分布，首页页码
-		//search:true,//是否显示搜索框
-		showColumns:false,//是否显示内容下拉框
-		sidePagination:'server'//设置在哪里进行分页，可以选择值为client或者server
-		queryParams:function(param){
-			return {
-				limit:params.limit,
-				offset:params.offset
-			};
-		},
+		iconSize:'outline',
+		striped:true,                                            
+		cache:false,                                             
+		showColumns:false,                                       
+		pagination:true,                                         
+		paginationPreText:'上一頁',                                 
+		paginationNextText:'下一頁',                                
+		showPaginationSwitch:false,                              
+		sortable:false,                                          
+		singleSelect:false,                                      
+		search:false,                                             
+		buttonsAlign:'right',                                    
+		showRefresh:false,
+		showExport:true,
+		exportDataType: "all",
+		pageNumber:1,                                            
+		pageSize:5,                                              
+		pageList:[5,10,20,30,50,100],                            
+		undefinedText:'--',                                      
+		uniqueId:'xh',             
 		columns:[
 		         {
-		        	 checkbox:true
+		        	 field:'xh',
+		        	 title:'序号',
+		        	 visible:false
 		         },{
-		        	 field:'id',
-		        	 title:'id',
+		        	 field:'name',
+		        	 title:'留言人姓名',
+		        	 width:100,
+		        	 align:'center'
 		         },{
-		        	 field:'jobName',
-		        	 title:'任务名称'
+		        	 field:'content',
+		        	 title:'留言内容',
+		        	 align:'center',
+		        	 width:300
 		         },{
-		        	 field:'jobGroup',
-		        	 title:'任务分组'
+		        	 field:'phone',
+		        	 title:'留言人电话',
+		        	 align:'center',
+		        	 width:100
 		         },{
-		        	 field:'beanClass',
-		        	 title:'任务类'
-		         },{
-		        	 visible:false,
-		        	 field:'methodName',
-		        	 title:'方法名称'
-		         },{
-		        	 field:'jobStatus',
-		        	 title:'停启操作',
-		        	 formatter:function(value,row,index){
-		        		 var e='<a class="btn btn-success btn-xs" href="#" mce_href="#" title="点击开启" onclick="changeStatus(\''
-		        			 +row.id+'\',\''+row.jobStatus
-		        			 +'\')"><i class="fa fa-hourglass-start"></i>开启</a>';
-		        		 var f = '<a class="btn btn-danger btn-xs" href="#" mce_href="#" title="点击关闭" onclick="changeStatus(\''
-                             + row.id + '\',\'' + row.jobStatus
-                             + '\')"><i class="fa fa-square-o">关闭</i></a> ';
-                         if (row.jobStatus == 0) {
-                             return e;
-                         } else {
-                             return f;
-                         }
-		        	 }
+		        	 field:'email',
+		        	 title:'留言人邮箱',
+		        	 align:'center',
+		        	 width:100
 		         },{
 		        	 title:'操作',
-		        	 field:'id',
+		        	 field:'xh',
 		        	 align:'center',
+		        	 width:100,
 		        	 formatter:function(value,row,index){
-		        		 var e='<a class="btn btn-primary btn-sm" href="#" mce_href="#" title="编辑" onclick="edit(\''
-		        			 +row.id+'\',\''+row.jobStatus
-		        			 +'\')"><i class="fa fa-edit"></i></a>';
-		        		 var d='<a class="btn btn-warning btn-sm" href="#" mce_href="#" title="删除" onclick="remove(\''
-		        			 +row.id
-		        			 +'\')"><i class="fa fa-remove"></i></a>';
-		        		 var f = '<a class="btn btn-success btn-sm" href="#" title="开启"  mce_href="#" onclick="resetPwd(\''
-                             + row.id
-                             + '\')"><i class="fa fa-key"></i></a> ';
-                         return e + d;
+		        		var btn;
+		        		if(row.status=="0"){
+		        			btn='<button id="btn_edit" class="btn btn-danger btn-sm" onclick="btn_reading2(\''+row.xh+'\');">未阅读</button>&nbsp;';
+		        		}else{
+		        			btn='<button id="btn_edit" class="btn btn-success btn-sm" onclick="btn_read(\''+row.xh+'\');">已阅读</button>&nbsp;';
+		        		}
+			 			return btn;
 		        	 }
 		         }
-		]
+		],
+		onLoadSuccess:function(json){
+			$("#onLineMsgTab").bootstrapTable('load',json);
+		},
+		onLoadError:function(){
+			bootbox.alert('load fail');
+		}
 		
-	});*/
+	});
+	
 	//---------------------------------------
 	$("#userListTable").bootstrapTable({                         
-		url:'/thy/getAllItemRecord',                             
+		url:'/item/getAllItemRecord',                             
 		method:'GET',                                           
 		dataType:'json',                                         
 		contentType:'application/x-www-form-urlencoded',
@@ -345,7 +345,10 @@ function initBootStrap(){
 				 		}                           
 				 	}                                            
 			]                                                    
-	})                                                           
+	})
+	//-------------------------------------------
+	
+	
 }
 
 function queryParams(params){
@@ -364,7 +367,7 @@ function searchUser(){
 	$("#userListTable").bootstrapTable("refresh");
 }
 function pre_view(){
-	alert('预览图片');
+	
 }
 
 function getItemDetails(id){
@@ -389,7 +392,7 @@ function btn_detail(id){
 	var param={"id":id,"action":action};
 	$.ajax({
 		type:'get',
-		url:'/thy/getRecordDetailOrEdit',
+		url:'/item/getRecordDetailOrEdit',
 		data:param,
 		dataType:'html',
 		success:function(data){
@@ -438,7 +441,7 @@ function btn_delete(id){
 	layer.confirm('确定删除',{icon:3,title:'提示'},function(index){
 		$.ajax({
 			type:'post',
-			url:'/thy/deleteById',
+			url:'/item/deleteById',
 			data:{"id":id},
 			dataType:'json',
 			success:function(data){
@@ -453,12 +456,13 @@ function btn_delete(id){
 	})
 }
 
+
 function btn_edit(id){
 	var action="edit";
 	var param={"id":id,"action":action};
 	$.ajax({
 		type:'GET',
-		url:'/thy/getRecordDetailOrEdit',
+		url:'/item/getRecordDetailOrEdit',
 		data:param,
 		dataType:'html',
 		success:function(data){
@@ -482,7 +486,7 @@ function btn_search(){
 	var Params={"title":title,"status":status,"mhcx":bol};
 	btn_search_bz="1";
 	$("#userListTable").bootstrapTable("refresh",{
-		url:'/thy/getAllItemRecord',
+		url:'/item/getAllItemRecord',
 		query:Params
 	});
 	//$("#userListTable").bootstrapTable('refresh');
@@ -495,7 +499,7 @@ function btn_remove(){
 	var bol=$("#mhcx").prop("checked");
 	var Params={"title":title,"status":status,"mhcx":bol};
 	$("#userListTable").bootstrapTable('refresh',{
-		url:'/thy/getAllItemRecord',
+		url:'/item/getAllItemRecord',
 		query:Params
 	});
 }
@@ -504,7 +508,7 @@ function changeStatus(id,status){
 	var param={"id":id,"status":status,"czbs":"1"};
 	$.ajax({
 		type:'POST',
-		url:'/thy/updateByParamsSelective',
+		url:'/item/updateByParamsSelective',
 		data:param,
 		dataType:"json",
 		success:function(data){
@@ -544,7 +548,7 @@ function btn_submit(){
 	
 	$.ajax({
 		type:'POST',
-		url:'/thy/insertItemRecord',
+		url:'/item/insertItemRecord',
 		dataType:'json',
 		data:param,
 		success:function(data){
@@ -568,7 +572,7 @@ function btn_update(){
 	var formEditParam=$("#editform").serialize();
 	$.ajax({
 		type:'POST',
-		url:'/thy/updateItemRecord',
+		url:'/item/updateItemRecord',
 		data:formEditParam,
 		dataType:'json',
 		success:function(data){
@@ -635,7 +639,7 @@ function getZdInfo(zddm,id){
 	var param={"zddm":zddm};
 	$.ajax({
 		type:'GET',
-		url:'getZd',
+		url:'/thy/static/getZd',
 		dataType:'json',
 		data:param,
 		contentType: "application/json; charset=utf-8",
@@ -656,7 +660,7 @@ function getZdInfo(zddm,id){
 }
 
 function preViewLBT(){
-	getLBTFile('1','/thy/shoppingPage');
+	getLBTFile('1','/thy/static/main');
 }
 function addLBT(){
 	alert('添加轮播图');
@@ -672,7 +676,7 @@ function removeLBT(){
 		dataType:'json',
 		success:function(data){
 			layer.msg(data.msg);
-			getLBTFile('1','/thy/shoppingPage');
+			getLBTFile('1','/thy/static/main');
 		},
 		error:function(data){
 			
@@ -765,4 +769,25 @@ function cityChange(){
 			
 		}
 	});
+}
+
+//在线留言阅读事件
+function btn_reading2(xh){
+	$.ajax({
+		type:'POST',
+		url:'/kf/readingMsg',
+		data:{"xh":xh},
+		dataType:'json',
+		success:function(data){
+			if(data.success){
+				$("#onLineMsgTab").bootstrapTable("refresh");
+				layer.msg(data.msg);
+			}else{
+				layer.msg(data.msg);
+			}
+		},
+		error:function(e){
+			layer.msg('系统异常，请及时联系开发人员哦O(∩_∩)O哈哈~');
+		}
+	})
 }

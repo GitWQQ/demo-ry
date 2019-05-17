@@ -21,7 +21,7 @@ button span{
 	font-size: 20px;
 }
 
-/*´Ë´¦µÄÑùÊ½×ÅÖØ½â¾öµã»÷Ê±´æÔÚÀ¶É«±ß¿ò*/
+/*ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ß¿ï¿½*/
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus,
@@ -43,4 +43,18 @@ button span{
 	margin-left:38px;
 	margin-top:50px;
 	background-color:#F5F5F5;
-}		 
+}	
+#panel_body_first {
+	margin:10px 50px 10px 10px;
+	background-color:#FFF;	
+	font-size:14px;
+}	
+
+#panel_body_first .span-control01{
+	display:block;
+	height:34px;
+	padding:6px 0px;
+	font-size:14px;
+	line-height:1.428;
+}
+ 

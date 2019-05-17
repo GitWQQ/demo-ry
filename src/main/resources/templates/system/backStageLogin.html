@@ -14,11 +14,17 @@
 			</header>
             <article>
                 <section>
+                	<div id="onlineMsg_warning">
+                		<font>在线留言:【<a id="onlineMsg_num" href="#"></a>】尚未阅读</font><br/>
+                		<font>待处理订单:【<a id="ording_num" href="#"></a>】请尽快处理</font>
+            		</div>
                     <aside>
                         <em>
                             <img th:src="@{/static/img/user.png}" />
                         </em>
-                         <form id="backstagelogin_form" action="/thy/sys/toLogin" method="post">
+                         <form id="backstagelogin_form" action="/thy/sys/toLogin" method="post"
+                         class="bs-example bs-example-form" role="form" onsubmit="onLoginSubmit();">
+                         
                          	<input type="hidden" id="bs" name="bs" value="backstage"/>
                             <p class="name"><i></i>
                             	<input type="text" id="username" name="username" class="userName" placeholder="请输入用户名" />
@@ -34,8 +40,9 @@
 									<span id="login_msg2"></span>
 								</div>
                             </p>
-                            <button id="backstage_btn_submit">登录</button>
-                            <p class="remember"><input type="checkbox" name="remember" />记住密码</p>
+                            <!-- <input type="button" id="backstage_btn_submit" value="登录"></input> -->
+                            <button id="backstage_btn_submit" >登录</button>
+                            <p class="remember"><input id="remember" type="checkbox" name="remember" />记住密码</p>
                             <p class="regist"><span>没有账号?</span><a href="regist.html">立即注册</a></p>
                             <div class="clear"></div>
                         </form>
@@ -61,6 +68,7 @@
 	$(function(){
 		var username="";
 		var password="";
+		var remember=false;
 		$("#username").blur(function(){
 			username=$("#username").val().trim();
 			if(username !=""){
@@ -76,6 +84,7 @@
 		$("#backstage_btn_submit").click(function(){
 			username=$("#username").val().trim();
 			password=$("#password").val().trim();
+			remember=$("#remember").prop('checked');
 			var $form=$("#backstagelogin_form");
 			if(username==""){
 				$("#backstage_username_warning").css("display","block");
@@ -88,17 +97,19 @@
 				return false;
 			}
 			//使用Ajax提交form表单
+			//var param={'username':username,'password':password,'remember':remember,'bs':'back_stage'};
+			var param={'username':username,'password':password,'bs':'back_stage'};
 			$.ajax({
 				type:'POST',
 				url:$form.attr('action'),
-				data:$form.serialize(),
+				data:param,
 				dataType:'json',
 				beforeSend:function(){
 					/* layer.msg('正在登陆......'); */
 				},
 				success:function(data){
 					if(data.status==200){
-						
+						window.location.href='/thy/backstage';	
 					}else{
 						$("#login_msg2").html(data.message);
 					}
@@ -112,6 +123,39 @@
 			})
 		})
 	})
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			setInterval("getOnlineMsgCount();getOrdersCount();",1000*60);
+		})
+		function getOnlineMsgCount(){
+			$.ajax({
+				type:'get',
+				url:'/kf/getOnlineCount',
+				type:'GET',
+				dataType:'json',
+				success:function(data){
+					$("#onlineMsg_num").html(data.num+"条");
+				},
+				error:function(e){
+					
+				}
+			})
+		}
+		function getOrdersCount(){
+			$.ajax({
+				type:'get',
+				url:'/thy/order/getSendOrderCount',
+				dataType:'json',
+				success:function(data){
+					$("#ording_num").html(data.count+"条");
+				},
+				error:function(data){
+					
+				}
+			})
+		}
+		
 	</script>
 </html>
 

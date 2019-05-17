@@ -321,7 +321,7 @@ function sendOrderCount(){
 //-----------------
 var t,n,count=0;
 $(function(){
-	t=setInterval("sendOrderCount()",6000);
+	t=setInterval("sendOrderCount()",1000*60);
 })
 
 

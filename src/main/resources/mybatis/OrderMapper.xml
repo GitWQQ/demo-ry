@@ -107,5 +107,4 @@
 		WHERE order_id=#{order_id,jdbcType=VARCHAR}
 	</update>
 	
-	
 </mapper>

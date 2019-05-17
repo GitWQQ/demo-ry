@@ -23,6 +23,7 @@
 						<div style="margin-top:30px;width:100%">
 							<form id="login_form" action="/thy/sys/toLogin"  method="POST" 
 							class="bs-example bs-example-form" role="form" onsubmit="onLoginSubmit();">
+								<input type="hidden" id="bs" name="bs" value="prev_stage"/>
 								<div class="form-group">
 									<div class="input-group">
 										<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
@@ -44,6 +45,7 @@
 									<input style="width:100%" id="btn_submit" type="button" class="btn btn-danger" value="登     录"/>
 								</div>
 								<div class="form-group" style="margin-top:15px;margin-left:140px;width:100%;">
+									<p class="remember"><input id="remember" type="checkbox" name="remember" />记住密码</p>
 								  	<a>忘记密码</a>
 								  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								  	<a th:href="@{/thy/static/registerPage}">免费注册</a>
@@ -77,7 +79,8 @@
 		$("#btn_submit").click(function(){
 			username=$("#username").val().trim();
 			password=$("#password").val().trim();
-			
+			remember=$("#remember").prop('checked');
+			bs=$("#bs").val();
 			var $form=$("#login_form");
 			if(username==""){
 				$("#username_warning").css("display","block");
@@ -89,19 +92,19 @@
 				$("#password_warning").html("密码不能为空!");
 				return false;	
 			}
-			
+			var param={"username":username,"password":password,"remember":remember,'bs':'prev_stage'};
 			//使用Ajax提交form表单
 			$.ajax({
 				type:'POST',
 				url:$form.attr('action'),
-				data:$form.serialize(),
+				data:param,
 				dataType:'json',
 				beforeSend:function(){
 					/* layer.msg('正在登陆......'); */
 				},
 				success:function(data){
 					if(data.status==200){
-						window.location.href='/thy/shoppingPage';	
+						window.location.href='/thy/static/main';	
 					}else{
 						$("#login_msg").html(data.message);
 					}

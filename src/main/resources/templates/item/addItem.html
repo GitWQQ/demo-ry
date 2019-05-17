@@ -1,14 +1,14 @@
 <div id="panel_one"  class="panel panel-primary"  style="padding-bottom:0px; display:none" th:fragment="addItem">
  							<div class="panel-body panel_body_style">
-							<div class="row" style="margin:10px 50px 10px 10px;background-color:#FFF;">
+							<div id="panel_body_first" class="row">
 								<div class="col-md-6">
-									<form id="item_add_form" style="width:100%" class="bs-example bs-example-form" role="form" enctype="multipart/form-data">
+									<form id="item_add_form" class="bs-example bs-example-form" role="form" enctype="multipart/form-data">
 										<input type="hidden" id="image" name="image"/>
 										<input type="hidden" id="img_id" name="img_id"/>
 										<div class="input-group" style="width:100%;margin-top:30px;">
 											<div class="row">
 												<div class="col-md-2">
-													<span class="span-control">商品名称:</span>
+													<span class="span-control01" style="font-size:14px;">商品名称:</span>
 												</div>
 												<div class="col-md-8">
 													<input type="text" id="title" name="title" class="form-control"  placeholder="商品名称"/>
@@ -19,7 +19,7 @@
 										<div class="input-group" style="width:100%;margin-top:30px;">
 											<div class="row">
 												<div class="col-md-2">
-													<span class="span-control">商品类目:</span>
+													<span class="span-control01">商品类目:</span>
 												</div>
 												<div class="col-md-8">
 													<select id="splx" name="splx" class="form-control"></select>
@@ -29,19 +29,82 @@
 										</div>
 										<div class="input-group" style="width:100%;margin-top:30px;">
 											<div class="row">
-												<div class="col-md-3">
-													<span class="span-control">尺寸/尺码:</span>
+												<div class="col-md-2">
+													<span class="span-control01">尺寸/尺码:</span>
 												</div>
-												<div class="col-md-8">
-													
-												</div>	
+												<div class="col-md-9" style="border:1px solid #bbb;margin-left:15px;padding:15px;">
+													 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="S"/>
+            											<label for="S">S</label>
+    												 </div>	
+													 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="M"/>
+            											<label for="M">M</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="L"/>
+            											<label for="L">L</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="XL"/>
+            											<label for="XL">XL</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="XXL"/>
+            											<label for="XXL">XXL</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="XXXL"/>
+            											<label for="XXXL">XXXL</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SA_L"/>
+            											<label for="SA_L">36码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SA_Q"/>
+            											<label for="SA_Q">37码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SA_B"/>
+            											<label for="SA_B">38码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SA_J"/>
+            											<label for="SA_J">39码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SI_SH"/>
+            											<label for="SI_SH">40码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SI_SHY"/>
+            											<label for="SI_SHY">41码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SI_SHE"/>
+            											<label for="SI_SHE">42码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SI_SHSA"/>
+            											<label for="SI_SHSA">43码</label>
+    												 </div>
+    												 <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SI_SHSI"/>
+            											<label for="SI_SHSI">44码</label>
+    												 </div>
+    												  <div class="checkbox-custom checkbox-default">
+        												<input type="checkbox" id="SI_SHW"/>
+            											<label for="SI_SHW">45码</label>
+    												 </div>
+												</div>
 												<div class="col-md-1"></div>
 											</div>
 										</div>
 										<div class="input-group" style="width:100%;margin-top:30px;">
 											<div class="row">
 												<div class="col-md-2">
-													<span class="span-control">商品价格:</span>
+													<span class="span-control01">商品价格:</span>
 												</div>
 												<div class="col-md-8">
 													<input type="text" id="price" name="price" class="form-control" placeholder="0.00(￥)"/>
@@ -52,7 +115,7 @@
 										<div class="input-group" style="width:100%;margin-top:30px;">
 											<div class="row">
 												<div class="col-md-2">
-													<span class="span-control">商品库存:</span>
+													<span class="span-control01">商品库存:</span>
 												</div>
 												<div class="col-md-8">
 													<input type="text" id="num" name="num" class="form-control"  placeholder="0(件)"/>
@@ -60,11 +123,11 @@
 												<div class="col-md-2"></div>
 											</div>
 										</div>
-										<div style="width:100%;margin-top:30px;"><span><h4>商品卖点(描述):</h4></span></div>
+										<div style="width:100%;margin-top:30px;"><span class="span-control01">商品卖点(描述):</span></div>
 										<div class="input-group">
 											 <textarea class="form-control" id="sell_point" name="sell_point"  rows="6" style="width:600px;"></textarea>
 										</div>
-										<div style="width:100%;margin-top:30px;"><span><h4>商品图片:</h4></span></div>
+										<div style="width:100%;margin-top:30px;"><span class="span-control01">商品图片:</span></div>
 										<div class="input-group" style="width:600px;">
 											<input type="hidden" name="imglx" id="imglx" value="1"/>
 											<input type="file" name="img_file" id="img_file" multipart="multipart" class="file-loading" />
