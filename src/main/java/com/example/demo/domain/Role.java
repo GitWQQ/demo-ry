@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,8 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+@SuppressWarnings("serial")
 @Entity
-public class Role {
+public class Role implements Serializable {
 
 	@Id
 	private String id;

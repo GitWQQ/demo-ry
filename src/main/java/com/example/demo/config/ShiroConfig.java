@@ -4,7 +4,9 @@ import java.util.LinkedHashMap;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,8 @@ import org.springframework.context.annotation.DependsOn;
 import com.example.demo.util.MyShiroRealm;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.codec.Base64;
+import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.mgt.SecurityManager;
 
 @Configuration
@@ -39,6 +43,7 @@ public class ShiroConfig {
 		//配置退出过滤器，具体的退出代码Shiro已经替我们实现
 		filterChainDefinitionMap.put("/logout","logout");
 		filterChainDefinitionMap.put("/kf/**","anon");
+		filterChainDefinitionMap.put("/resource/**","anon");
 		filterChainDefinitionMap.put("/static/**", "anon");
 		filterChainDefinitionMap.put("/thy/static/**","anon");
 		filterChainDefinitionMap.put("/thy/order/**","anon");
@@ -50,6 +55,33 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;
 	}
+	
+	/**
+	 * Cookie
+	 */
+	@Bean
+	public SimpleCookie rememberMeCookie(){
+		//这个参数是cookie的名称，对应前端的checkbox的name=rememberMe
+		SimpleCookie simpleCookie=new SimpleCookie("rememberMe");
+		System.err.println("simpleCookie:"+simpleCookie);
+		simpleCookie.setHttpOnly(true);
+		//cookie的生效时间,单位秒
+		simpleCookie.setMaxAge(600);
+		return simpleCookie;
+	}
+	
+	/**
+	 * cookie管理器
+	 */
+	@Bean
+	public CookieRememberMeManager rememberMeManager(){
+		CookieRememberMeManager cookieRememberMeManager=new CookieRememberMeManager();
+		byte[] cipherKey=Base64.decode("wGiHplamyXlVB11UXWol8g==");
+		cookieRememberMeManager.setCipherKey(cipherKey);
+		cookieRememberMeManager.setCookie(rememberMeCookie());
+		return cookieRememberMeManager;
+	}
+	
 	
 	/**
 	 * 密码校验规则 HashedCredentialsMatcher
@@ -90,6 +122,7 @@ public class ShiroConfig {
     public SecurityManager securityManager(@Qualifier("myShiroRealm") MyShiroRealm myShiroRealm) {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
         manager.setRealm(myShiroRealm);
+        manager.setRememberMeManager(rememberMeManager());
         return manager;
     }
     

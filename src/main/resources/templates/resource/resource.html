@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/style_script::head('首页','/static/bootstrap-3.3.7/css/bootstrap.css')">
+	<meta  charset="UTF-8"/>
+</head>
+<script type="text/javascript" th:src="@{/static/bootstrap-3.3.7/js/bootstrap-treeview.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap-3.3.7/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap-3.3.7/css/bootstrap-treeview.css}" />
+<script type="text/javascript">
+//选中/取消父节点时选中/取消所有子节点
+function getChildNodeIdArr(node) {
+    var ts = [];
+    if (node.nodes) {
+        for (x in node.nodes) {
+            ts.push(node.nodes[x].nodeId);
+            if (node.nodes[x].nodes) {
+                var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                for (j in getNodeDieDai) {
+                    ts.push(getNodeDieDai[j]);
+                }
+            }
+        }
+    } else {
+        ts.push(node.nodeId);
+    }
+    return ts;
+}
+
+//选中所有子节点时选中父节点
+function setParentNodeCheck(node) {
+    var parentNode = $("#tree").treeview("getNode", node.parentId);
+    if (parentNode.nodes) {
+        var checkedCount = 0;
+        for (x in parentNode.nodes) {
+            if (parentNode.nodes[x].state.checked) {
+                checkedCount ++;
+            } else {
+                break;
+            }
+        }
+        if (checkedCount === parentNode.nodes.length) {
+            $("#tree").treeview("checkNode", parentNode.nodeId);
+            setParentNodeCheck(parentNode);
+        }
+    }
+}
+
+/* $(function(){
+	 $.ajax({
+	        type: "Post",
+	        url: '/thy/sys/resource/menu',  
+	        dataType: "json",
+	        success: function (result) {
+	            $('#tree').treeview({
+	                data: result,         // 数据源
+	                showCheckbox: true,   //是否显示复选框
+	                highlightSelected: true,    //是否高亮选中
+	                multiSelect: true,    //多选
+	                levels :1,
+	                enableLinks : true,//必须在节点属性给出href属性
+	                color: "#8DEEEE",
+	                backColor:"#808080",
+	                showBorder:false,
+	                onhoverColor:"#757575",
+	                selectedBackColor:"#757575",
+	                onNodeChecked : function (event,node) {
+	                    var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+	                    if (selectNodes) { //子节点不为空，则选中所有子节点
+	                        $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
+	                    }
+	                },
+	                onNodeUnchecked : function(event, node) { //取消选中节点
+	                    var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+	                    if (selectNodes) { //子节点不为空，则取消选中所有子节点
+	                        $('#tree').treeview('uncheckNode', [selectNodes, { silent: true }]);
+	                    }
+	                },
+	                
+	                onNodeExpanded : function(event, data) {
+	                        
+	                },
+	                    
+	                onNodeSelected: function (event, data) {
+	                	//window.location.href=data.href;
+	                }
+	                    
+	            });
+	        },
+	        error: function () {
+	            alert("菜单加载失败！")
+	        }
+	    })
+	    
+}) */
+</script>
+
+<body>
+
+<!-- <div id="tree" class="col-sm-2">
+
+</div> -->
+
+<input id="selectCatalog"  name="selectCatalog" type="text" autocomplete="off" 
+		class="col-lg-10 col-md-2 form-group" onclick="$('#tree').show()" 
+		style="width: 250px;height: 31px;margin-left: 10px; margin-bottom:0px" tabindex="2"/>
+	<div id="tree" style="display: none; position:absolute; 
+	z-index:1010; background-color:white; margin-left:10px; width: 250px"></div>
+
+</body>
+<script type="text/javascript">
+	$(function(){
+		
+		$.ajax({
+			type: "post",
+			url: "/thy/sys/resource/menu",//对应后台的post
+			contentType:'application/json',
+			async: false,
+			success:function(result){
+			    if(result!=null){
+					$("#selectCatalog").click(function() {
+						var options = {
+							levels : 1,
+							data : result,
+							multiSelect: true,
+							onNodeSelected : function(event, node) {
+								var v=$("#selectCatalog").val();
+							 	v=v+node.text+"|";
+								$("#selectCatalog").val(v);
+								
+							}
+						};
+						$('#tree').treeview(options);
+					});
+			    }
+			},
+			error:function(){
+				parent.alertShow('error','下拉菜单加载失败');
+			}
+		})
+	})
+</script>
+</html>

@@ -84,12 +84,15 @@ public class SysController {
 		String username=paramMap.get("username").toString();
 		String password=paramMap.get("password").toString();
 		String bs=paramMap.get("bs").toString();
-		/*boolean remember=Boolean.parseBoolean(paramMap.get("remember").toString());
-		System.out.println("remember:========"+remember);*/
+		boolean rememberMe=Boolean.parseBoolean(paramMap.get("remember").toString());
+		System.out.println("remember:===="+rememberMe);
+		System.out.println("isRemembered:===="+subject.isRemembered());
+		System.out.println("isAuthenticated:======"+subject.isAuthenticated());
 		UserInfoLoginToken token=null;
 			try{
 				if(!"".equals(username)&& username !=null){
 					token=new UserInfoLoginToken(username, password);
+					token.setRememberMe(rememberMe);
 					subject.login(token);
 					User currentUser=(User)subject.getPrincipal();
 					//存session
@@ -102,18 +105,15 @@ public class SysController {
 					result.put("message","登录成功");
 				}
 			}catch(UnknownAccountException uae){
-					System.out.println("用户不存在");
-					log.error("用户不存在");
+					log.info("用户【"+username+"】不存在");
 					result.put("status",201);
 					result.put("message","用户不存在");
 			}catch(IncorrectCredentialsException ice){
-					System.out.println("密码不正确");
-					log.error("密码不正确");
+					log.info("用户【"+username+"】密码不正确");
 					result.put("status",202);
 					result.put("message","密码不正确");
 			}catch(LockedAccountException lae){
-					System.out.println("账号被锁定");
-					log.error("账号被锁定");
+					log.info("用户【"+username+"】账号被锁定");
 					result.put("status",203);
 					result.put("message","账号被锁定");
 			}catch(ExcessiveAttemptsException eae){
@@ -121,6 +121,8 @@ public class SysController {
 					result.put("status",204);
 					result.put("message","密码尝试限制");
 			}
+			result.put("username",username);
+			result.put("password",password);
 		return result;
 	}
 	

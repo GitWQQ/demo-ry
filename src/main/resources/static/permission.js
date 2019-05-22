@@ -93,7 +93,7 @@ function initBootStrap_Permission(){
 		        	 }
 		         },{
 		        	 title:'操作',
-		        	 field:'xh',
+		        	 field:'id',
 		        	 align:'center',
 		        	 width:80,
 		        	 formatter:function(value,row,index){
@@ -230,9 +230,41 @@ function initBootStrap_Permission(){
 }
 
 function btn_edit_ru(xh){
+	var param={"id":xh};
+	$.ajax({
+		type:'POST',
+		url:'/user/getUserByParam',
+		data:param,
+		dataType:'html',
+		success:function(data){
+			$("#roleUserModal #myModal_body").html(data);
+		},
+		error:function(e){
+			
+		}
+	})
 	$("#roleUserModal").modal('show');
-/*	$("#roleUserModal").on('shown.bs.modal',function(){
-		getZdInfo('SPLX','splx_edit');
-		getZdInfo('STATUS','status_edit');
-	})*/
+	$("#roleUserModal").on('shown.bs.modal',function(){
+		getRoles();
+	})
+	
+}
+
+function getRoles(){
+	$.ajax({
+		type:'GET',
+		url:'/role/getRoles',
+		dataType:'json',
+		success:function(data){
+			var sel=$("#example-getting-started");
+			sel.find("option").remove();
+			sel.append("<option>111</option>");
+			for(var i=0;i<data.length;i++){//外循环，循环有几种字典类
+				sel.append("<option value='"+data[i].id+"'>"+data[i].roleName+"</option>");
+			}
+		},
+		error:function(){
+			
+		}
+	})
 }

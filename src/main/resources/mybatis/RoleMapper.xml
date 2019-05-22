@@ -24,4 +24,8 @@
 			AND u.username = #{username,jdbcType=VARCHAR}
 	</select>
 	
+	<select id="getRoles" parameterType="java.util.Map" resultMap="roleMap">
+		SELECT <include refid="columns"/> FROM TB_ROLE
+	</select>
+	
 </mapper>
