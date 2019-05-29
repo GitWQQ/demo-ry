@@ -5,6 +5,7 @@
 	<resultMap type="User" id="userMap">
 		<id column="ID" jdbcType="VARCHAR" property="id"/>
 		<result column="USERNAME" jdbcType="VARCHAR" property="username"/>
+		<result column="SEX" jdbcType="VARCHAR" property="sex"/>
 		<result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
 		<result column="PHONE" jdbcType="VARCHAR" property="phone"/>
 		<result column="EMAIL" jdbcType="VARCHAR" property="email"/>
@@ -22,7 +23,19 @@
 	</resultMap>
 	
 	<sql id="columns">
-		ID,USERNAME,PASSWORD,PHONE,EMAIL,SALT,CREATED,UPDATED
+		ID,
+		USERNAME,
+		(CASE SEX
+			WHEN '0' THEN '女'
+			WHEN '1' THEN '男'
+			ELSE '未知' END
+		)SEX,
+		PASSWORD,
+		PHONE,
+		EMAIL,
+		SALT,
+		CREATED,
+		UPDATED
 	</sql>	
 	<sql id="queryByParam">
 		<if test="id !=null and id !=''">
@@ -30,6 +43,9 @@
 		</if>
 		<if test="username !=null and username !=''">
 			username=#{username,jdbcType=VARCHAR}
+		</if>
+		<if test="sex !=null and sex !=''">
+			sex=#{sex,jdbcType=VARCHAR}
 		</if>
 		<if test="password !=null and password !=''">
 			password=#{password,jdbcType=VARCHAR}

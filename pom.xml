@@ -88,11 +88,7 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- 邮件 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-spring</artifactId>
@@ -144,13 +140,37 @@
     		<artifactId>commons-httpclient</artifactId>
     		<version>3.1</version>
 		</dependency>
-		<!-- ===================== -->
-		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-<dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <scope>provided</scope>
-</dependency>
+		
+		<!--导出excel poi 依赖-->
+		<dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+		<!--导出excel jxl 依赖-->
+		<dependency>
+        	<groupId>net.sourceforge.jexcelapi</groupId>
+        	<artifactId>jxl</artifactId>
+        	<version>2.6.12</version>
+    	</dependency> 
+    	      
+		<!--发送邮件依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		
+		<!-- ============== -->
+		<dependency>
+    		<groupId>javax.servlet</groupId>
+   	 		<artifactId>javax.servlet-api</artifactId>
+    		<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

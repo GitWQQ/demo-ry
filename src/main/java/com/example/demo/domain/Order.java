@@ -47,6 +47,12 @@ public class Order {
 	 * 交易完成时间
 	 */
 	private Date end_time;
+	
+	/**
+	 * 是否完成订单
+	 */
+	private String sfwc;
+	
 	/**
 	 * 交易关闭时间
 	 */
@@ -85,7 +91,12 @@ public class Order {
 	private String gxsjc;
 
 	
-	
+	public String getSfwc() {
+		return sfwc;
+	}
+	public void setSfwc(String sfwc) {
+		this.sfwc = sfwc;
+	}
 	public String getGxsjc() {
 		return gxsjc;
 	}

@@ -12,4 +12,8 @@ public interface OrderItemMapper {
 	public void removeOrderItem(Map<String,Object> paramMap);
 
 	public void updateOrderItemByParam(Map<String,Object> paramMap);
+	
+	
+	public List exportSaleRanking();
+	
 }

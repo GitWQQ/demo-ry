@@ -47,6 +47,11 @@ function initBootStrap_Permission(){
 		        	 width:100,
 		        	 align:'center'
 		         },{
+		        	 field:'sex',
+		        	 title:'性别',
+		        	 width:100,
+		        	 align:'center'
+		         },{
 		        	 field:'phone',
 		        	 title:'联系电话',
 		        	 align:'center',
