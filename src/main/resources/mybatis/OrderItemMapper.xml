@@ -122,4 +122,16 @@
 		WHERE order_id=#{order_id,jdbcType=VARCHAR}
 	</update>
 	
+	<!-- 商品销售排行榜单下载 -->
+	<select id="exportSaleRanking"  resultMap="orderItemMap">
+		select orit.title,sum(orit.num) num,sum(orit.total_fee) total_fee 
+		from tb_order_item orit,
+		tb_order ord 
+		where 
+		orit.order_id=ord.order_id 
+        and ord.sfwc=1
+        and ord.yxx=1
+        and orit.yxx=1
+        group by orit.item_id;
+	</select>
 </mapper>

@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import com.example.demo.dao.UserRoleMapper;
 import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
 import com.example.demo.util.CommonUtil;
+import com.example.demo.util.EMailUtil;
 import com.mysql.fabric.xmlrpc.base.Param;
 
 @Service
@@ -65,12 +69,30 @@ public class UserServiceImpl  implements UserService{
 		}
 		paramMap.put("created",CommonUtil.getNowDate());
 		paramMap.put("updated",CommonUtil.getNowDate());
+		//持久化用户注册信息
 		userMapper.addUserInfoselective(paramMap);
+		
+		/////////////////////////////
+		
 		Map<String,Object> p=new HashMap<>();
 		p.put("xh",CommonUtil.getId());
 		p.put("uid",paramMap.get("id"));
 		p.put("rid","2");
+		//设置用户角色，默认为普通用户
 		userRoleMapper.addUserRole(p);
+		
+		//发送邮件提示用户注册成功
+		if(paramMap.get("email")!=null && !"".equals(paramMap.get("email"))){
+			try {
+				EMailUtil.sendEMail(paramMap.get("email").toString(),"欢迎【"+paramMap.get("username")+"】成为本店新用户");
+			} catch (AddressException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**

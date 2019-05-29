@@ -14,5 +14,10 @@ public interface OrderItemService {
 	public void removeOrderItem(Map<String,Object> paramMap);
 
 	public void updateOrderItemByParam(Map<String,Object> paramMap);
-
+	
+	/**
+	 * 导出销售量排行榜
+	 * @return
+	 */
+	public List exportSaleRanking();
 }

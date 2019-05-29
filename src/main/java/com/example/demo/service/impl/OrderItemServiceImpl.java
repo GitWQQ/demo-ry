@@ -59,4 +59,9 @@ public class OrderItemServiceImpl implements OrderItemService{
 		orderItemMapper.updateOrderItemByParam(param);
 	}
 
+	@Override
+	public List exportSaleRanking() {
+		return orderItemMapper.exportSaleRanking();
+	}
+
 }

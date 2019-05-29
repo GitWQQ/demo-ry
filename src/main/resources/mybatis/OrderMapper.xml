@@ -20,11 +20,12 @@
 		<result column="BUYER_MESSAGE" jdbcType="VARCHAR" property="buyer_message"/>
 		<result column="GXSJC" jdbcType="VARCHAR" property="gxsjc"/>
 		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>
+		<result column="SFWC" jdbcType="VARCHAR" property="sfwc"/>
 	</resultMap>	
 	<sql id="columns">
 		ORDER_ID,PAYMENT,PAYMENT_TYPE,POST_FEE,STATUS,CREATE_TIME,
 		UPDATE_TIME,PAYMENT_TIME,CONSIGN_TIME,END_TIME,CLOSE_TIME,SHIPPING_NAME,SHIPPING_CODE,
-		BUYER_NICK,BUYER_MESSAGE,YXX,GXSJC
+		BUYER_NICK,BUYER_MESSAGE,YXX,GXSJC,SFWC
 	</sql>
 	
 	<select id="getOrderRecordByParam" parameterType="java.util.Map" resultMap="orderMap">
