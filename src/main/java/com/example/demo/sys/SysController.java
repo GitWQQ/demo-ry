@@ -420,22 +420,16 @@ public class SysController {
 		return "/sys/onlineUsersPage";
 	}
 	
+	
+	/**
+	 * 获取在线人员信息
+	 * @return
+	 */
 	@RequestMapping("/getOnLineUsersInfo")
 	@ResponseBody
-	public List getOnlineUsersInfo(){
+	public Set<Map<String,Object>> getOnlineUsersInfo(){
 		Set<Map<String,Object>> result=(HashSet<Map<String, Object>>) getOnlineUsers();
-		Iterator iterator=result.iterator();
-		Map map=new HashMap<String,Object>();
-		List list=new ArrayList<>();
-		OnlineMesg onlineMesg=new OnlineMesg();
-		while(iterator.hasNext()){
-		 	map=(Map)iterator.next();
-		 	for (Object object : map.values()) {
-		 
-			} 
-		}
-		System.out.println(list);
-		return list;
+		return result;
 	}
 	
 	
