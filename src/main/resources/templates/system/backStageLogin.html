@@ -176,6 +176,7 @@
 		$(function(){
 			//定时查询订单数，在线留言数
 			setInterval("getOnlineMsgCount();getOrdersCount();",1000*60);
+			setInterval("onLineUser()",1000*30);
 		})
 		
 		function getOnlineMsgCount(){
