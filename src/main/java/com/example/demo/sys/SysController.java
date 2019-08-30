@@ -3,11 +3,26 @@ package com.example.demo.sys;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.annotation.Resource;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,8 +32,10 @@ import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.session.HttpServletSession;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +45,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.domain.OnlineMesg;
 import com.example.demo.domain.User;
 import com.example.demo.service.UserService;
 import com.example.demo.service.ZdService;
+import com.example.demo.util.AESUtils;
 import com.example.demo.util.CommonUtil;
+import com.example.demo.util.CookieUtils;
+import com.example.demo.util.EncryptUtil;
+import com.example.demo.util.TokenManager;
 import com.example.demo.util.UserInfoLoginToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,6 +70,8 @@ public class SysController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private DefaultWebSessionManager sessionManager;
 	/**
 	 * 获取字典信息
 	 * @param request
@@ -73,11 +97,15 @@ public class SysController {
 	 * 执行登录
 	 * @param httpRequest
 	 * @return
+	 * @throws BadPaddingException 
+	 * @throws IllegalBlockSizeException 
+	 * @throws InvalidKeyException 
+	 * @throws NoSuchPaddingException 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	@RequestMapping("/toLogin")
 	@ResponseBody
-	public Map<String,Object> login(HttpServletRequest httpRequest,HttpServletResponse httpResponse,Model model){
-		System.out.println("==================登录============================");
+	public Map<String,Object> login(HttpServletRequest httpRequest,HttpServletResponse httpResponse,Model model) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException{
 		Subject subject=SecurityUtils.getSubject();
 		Map<String,Object> paramMap=getParamMap(httpRequest.getParameterMap());
 		Map<String,Object> result=new HashMap<>();
@@ -85,9 +113,6 @@ public class SysController {
 		String password=paramMap.get("password").toString();
 		String bs=paramMap.get("bs").toString();
 		boolean rememberMe=Boolean.parseBoolean(paramMap.get("remember").toString());
-		System.out.println("remember:===="+rememberMe);
-		System.out.println("isRemembered:===="+subject.isRemembered());
-		System.out.println("isAuthenticated:======"+subject.isAuthenticated());
 		UserInfoLoginToken token=null;
 			try{
 				if(!"".equals(username)&& username !=null){
@@ -95,9 +120,16 @@ public class SysController {
 					token.setRememberMe(rememberMe);
 					subject.login(token);
 					User currentUser=(User)subject.getPrincipal();
+					//cookie
+					
+					CookieUtils.createCookie("sso_cookie_U",EncryptUtil.AESencode(username,"666666"),httpRequest,httpResponse);
+					CookieUtils.createCookie("sso_cookie_P",EncryptUtil.AESencode(password,"666666"),httpRequest,httpResponse);
+					//CookieUtils.createCookie("sso_token",token.toString(),httpRequest,httpResponse);
 					//存session
 					subject.getSession().setAttribute("token",token);
 					subject.getSession().setAttribute("username",currentUser.getUsername());
+					subject.getSession().setAttribute("phone",currentUser.getPhone());
+					subject.getSession().setAttribute("email", currentUser.getEmail());
 					subject.getSession().setAttribute("user",currentUser);
 					subject.getSession().setTimeout(30*60*1000);//设置session过期时间30分钟
 					subject.getSession().setAttribute("ip",getIpValue(subject.getSession().getHost(),httpRequest));
@@ -106,12 +138,14 @@ public class SysController {
 				}
 			}catch(UnknownAccountException uae){
 					log.info("用户【"+username+"】不存在");
+					String msg=CommonUtil.lockAccount();
 					result.put("status",201);
-					result.put("message","用户不存在");
+					result.put("message","用户不存在,"+msg);
 			}catch(IncorrectCredentialsException ice){
 					log.info("用户【"+username+"】密码不正确");
+					String msg=CommonUtil.lockAccount();
 					result.put("status",202);
-					result.put("message","密码不正确");
+					result.put("message","密码不正确,"+msg);
 			}catch(LockedAccountException lae){
 					log.info("用户【"+username+"】账号被锁定");
 					result.put("status",203);
@@ -125,6 +159,7 @@ public class SysController {
 			result.put("password",password);
 		return result;
 	}
+	
 	
 	/**
 	 * 注册时验证用户名是否已经存在
@@ -190,11 +225,38 @@ public class SysController {
 	@RequestMapping("/toRegist")
 	@ResponseBody
 	public Map<String,Object> toRegist(HttpServletRequest request){
+		//获取Session中的验证码
+		String yzm=TokenManager.getYZM();
 		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
 		Map<String,Object> result=new HashMap<>();
-		userService.addUserInfoselective(paramMap);
-		result.put("status",200);
-		result.put("msg","注册成功!");
+		String vcode=paramMap.get("vcode").toString();
+		if(vcode==null||"".equals(vcode)){
+			result.put("status",201);
+			result.put("msg","验证码不能为空");
+		}else{
+			if(yzm.equalsIgnoreCase(vcode)){
+				System.out.println(yzm+"===="+vcode);
+				//验证码相同
+				try {
+					userService.addUserInfoselective(paramMap);
+				} catch (AddressException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				result.put("status",200);
+				result.put("msg","注册成功!");
+			}else{
+				//验证码不同
+				result.put("status",201);
+				result.put("msg","验证码错误");
+			}
+		}	
 		return result;
 	}
 	
@@ -209,11 +271,32 @@ public class SysController {
 		Subject subject=SecurityUtils.getSubject();
 		if(subject!=null && subject.getSession()!=null){
 			subject.logout();
+			Cookie[] cookies=request.getCookies();
+			if(cookies !=null){
+				for (Cookie cookie : cookies) {
+					if(cookie.getName().equals("sso_cookie_U")){
+						cookie.setValue("");
+						cookie.setMaxAge(0);
+						cookie.setPath("/");
+						response.addCookie(cookie);
+					}
+					if(cookie.getName().equals("sso_cookie_P")){
+						cookie.setValue("");
+						cookie.setMaxAge(0);
+						cookie.setPath("/");
+						response.addCookie(cookie);
+					}
+				}
+			}
 		}
-		//request.getRequestDispatcher("/thy/shoppingPage").forward(request, response);
 		response.sendRedirect("/thy/shoppingPage");
 	}
 	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/modifyPass")
 	@ResponseBody
 	public Map<String,Object> modifyPass(HttpServletRequest request){
@@ -226,7 +309,7 @@ public class SysController {
 		String password=paramMap.get("password").toString();
 		if(password !=null && !"".equals(password)){
 			if(user.getSalt()!=null && !"".equals(user.getSalt())){
-				password=CommonUtil.encodePassphrase(user.getSalt(),password);
+				password=CommonUtil.md5(user.getSalt(),password);
 			}	
 		}
 		//获取当登录前用户的密码
@@ -290,22 +373,120 @@ public class SysController {
 	}
 	
 	
-	//获取参数
+	/**
+	 * 获取所有当前登录用户的信息
+	 * @return
+	 */
+	@RequestMapping("/session")
+	@ResponseBody
+	public Object getOnlineUsers(){
+		Set<Map<String,Object>> onlineUsers=new LinkedHashSet<>();
+		sessionManager.validateSessions();
+		Collection<Session> sessions= sessionManager.getSessionDAO().getActiveSessions();
+		for (Session session : sessions) {
+			if(session.getAttribute("username") !=null &&  session.getTimeout()>0){
+				Map<String,Object> map=new HashMap<>();
+				map.put("username",session.getAttribute("username"));
+				map.put("ip",session.getAttribute("ip"));
+				map.put("phone",session.getAttribute("phone"));
+				map.put("email",session.getAttribute("email"));
+				map.put("loginTime", CommonUtil.dateToString(session.getStartTimestamp()));
+				onlineUsers.add(map);
+			}
+		}
+		return onlineUsers;
+	}
+	
+	/**
+	 * 获取当前登录用户数，调用getOnlineUsers()方法，
+	 * 获取返回值List<Map<String,String>>的长度
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/getOnlineNum")
+	@ResponseBody
+	public int getOnlineNum(){
+		Set<Map<String,Object>> result=(HashSet<Map<String, Object>>) getOnlineUsers();
+		return result.size();
+	}
+	
+	
+
+	/**
+	 * 跳转到在线用户信息页面
+	 */
+	@RequestMapping("/showOnlineUser")
+	public String toOnlineUsersPage(Model model){
+		return "/sys/onlineUsersPage";
+	}
+	
+	@RequestMapping("/getOnLineUsersInfo")
+	@ResponseBody
+	public List getOnlineUsersInfo(){
+		Set<Map<String,Object>> result=(HashSet<Map<String, Object>>) getOnlineUsers();
+		Iterator iterator=result.iterator();
+		Map map=new HashMap<String,Object>();
+		List list=new ArrayList<>();
+		OnlineMesg onlineMesg=new OnlineMesg();
+		while(iterator.hasNext()){
+		 	map=(Map)iterator.next();
+		 	for (Object object : map.values()) {
+		 
+			} 
+		}
+		System.out.println(list);
+		return list;
+	}
+	
+	
+	/**
+	 * 检查是否已经登录，如果已经登录过了，刷新登录页面直接跳转到
+	 * 登录后的首页。如果没登录，则还是登录页面
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	@RequestMapping("/checked_login")
+	@ResponseBody
+	public Map checked_login2(HttpServletRequest request,HttpServletResponse response) 
+			throws IOException, ServletException{
+		Map<String,Object> map=new HashMap<>();
+		Subject subject=SecurityUtils.getSubject();
+		System.err.println(subject.isAuthenticated());
+		if(subject.isAuthenticated()){
+			map.put("status",200);
+		}else{
+			map.put("status",201);
+		}
+		return map;
+	}
+
+	
+	/**
+	 * 获取request里的参数，
+	 * 并且封装到Map集合中
+	 * @param map
+	 * @return
+	 */
 	private Map<String, Object> getParamMap(Map<String, String[]> map){
-	    Map<String, Object> paramMap = new HashMap<String, Object>();
-	    for (String key : map.keySet()) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		for (String key : map.keySet()) {
 			if (map.get(key) instanceof String[]) {
 				if (((String[]) map.get(key)).length > 0) {					
 					paramMap.put(key, ((String[]) map.get(key))[0]);
 				}
 			}
 		} 
-	    return paramMap;
-	 }
+		return paramMap;
+	}
+		
 	
 	public static void main(String[] args) {
 		String salt=CommonUtil.getSalt();
 		System.out.println("salt:"+salt);
 		System.out.println(CommonUtil.encodePassphrase("4bV+oJuheKcajXKPujbBYw==","123456"));
 	}
+	
 }

@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,4 +23,24 @@ public class PermissionServiceImpl  implements PermissionService{
 		}
 		return null;
 	}
+
+	@Override
+	public List getAllPermission(Map paramMap) {
+		List result=permissionMapper.getAllPermissionByParam2(paramMap);
+		if(result !=null)
+			return result;
+		return null;
+	}
+
+	@Override
+	public void addPermission(Map paramMap) {	
+		permissionMapper.addPermission(paramMap);
+	}
+
+	@Override
+	public int removePermission(Map paramMap) {
+		return permissionMapper.removePermission(paramMap);
+	}
+
+	
 }

@@ -69,7 +69,7 @@ function InitOrderList(sfcl,tabName){
 				 	    }
 				 	},{
 				        field:'total_fee',
-				        title:'商品总金额',
+				        title:'商品总金额1',
 				        align:'center',
 				        width:100,
 				        formatter:function(value,row,index){

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -33,6 +34,7 @@ import com.example.demo.service.ItemService;
 import com.example.demo.service.ZdService;
 import com.example.demo.util.BaseController;
 import com.example.demo.util.CommonUtil;
+import com.example.demo.util.example.MyHttpSessionListener;
 
 @Controller
 @RequestMapping("/thy")
@@ -51,7 +53,7 @@ public class ThymeleafController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/backstage")
-	public String toIndex(){
+	public String toIndex(HttpSession session){
 		return "backstage";
 	}
 	/**

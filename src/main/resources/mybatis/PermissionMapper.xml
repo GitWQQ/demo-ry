@@ -5,9 +5,12 @@
 	<resultMap type="Permission" id="permissionMap">
 		<id column="ID" jdbcType="INTEGER" property="id"/>
 		<result column="PERMISSION" jdbcType="VARCHAR" property="permission"/>
+		<result column="PERMISSION_NAME" jdbcType="VARCHAR" property="permission_name"/>
+		<result column="CREATE_TIME" jdbcType="DATE" property="create_time"/>
+		<result column="GXSJC" jdbcType="VARCHAR" property="gxsjc"/>
 	</resultMap>
 	<sql id="columns">
-		ID,PERMISSION
+		ID,PERMISSION,PERMISSION_NAME,CREATE_TIME,GXSJC
 	</sql>
 	
 	<select id="getPermissionByParam" parameterType="java.util.Map" resultMap="permissionMap">
@@ -22,5 +25,54 @@
 			AND p.id = rp.pid	
   		AND r.roleName =#{rolename,jdbcType=VARCHAR}
 	</select>
+	
+	<!-- 新增权限信息 -->
+	<insert id="addPermission" parameterType="java.util.Map">
+		<!-- <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER"/> -->
+		INSERT INTO TB_PERMISSION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="permission !=null and permission !=''">
+				permission,
+			</if>
+			<if test="permission_name !=null and permission_name !=''">
+				permission_name,
+			</if>
+			<if test="gxsjc !=null and gxsjc !=''">
+				gxsjc,
+			</if>
+			create_time
+		</trim>
+		<trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+			<if test="permission !=null and permission !=''">
+				#{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="permission_name !=null and permission !=''">
+				#{permission_name,jdbcType=VARCHAR},
+			</if>
+			<if test="gxsjc !=null and gxsjc !=''">
+				#{gxsjc,jdbcType=VARCHAR}
+			</if>
+			NOW()
+		</trim>
+	</insert>
+	
+	<!-- 获取所有的权限信息 -->
+	<select id="getAllPermissionByParam2" parameterType="java.util.Map" resultMap="permissionMap">
+		SELECT 
+		<include refid="columns"/>
+		FROM TB_PERMISSION
+		<where> 
+			1=1
+			<if test="id !=null">
+				AND id=#{id,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="removePermission" parameterType="java.util.Map">
+		DELETE FROM TB_PERMISSION
+		WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	
 	
 </mapper>

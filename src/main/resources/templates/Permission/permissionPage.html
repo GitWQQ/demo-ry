@@ -13,13 +13,13 @@ xmlns:th="http://www.thymeleaf.org" >
 					</a>	
 				</li>
 				<li>
-					<a href="#power_manager" data-toggle="tab" onclick="">
-						权限信息管理<span class="badge"></span>
+					<a href="#roles_manager" data-toggle="tab" onclick="">
+						角色信息管理<span class="badge"></span>
 					</a>	
 				</li>
 				<li>
-					<a href="#roles_manager" data-toggle="tab" onclick="">
-						角色信息管理<span class="badge"></span>
+					<a href="#power_manager" data-toggle="tab" onclick="">
+						权限信息管理<span class="badge"></span>
 					</a>	
 				</li>
  			</ul>
@@ -69,7 +69,29 @@ xmlns:th="http://www.thymeleaf.org" >
  			</div>			
  		</div>
 	</div>
-	
+	<div class="row">
+			<div class="col-xs-12">
+			<div id="permissionToolbar" class="fixed-table-toolbar">
+				<div class="columns pull-left">
+					<button type="button" class="btn btn-info" onclick="btn_search();">
+						<i class="fa fa-trash" aria-hidden="true"></i>
+						<span class="glyphicon glyphicon-search"></span>
+						查询
+					</button>
+					<button type="button" class="btn btn-danger" onclick="btn_remove();">
+						<i class="fa fa-trash" aria-hidden="true"></i>
+						<span class="glyphicon glyphicon-remove"></span>
+						删除
+					</button>
+					<button id="btn_download" type="button" class="btn btn-primary" onclick="btn_export();">
+						<i class="fa fa-trash" aria-hidden="true"></i>
+						<span class="glyphicon glyphicon-export"></span>
+						导出Excel
+					</button>
+				</div>
+			</div>
+			</div>
+	</div>
 	<div id="roleUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" th:fragment="roleUser_edit_Modal">
 		<div class="modal-dialog" role="document" style="width:50%">
 			<div class="modal-content" >
@@ -98,4 +120,5 @@ xmlns:th="http://www.thymeleaf.org" >
 	</div>
 </body>
 </html>
+
 		

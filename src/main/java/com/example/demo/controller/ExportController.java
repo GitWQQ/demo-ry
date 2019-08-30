@@ -43,10 +43,8 @@ public class ExportController {
 	@RequestMapping("/saleRanking")
 	public void exportSaleRanking(HttpServletRequest request,
 			HttpServletResponse response) throws FileNotFoundException, ExcelException{
-		List<OrderItem> list=orderItemService.exportSaleRanking();
-		for (OrderItem orderItem : list) {
-			System.out.println(orderItem);
-		}
+		List<Map<String,Object>> list=orderItemService.exportSaleRanking();
+		System.out.println(list);
 		if(list!=null){
 			LinkedHashMap<String, String> fieldMap=new LinkedHashMap();
 			fieldMap.put("title","商品名称");

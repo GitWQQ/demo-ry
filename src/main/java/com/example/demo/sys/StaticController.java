@@ -4,20 +4,28 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import com.example.demo.domain.Img;
 import com.example.demo.service.ImgService;
 import com.example.demo.service.ZdService;
+import com.example.demo.util.JavaMailUtil;
+import com.example.demo.util.example.MyHttpSessionListener;
 
 @Controller
 @RequestMapping("/thy/static")
@@ -29,6 +37,9 @@ public class StaticController {
 	@Autowired
 	private ImgService imgService;
 	
+	
+	
+	
 	/**
 	 * 跳转到未授权页面
 	 * @return
@@ -39,7 +50,9 @@ public class StaticController {
 	}
 	
 	@RequestMapping("/toBackStageLogin")
-	public String toBackStageLogin(){
+	public String toBackStageLogin(HttpSession session){
+		session.setAttribute("online",MyHttpSessionListener.online);
+		System.out.println("onlineNum:"+session.getAttribute("online"));
 		return "/system/backStageLogin";
 	}
 	/**
@@ -150,4 +163,11 @@ public class StaticController {
 		} 
     	return paramMap;
     }
+	
+	@RequestMapping("/online")
+	@ResponseBody
+	public Object online(){
+		return "当前在线人数："+MyHttpSessionListener.online+"人";
+	}
+	
 }

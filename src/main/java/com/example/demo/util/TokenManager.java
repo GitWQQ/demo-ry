@@ -16,7 +16,7 @@ public class TokenManager {
 	}
 	
 	/**
-	 * ��ȡ��ǰ�û�Session
+	 * 创建Session,Shiro里的session
 	 * 
 	 */
 	public static Session getSession(){
@@ -25,14 +25,14 @@ public class TokenManager {
 	}
 	
 	/**
-	 * ����ǰ�û�session������ֵ	
+	 * 设置Session的值
 	 */
 	
 	public static void setSessionValue(Object sessionId,Object object){
 		getSession().setAttribute(sessionId,object);
 	}
 	/**
-	 * ��ȡsessionֵ
+	 *获取Session的值
 	 */
 	
 	public static Object getSessionValue(Object key){
@@ -40,11 +40,10 @@ public class TokenManager {
 	}
 	
 	/**
-	 * ��ȡ��֤���ɾ��
+	 * 获取验证码
 	 */
 	public static String getYZM(){
 		String yzm=(String)getSession().getAttribute("_CODE");
-		//getSession().removeAttribute("_CODE");
 		return yzm;
 	}
 }

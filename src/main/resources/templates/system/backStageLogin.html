@@ -15,8 +15,9 @@
             <article>
                 <section>
                 	<div id="onlineMsg_warning">
-                		<font>在线留言:【<a id="onlineMsg_num" href="#"></a>】尚未阅读</font><br/>
-                		<font>待处理订单:【<a id="ording_num" href="#"></a>】请尽快处理</font>
+                		<font>在线留言:【<a id="onlineMsg_num" href="#">0</a>】尚未阅读</font><br/>
+                		<font>待处理订单:【<a id="ording_num" href="#">0</a>】请尽快处理</font><br/>
+                		<font>当前在线用户:【<a id="onlineNum" href="/thy/sys/showOnlineUser"></a>】人</font>
             		</div>
                     <aside>
                         <em>
@@ -65,10 +66,15 @@
     </div>
 	</body>
 	<script>
+	var username="";
+	var password="";
+	var remember=false;
+	
 	$(function(){
-		var username="";
-		var password="";
-		var remember=false;
+		//检查当前是否已经登录
+		/* checked_login(); */
+		onLineUser();
+		//失去焦点提示信息消失隐藏
 		$("#username").blur(function(){
 			username=$("#username").val().trim();
 			if(username !=""){
@@ -81,54 +87,97 @@
 				$("#backstage_password_warning").css("display","none");
 			}
 		})
+		
+		//点击登录按钮进行登录
 		$("#backstage_btn_submit").click(function(){
-			username=$("#username").val().trim();
-			password=$("#password").val().trim();
-			remember=$("#remember").prop('checked');
-			var $form=$("#backstagelogin_form");
-			if(username==""){
-				$("#backstage_username_warning").css("display","block");
-				$("#backstage_username_warning").html("用户名不能为空!");
-				return false;
-			}
-			if(password==""){
-				$("#backstage_password_warning").css("display","block");
-				$("#backstage_password_warning").html("密码不能为空!");
-				return false;
-			}
-			//使用Ajax提交form表单
-			var param={'username':username,'password':password,'remember':remember,'bs':'back_stage'};
-			$.ajax({
-				type:'GET',
-				url:'/thy/sys/toLogin',
-				data:param,
-				dataType:'json',
-				beforeSend:function(){
-				
-				},
-				success:function(data){
-					if(data.status==200){
-						window.location.href='/thy/backstage';	
-					}else{
-						$("#username").val(data.username);
-						$("#password").val(data.password);
-						$("#login_msg2").html(data.message);
-					}
-				},
-				error:function(e){
-					console.log(e);
-					layer.msg('出错咯o(╥﹏╥)o,请与后台联系!',{
-                        btn:'我知道了'
-                    })
-				}
-			})
+			submit();
 		})
+		//点击回车键(Enter)进行登录
+		$(document).keyup(function(even){
+			if(even.keyCode==13){
+				submit();
+			}
+		})
+		
 	})
+	
+	//获取当前用户在线数量
+	function onLineUser(){
+		$.ajax({
+			type:'get',
+			url:'/thy/sys/getOnlineNum',
+			dataType:'json',
+			success:function(data){
+				$("#onlineNum").html(data);
+			}
+		})
+		
+	}
+	//检查是否已经登录，如果已经登录了，刷新页面直接跳转到首页，否则还是登录页面
+	function checked_login(){
+		
+		$.ajax({
+			type:'GET',
+			url:'/thy/sys/checked_login',
+			dataType:'json',
+			success:function(data){
+				if(data.status==200){
+					window.location.href='/thy/backstage';
+				}
+			}
+		})
+	}
+	
+	//登录
+	function submit(){
+		username=$("#username").val().trim();
+		password=$("#password").val().trim();
+		remember=$("#remember").prop('checked');
+		var $form=$("#backstagelogin_form");
+		if(username==""){
+			$("#backstage_username_warning").css("display","block");
+			$("#backstage_username_warning").html("用户名不能为空!");
+			return false;
+		}
+		if(password==""){
+			$("#backstage_password_warning").css("display","block");
+			$("#backstage_password_warning").html("密码不能为空!");
+			return false;
+		}
+		//使用Ajax提交form表单
+		var param={'username':username,'password':password,'remember':remember,'bs':'back_stage'};
+		$.ajax({
+			type:'GET',
+			url:'/thy/sys/toLogin',
+			data:param,
+			dataType:'json',
+			beforeSend:function(){
+				
+			},
+			success:function(data){
+				if(data.status==200){
+					window.location.href='/thy/backstage';	
+				}else{
+					$("#username").val(data.username);
+					$("#password").val(data.password);
+					$("#login_msg2").html(data.message);
+				}
+			},
+			error:function(e){
+				console.log(e);
+				layer.msg('出错咯o(╥﹏╥)o,请与后台联系!',{
+                btn:'我知道了'
+             })
+			}
+		})
+	}
 	</script>
 	<script type="text/javascript">
 		$(function(){
+			//定时查询订单数，在线留言数
 			setInterval("getOnlineMsgCount();getOrdersCount();",1000*60);
 		})
+		
 		function getOnlineMsgCount(){
 			$.ajax({
 				type:'get',
@@ -143,6 +192,7 @@
 				}
 			})
 		}
+		
 		function getOrdersCount(){
 			$.ajax({
 				type:'get',

@@ -31,4 +31,5 @@ public interface UserMapper {
 	 */
 	public void updateUserInfoByParam(Map<String,Object> paramMap);
 	
+	public void removeUserByParam(Map<String,Object> paramMap);
 }

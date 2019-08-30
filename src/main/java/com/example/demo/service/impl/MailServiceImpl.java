@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MailServiceImpl {
+	//@Value("${spring.mail.sender_email}")
 	@Value("${spring.mail.username}")
 	private String from;
 	
@@ -78,5 +79,9 @@ public class MailServiceImpl {
 		helper.setText(content);
 		helper.setSubject(content);
 		
+	}
+	
+	public static void main(String [] args){
+		new MailServiceImpl().sendSimpleMail("1640611853@qq.com","测试","测试内容");
 	}
 }

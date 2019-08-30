@@ -12,8 +12,15 @@ public class OrderItem {
 	private String yxx;
 	private String sfcl;
 	private String gxsjc;
+	private Item item;
 	
 	
+	public Item getItem() {
+		return item;
+	}
+	public void setItem(Item item) {
+		this.item = item;
+	}
 	public String getGxsjc() {
 		return gxsjc;
 	}
@@ -84,6 +91,7 @@ public class OrderItem {
 	public void setSfcl(String sfcl) {
 		this.sfcl = sfcl;
 	}
+	
 	@Override
 	public String toString() {
 		return "OrderItem [id=" + id + ", item_id=" + item_id + ", order_id=" + order_id + ", num=" + num + ", title="

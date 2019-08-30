@@ -34,6 +34,8 @@ public class User implements Serializable{
 	
 	private String updated;
 	
+	private String about_xh;
+	
 	@OneToMany(cascade=CascadeType.ALL,mappedBy = "user")
 	private List<Role> roles;
 
@@ -116,6 +118,15 @@ public class User implements Serializable{
 
 	public void setUpdated(String updated) {
 		this.updated = updated;
+	}
+
+	
+	public String getAbout_xh() {
+		return about_xh;
+	}
+
+	public void setAbout_xh(String about_xh) {
+		this.about_xh = about_xh;
 	}
 
 	@Override

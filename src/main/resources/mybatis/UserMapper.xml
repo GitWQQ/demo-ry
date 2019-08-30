@@ -12,9 +12,11 @@
 		<result column="SALT" jdbcType="VARCHAR" property="salt"/>
 		<result column="CREATED" jdbcType="DATE" property="created"/>
 		<result column="UPDATED" jdbcType="DATE" property="updated"/>
+		<result column="ABOUT_XH" jdbcType="VARCHAR" property="about_xh"/>
 		<collection property="roles" ofType="com.example.demo.domain.Role" javaType="java.util.ArrayList" 
 		select="getRoles" column="ID">
 		</collection>
+		
 	</resultMap>
 	
 	<resultMap type="Role" id="roleMap">
@@ -35,7 +37,8 @@
 		EMAIL,
 		SALT,
 		CREATED,
-		UPDATED
+		UPDATED,
+		ABOUT_XH
 	</sql>	
 	<sql id="queryByParam">
 		<if test="id !=null and id !=''">
@@ -61,6 +64,9 @@
 		</if>
 		<if test="updated !=null">
 			updated=#{updated,jdbcType=DATE}
+		</if>
+		<if test="about_xh !=null">
+			about_xh=#{about_xh,jdbcType=VARCHAR}
 		</if>
 	</sql>
 	
@@ -103,6 +109,9 @@
 			<if test="updated !=null">
 				UPDATED,
 			</if>
+			<if test="about_xh !=null">
+				ABOUT_XH,
+			</if>
 		</trim>
 		<trim prefix="values(" suffix=")" suffixOverrides=",">
 			<if test="id !=null">
@@ -129,6 +138,9 @@
 			<if test="updated !=null">
 				#{updated,jdbcType=DATE},
 			</if>
+			<if test="about_xh !=null">
+				#{about_xh,jdbcType=VARCHAR},
+			</if>
 		</trim>
 	</insert>
 	
@@ -142,7 +154,8 @@
 			 email,
 			 salt,
 			 created,
-			 updated
+			 updated,
+			 about_xh
 		)
 		VALUES(
 			id=#{id,jdbcType=VARCHAR},
@@ -152,7 +165,8 @@
 			email=#{email,jdbcType=VARCHAR},
 			salt=#{salt,jdbcType=VARCHAR},
 			now(),
-			now()
+			now(),
+			about_xh
 		)
 	</insert>
 	
@@ -191,4 +205,10 @@
 		TB_USER_ROLE ur ON r.id=ur.rid
 		WHERE ur.uid=#{id,jdbcType=VARCHAR}  
 	</select>
+	
+	<!-- 注销用户信息 -->
+	<delete id="removeUserByParam" parameterType="java.util.Map">
+		DELETE FROM TB_USER WHERE id=#{id,jdbcType=VARCHAR}
+	</delete>
+	
 </mapper>

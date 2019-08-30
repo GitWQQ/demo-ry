@@ -20,31 +20,31 @@ import com.example.demo.util.verifyCodeUtils.vcode.SpecCaptcha;
 @Controller
 @RequestMapping("/thy/static/check")
 public class CommonController {
-	
+
 	/**
 	 * 获取普通验证码
 	 * @param request
 	 * @param response
 	 */
 	@RequestMapping(value="getVCode",method=RequestMethod.GET)
-	public void getVCode(HttpServletRequest request,HttpServletResponse response){
+	public  void getVCode(HttpServletRequest request,HttpServletResponse response){
 		response.setHeader("Pragma", "No-cache");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setDateHeader("Expires",0);
 		response.setContentType("image/jpg");
 		
-	   //��������ִ�  
+	    //生成验证码  
 		String verifyCode=VerifyCodeUtils.generateVerifyCode(4);
-		//���뵽Session
+	    //验证码存入Session
 		TokenManager.setSessionValue(VerifyCodeUtils.V_CODE,verifyCode);
-		//����ͼƬ  
+		//设置宽高 
 		int w = 146, h = 33;  
 		try {
 			VerifyCodeUtils.outputImage(w, h,response.getOutputStream(),verifyCode);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			LoggerUtils.fmtError(getClass(),e, "��ȡ��֤���쳣��%s",e.getMessage());
+			LoggerUtils.fmtError(getClass(),e, "验证码异常",e.getMessage());
 		}
 	}
 	

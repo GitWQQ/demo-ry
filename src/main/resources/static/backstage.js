@@ -110,13 +110,12 @@ function modifyPassWord(){
 				data:param,
 				dataType:'json',
 				beforeSend:function(){
-					
+					layer.msg("正在修改密码......",{icon:16,time:6000,shade:[0.5,'#000',true]})
 				},
 				success:function(data){
-					layer.msg('密码修改成功！')
+					layer.msg(data.msg,{icon:16,time:6000,shade:[0.5,'#000',true]});
 				},
 				error:function(e){
-					console.log(e);
 					layer.msg('出错咯o(╥﹏╥)o,请与后台联系!',{
                         btn:'我知道了'
                     })

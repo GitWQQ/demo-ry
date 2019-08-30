@@ -17,9 +17,7 @@ import javax.imageio.ImageIO;
 
 public class VerifyCodeUtils{  
   
-    //ʹ�õ�Algerian���壬ϵͳ��û�еĻ���Ҫ��װ���壬����ֻ��ʾ��д��ȥ����1,0,i,o�������׻������ַ�  
     public static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";  
-    //��֤���Key
     public static final String V_CODE = "_CODE";
     private static Random random = new Random();  
   

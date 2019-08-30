@@ -32,6 +32,11 @@
 				#{rid,jdbcType=VARCHAR},
 			</if>
 		</trim>
-		
 	</insert>
+	
+	<delete id="delUserRoleById" parameterType="java.util.Map">
+		DELETE FROM TB_USER_ROLE WHERE UID=#{uid,jdbcType=VARCHAR}
+	</delete>
+	
+	
 </mapper>

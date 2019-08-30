@@ -28,4 +28,5 @@ public class BeanConfig {
 	public ShiroDialect shiroDialect() {
 	    return new ShiroDialect();
 	}
+	
 }
