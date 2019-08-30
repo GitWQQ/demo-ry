@@ -59,7 +59,7 @@
 										<input type="text" id="vcode" name="vcode" class="form-control" placeholder="验证码" />
 									</div>
 									<div class="col-md-4" id="checkCode">
-										<img alt="" th:src="@{/thy/static/check/getJPGCode.shtml}"/>
+										<img alt="" th:src="@{/thy/static/check/getVCode.shtml}"/>
 									</div>
 								</div>
 								<div class="input-group" style="margin-top:35px;width:100%;">
@@ -84,7 +84,7 @@
 		$(function(){
 			$("#checkCode").on("click",'img',function(){
 				var i = new Image();
-				i.src = '/thy/static/check/getJPGCode.shtml?'  + Math.random();
+				i.src = '/thy/static/check/getVCode.shtml?'  + Math.random();
 				$(i).replaceAll(this);
 				return false;
 			});
@@ -176,6 +176,8 @@
 						success:function(data){
 							if(data.status==200){
 								window.location.href='/thy/static/main';	
+							}else if(data.status==201){
+								layer.msg(data.msg);
 							}
 						},
 						error:function(e){

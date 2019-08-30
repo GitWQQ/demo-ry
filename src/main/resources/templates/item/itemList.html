@@ -4,14 +4,14 @@ xmlns:th="http://www.thymeleaf.org" >
 <head></head>
 <body>
 <div id="panel_three" class="panel panel-primary" style="padding-bottom:0px; display:none" th:fragment="itemList">
+		<div>
+			<ul class="breadcrumb">
+    			<li><a href="#">首页</a></li>
+    			<li class="active">商品信息列表</li>
+			</ul>
+		</div>
 		<div class="panel-body panel_body_style">
 			<div class="row">
-			<div>
-				<ul class="breadcrumb">
-    				<li><a href="#">首页</a></li>
-    				<li class="active">商品信息列表</li>
-				</ul>
-			</div>
 			<div class="col-xs-12">
 			<form id="formSearch" class="form-horizontal" onsubmit="submit_check();">
 				<div class="form-group">

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.support.ibatis.SqlMapClientImplWrapper;
 import com.example.demo.dao.OrderItemMapper;
 import com.example.demo.service.OrderItemService;
 import com.example.demo.util.CommonUtil;
@@ -63,5 +64,7 @@ public class OrderItemServiceImpl implements OrderItemService{
 	public List exportSaleRanking() {
 		return orderItemMapper.exportSaleRanking();
 	}
+	
+	
 
 }

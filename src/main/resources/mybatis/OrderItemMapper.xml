@@ -14,6 +14,8 @@
 		<result column="SFCL" jdbcType="VARCHAR" property="sfcl"/>
 		<result column="GXSJC" jdbcType="VARCHAR" property="gxsjc"/>
 		<result column="YXX" jdbcType="VARCHAR" property="yxx"/>
+		<association column="item_id"  property="item" select="getItem" javaType="Item" >
+		</association>
 	</resultMap>
 	
 	<sql id="columns">
@@ -124,14 +126,36 @@
 	
 	<!-- 商品销售排行榜单下载 -->
 	<select id="exportSaleRanking"  resultMap="orderItemMap">
-		select orit.title,sum(orit.num) num,sum(orit.total_fee) total_fee 
-		from tb_order_item orit,
-		tb_order ord 
-		where 
-		orit.order_id=ord.order_id 
-        and ord.sfwc=1
-        and ord.yxx=1
-        and orit.yxx=1
-        group by orit.item_id;
+		SELECT
+		item.num AS 'kc',
+		A.num,
+		A.title,
+		A.total_fee
+		FROM
+			tb_item item
+		RIGHT JOIN (
+		SELECT
+			orit.item_id,
+			orit.title,
+			sum(orit.num) num,
+			sum(orit.total_fee) total_fee
+		FROM
+			tb_order_item orit,
+			tb_order ord
+		WHERE
+			orit.order_id = ord.order_id
+			AND ord.sfwc = 1
+			AND ord.yxx = 1
+			AND orit.yxx = 1
+			GROUP BY
+			orit.item_id
+			ORDER BY
+		orit.num DESC
+		) A ON item.id = A.item_id
 	</select>
+	
+	<select id="getItem" parameterType="string"  resultType="Item">
+		SELECT * FROM TB_ITEM WHERE id=#{item_id,jdbcType=VARCHAR}
+	</select>
+	
 </mapper>

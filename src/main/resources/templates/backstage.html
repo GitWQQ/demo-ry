@@ -25,7 +25,7 @@
 	<body style="position:relative;">
 		<div th:include="common/backstage_navbar :: backstage_navbar"/>
 		<div th:include="common/backstage_left_navbar :: backstage_left_navbar"/>
-		<div class="main-container" style="width:100%;">
+		<div class="main-container" style="width:100%;margin-left:40px;padding-top:50px;">
 			<div>
 					<div th:replace="item/addItem :: addItem"/>
 					<div th:replace="yxqs/yxqs :: yxqs"/>
@@ -38,7 +38,7 @@
 					<div th:replace="itemOrder/orderForm :: orderDetail_modal"></div>
 					<div th:replace="Permission/permissionPage :: permissionList"></div>
 					<div th:replace="Permission/permissionPage :: roleUser_edit_Modal"></div>
-					<div th:replace="Permission/permissionPage :: roleUser_edit_Modal"></div>
+					<div th:replace="Permission/toolsBar :: toolBar"></div>
 					<div th:replace="WelcomePage :: welcomePage"/>
 			</div>
 		</div>

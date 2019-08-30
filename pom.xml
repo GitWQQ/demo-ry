@@ -165,12 +165,27 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		
-		<!-- ============== -->
+		<!--jsp-->
 		<dependency>
     		<groupId>javax.servlet</groupId>
    	 		<artifactId>javax.servlet-api</artifactId>
     		<scope>provided</scope>
 		</dependency>
+		<dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 加密解密 -->
+        <dependency>  
+            <groupId>org.bouncycastle</groupId>  
+            <artifactId>bcprov-jdk16</artifactId>  
+            <version>1.46</version>  
+     	</dependency>  
 	</dependencies>
 
 	<build>

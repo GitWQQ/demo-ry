@@ -1,9 +1,12 @@
 package com.example.demo.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -12,7 +15,9 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.domain.Permission;
@@ -66,6 +71,10 @@ public class MyShiroRealm extends AuthorizingRealm{
 		String userName=userInfoToken.getUsername();
 		String password=userInfoToken.getPassword().toString();
 		SimpleAuthenticationInfo info=null;
+		//----剔除已经登录的用户-------
+		
+		//----
+		
 		if(!"".equals(userName)){
 			Map<String,Object> param=new HashMap<String,Object>();
 			param.put("username",userName);

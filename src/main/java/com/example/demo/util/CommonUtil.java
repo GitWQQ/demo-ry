@@ -16,6 +16,34 @@ import org.apache.shiro.util.ByteSource;
 import com.example.demo.domain.User;
 
 public class CommonUtil {
+	
+	private static Integer LOGIN_NUM=0;
+	private static final Integer TOTAL_NUM=4;
+	
+	
+	public static String lockAccount(){
+		String msg="";
+		Subject subject=SecurityUtils.getSubject();
+		subject.getSession().setTimeout(1000*60);
+		if(LOGIN_NUM==0){
+			++LOGIN_NUM;
+			msg="您已经登录"+LOGIN_NUM+"次，还剩"+(TOTAL_NUM-LOGIN_NUM)+"次登录机会";
+			subject.getSession().setAttribute("account",LOGIN_NUM);
+		}else{	
+			LOGIN_NUM= Integer.parseInt(subject.getSession().getAttribute("account").toString());
+			System.out.println("LOGIN_NUM="+LOGIN_NUM);
+			if(LOGIN_NUM<TOTAL_NUM){
+				++LOGIN_NUM;
+				subject.getSession().setAttribute("account",LOGIN_NUM);
+				msg="您已经登录"+LOGIN_NUM+"次，还剩"+(TOTAL_NUM-LOGIN_NUM)+"次登录机会";
+				if(LOGIN_NUM==4){
+					subject.getSession().setAttribute("account",TOTAL_NUM-LOGIN_NUM);
+				}
+			}
+		}	
+		return msg;
+	}
+	
 	/**
 	 * 获取当前时间 yyyy-MM-dd HH:mm:ss
 	 * @return
@@ -167,7 +195,7 @@ public class CommonUtil {
 	  */
 	 public static String getID(){
 		 Date date=new Date();
-		 SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
+		 SimpleDateFormat format=new SimpleDateFormat("yyMMdd");
 		 String id=format.format(date.getTime());
 		 Random random=new Random();
 		 for(int i=0;i<4;i++){
@@ -176,6 +204,20 @@ public class CommonUtil {
 		 return id;
 	 }
 	 
+	 /**
+	  * Id=年月日+三位随机数
+	  * @return
+	  */
+	 public static String getXH(String tableName){
+		 Date date=new Date();
+		 SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
+		 String id=format.format(date.getTime());
+		 Random random=new Random();
+		 for(int i=0;i<4;i++){
+			 id=id+random.nextInt(9);
+		 }
+		 return (tableName+id);
+	 }
 	
 	 /**
 	  * 获取更新时间戳
@@ -189,7 +231,23 @@ public class CommonUtil {
 		 return tstamp;
 	 }
 	 
+	 
+	 public static String doFormatDate(Date date,String pattern){
+		if(date !=null){
+			SimpleDateFormat format=new SimpleDateFormat(pattern);
+			return format.format(date);
+		}else{
+			return "";
+		}
+		
+	 }
+	 public static String dateToString(Date date){
+		 String res=doFormatDate(date,"yyyy-MM-dd HH:mm:ss");
+		 return res;
+	 }
+	 
+	 
 	public static void main(String[] args){
-	
+		System.out.println(LOGIN_NUM++);
 	}
 }	

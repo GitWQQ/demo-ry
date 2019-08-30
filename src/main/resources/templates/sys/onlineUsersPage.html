@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/style_script">
+	<meta  charset="UTF-8"/>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-xs-12">
+				<table id="onlineUsers"/>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function(){
+		initOnLineUsers();
+	});
+	
+	function initOnLineUsers(){
+		$("#onlineUsers").bootstrapTable({
+			method:'GET',//服务器数据的请求方式
+			url:'/thy/sys/getOnLineUsersInfo',
+			iconSize:'outline',
+			dataType:'json',                                         
+			contentType:'application/x-www-form-urlencoded',
+			toolbar:'#permissionToolbar',
+			iconSize:'outline',
+			striped:true,
+			silent:true,
+			cache:false,                                             
+			showColumns:false,                                       
+			pagination:true,                                         
+			paginationPreText:'上一頁',                                 
+			paginationNextText:'下一頁',                                
+			showPaginationSwitch:false,                              
+			sortable:false,                                          
+			singleSelect:false,                                      
+			search:false,                                             
+			buttonsAlign:'right',                                    
+			showRefresh:false,
+			showExport:true,
+			exportDataType: "all",
+			pageNumber:1,                                            
+			pageSize:5,                                              
+			pageList:[5,10,20,30,50,100],                            
+			undefinedText:'--',                                      
+			uniqueId:'id', 
+			columns:[
+			         {
+			        	 field:'username',
+			        	 title:'用户名',
+			        	 width:80,
+			        	 align:'center',
+			        	 visible:false
+			         },{
+			        	 field:'ip',
+			        	 title:'用户IP',
+			        	 width:100,
+			        	 align:'center'
+			         },{
+			        	 field:'phone',
+			        	 title:'联系电话',
+			        	 width:150,
+			        	 align:'center'
+			         },{
+			        	 field:'email',
+			        	 title:'邮箱',
+			        	 align:'center',
+			        	 width:100
+			         },{
+			        	 field:'loginTime',
+			        	 title:'登录时间',
+			        	 align:'center',
+			        	 width:100,
+			        	 formatter:function(value,row,index){
+			        	 
+			        	 }
+			         }
+				  ]
+		})
+	}
+
+</script>
+</html>

@@ -88,8 +88,6 @@ public class ExcelUtil2013  {
                     fillSheet(sheet, list, fieldMap, firstIndex, lastIndex);  
                 }  
             }  
-            out.close();
-            out.flush();
             wwb.write();
             wwb.close(); 
            
@@ -563,25 +561,17 @@ public class ExcelUtil2013  {
 		List<User> lists=new ArrayList<>();
 		lists.add(new User("王权","男","17551066852","1640611853@qq.com"));
 		lists.add(new User("许莹","女","11111111111","1111111111@qq.com"));
-		
+		System.out.print(lists);
 		LinkedHashMap<String,String> fieldMap=new LinkedHashMap<>();
 		fieldMap.put("username","姓名");
 		fieldMap.put("sex","性别");
 		fieldMap.put("phone","电话");
 		fieldMap.put("email","邮箱");
 		
-		//OutputStream out=new FileOutputStream("E:\\1111.xls");
+		OutputStream out=new FileOutputStream("E:\\1111.xls");
 		
-		//listToExcel(lists, fieldMap,"Excel导出测试",out);
+		listToExcel(lists, fieldMap,"Excel导出测试",out);
 		System.out.println("====================================");
 		
-		LinkedHashMap<String,String> fieldMap2=new LinkedHashMap<>();
-		fieldMap2.put("姓名","username");
-	
-		
-		
-		String [] arr=new String[]{"username"};
-		InputStream in=new FileInputStream("E:\\1111.xls");
-		excelToList(in,"Excel导出测试",User.class,fieldMap2,arr);
 	}
 }

@@ -120,6 +120,9 @@
 	</div>
 	<div id="loginModal">
 	</div>
+		<form id="to" action="http://127.0.0.1:8082/bbs/static/index" method="post">
+			<input id="login_token" type="hidden" th:value="${session.token}"></input>	
+		</form>
 	</body>
 </html>
 <script>
@@ -128,4 +131,21 @@
 			interval:3000
 		})
 	})
+	
+	function toBBS(){
+		var token=$("#login_token").val();
+		window.open('http://127.0.0.1:8082/bbs/static/index?token='+token,'_blank');
+		
+		/* $.ajax({
+			type:'POST',
+			url:'',
+			data:{"token":token},
+			dataType:'jsonp',
+			success:function(data){
+				
+			}
+		}) */
+		
+	}
+
 </script>

@@ -43,6 +43,23 @@ public class UserController {
 		return "/Permission/roleUserFrom";
 	}
 	
+	/**
+	 * 注销指定用户
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/removeUserByParam")
+	@ResponseBody
+	public Map<String,Object> removeUserByParam(HttpServletRequest request){
+		Map<String,Object> result=new HashMap<String,Object>();
+		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
+		if(paramMap.get("id")!=null){
+			userService.removeUserById(paramMap);
+			result.put("msg","注销成功");
+		}
+		return result;
+	}
+	
 	
 	//获取参数
 	private Map<String, Object> getParamMap(Map<String, String[]> map){

@@ -6,6 +6,20 @@ $(function(){
 		initBootStrap_Permission();
 	})
 	
+	// 根据输入的权限名称，获取权限名称的拼音首字母组成权限代码
+	$("#permission_name").blur(function(){
+		var val=$("#permission_name").val();
+		var result=getPinYinFirstCharacter(val,true);
+		$("#permission").val(result);
+	});
+	
+	// 根据输入的权限名称，获取权限名称的拼音首字母组成权限代码
+	$("#permission_edit_name").blur(function(){
+		var val=$("#permission_edit_name").val();
+		var result=getPinYinFirstCharacter(val,true);
+		$("#permission_edit").val(result);
+	});
+	
 })
 
 function initBootStrap_Permission(){
@@ -15,7 +29,7 @@ function initBootStrap_Permission(){
 		iconSize:'outline',
 		dataType:'json',                                         
 		contentType:'application/x-www-form-urlencoded',
-		toolbar:'#exampleToolbar',
+		toolbar:'#',
 		iconSize:'outline',
 		striped:true,                                            
 		cache:false,                                             
@@ -114,13 +128,14 @@ function initBootStrap_Permission(){
 	//==============================
 	$("#permission_Tab").bootstrapTable({
 		method:'GET',//服务器数据的请求方式
-		url:'',
+		url:'/per/getAllPermission',
 		iconSize:'outline',
 		dataType:'json',                                         
 		contentType:'application/x-www-form-urlencoded',
-		toolbar:'#exampleToolbar',
+		toolbar:'#permissionToolbar',
 		iconSize:'outline',
-		striped:true,                                            
+		striped:true,
+		silent:true,
 		cache:false,                                             
 		showColumns:false,                                       
 		pagination:true,                                         
@@ -138,34 +153,46 @@ function initBootStrap_Permission(){
 		pageSize:5,                                              
 		pageList:[5,10,20,30,50,100],                            
 		undefinedText:'--',                                      
-		uniqueId:'id',             
+		uniqueId:'id', 
 		columns:[
 		         {
 		        	 field:'id',
 		        	 title:'序号',
-		        	 visible:false,
+		        	 width:80,
+		        	 align:'center',
+		        	 visible:false
 		         },{
-		        	 field:'permission',
+		        	 field:'permission_name',
 		        	 title:'权限名称',
 		        	 width:100,
 		        	 align:'center'
 		         },{
-		        	 field:'createtime',
+		        	 field:'permission',
+		        	 title:'权限代码',
+		        	 width:150,
+		        	 align:'center'
+		         },{
+		        	 field:'create_time',
 		        	 title:'创建时间',
 		        	 align:'center',
 		        	 width:100
 		         },{
+		        	 field:'',
+		        	 title:'停/启用状态',
+		        	 align:'center',
+		        	 width:100,
+		        	 formatter:function(value,row,index){
+		        	 
+		        	 }
+		         },{
 		        	 title:'操作',
-		        	 field:'xh',
+		        	 field:'id',
 		        	 align:'center',
 		        	 width:80,
 		        	 formatter:function(value,row,index){
 		        		var btn;
-		        		if(row.status=="0"){
-		        			btn='<button id="btn_edit" class="btn btn-warning btn-sm" onclick="btn_edit_p('+value+');">未阅读</button>&nbsp;';
-		        		}else{
-		        			btn='<button id="btn_edit" class="btn btn-success btn-sm" onclick="btn_delete_p('+value+');">已阅读</button>&nbsp;';
-		        		}
+		        		btn='<button id="btn_edit" class="btn btn-warning btn-sm" onclick="btn_edit_permission('+value+');">修改</button>&nbsp;'		        		
+		        		   +'<button id="btn_delete" class="btn btn-danger btn-sm" onclick="btn_delete_permission('+value+');">删除</button>&nbsp;';
 			 			return btn;
 		        	 }
 		         }
@@ -179,7 +206,7 @@ function initBootStrap_Permission(){
 		iconSize:'outline',
 		dataType:'json',                                         
 		contentType:'application/x-www-form-urlencoded',
-		toolbar:'#exampleToolbar',
+		toolbar:'#roleToolBar',
 		iconSize:'outline',
 		striped:true,                                            
 		cache:false,                                             
@@ -252,8 +279,28 @@ function btn_edit_ru(xh){
 	$("#roleUserModal").on('shown.bs.modal',function(){
 		getRoles();
 	})
-	
 }
+
+
+function btn_delete_ru(xh){
+	layer.confirm('确定注销此用户',{icon:3,title:'提示'},function(index){
+		var param={'id':xh};
+		$.ajax({
+			type:'POST',
+			url:'/user/removeUserByParam',
+			data:param,
+			dataType:'json',
+			beforeSend:function(){
+				//layer.msg("正在注销用户.........",{icon:16});
+			},
+			success:function(data){
+				$("#role_user_Tab").bootstrapTable("refresh");
+			}
+		})
+		layer.close(index);
+	})
+}
+
 
 function getRoles(){
 	$.ajax({
@@ -273,3 +320,57 @@ function getRoles(){
 		}
 	})
 }
+
+function btn_permissionAdd(){
+	var permission_name=$("#permission_name").val().trim();
+	var permission=$("#permission").val().trim();
+	$.ajax({
+		type:'POST', //请求方式，post,get
+		url:'/per/addPermission', //发送请求地址
+		data:{"permission_name":permission_name,"permission":permission},//请求参数
+		dataType:'json',//要求为String类型的参数，预期服务器返回的数据类型，xml，html,script,json,text,jsonp
+		async:true,	//要求为boolean类型参数，默认true异步。设置为false发送同步请求
+		timeout:5000, //设置请求超时时间，单位毫秒
+		contentType:"application/x-www-form-urlencoded",//设置请求向服务器发送参数的格式，
+		success:function(data){	
+			$("#addPermissionModal").modal('hide');
+			$("#permission_Tab").bootstrapTable("refresh");
+			
+		},
+		error:function(){
+			
+		}
+	})
+}
+
+function btn_delete_permission(Id){
+	layer.confirm('你确定删除这个数据吗?',{btn:['确定','取消']},
+			function(){
+				$.post('/per/removePermission',{"id":Id},function(msg){
+					if(msg=="false"){
+						layer.msg('删除失败',{icon:2});
+					}
+				})
+				layer.msg('删除成功',{icon:1,time:1000});
+				$("#permission_Tab").bootstrapTable("refresh");
+			})		
+}
+
+function btn_edit_permission(Id){
+	var param={"id":Id};
+	$.ajax({
+		type:'GET',
+		url:'/per/getPermissionById',
+		data:param,
+		dataType:'html',
+		success:function(data){
+			$("#permissionEditModal_Body").html(data);
+		},
+		error:function(data){
+				
+		}
+	})
+	$("#permissionEditModal").modal("show");
+	
+}
+

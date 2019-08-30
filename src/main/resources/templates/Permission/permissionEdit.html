@@ -1,0 +1,9 @@
+<form role="form" th:each="per : ${permissions}">
+	<div class="form-group">
+		<label for="permission_name"><strong>权限名称:</strong></label>
+		<input type="text" class="form-control" id="permission_edit_name" th:value="${per.permission_name}"  placeholder="请输入名称"></input>
+		<label for="permission"><strong>权限代码:</strong></label>
+		<input for="permission" class="form-control" id="permission_edit" th:value="${per.permission}"/>
+	</div>
+</form>
+		
