@@ -1,46 +1,148 @@
 <table style="font-family:'Microsoft YaHei', Arial, Helvetica;
-border-collapse:separate;border-spacing:15px;" th:each="user : ${users}">
-	<tr>                                                                          				
-		<td style="width:20%;background-color:#81B4FF;">用户名:</td>                 				
-		<td style="width:30%;border-bottom:1px dashed #81B4FF" th:text="${user.username}"></td>  				
-		<td style="width:20%;background-color:#81B4FF">联系电话:</td>                				
-		<td style="width:30%;border-bottom:1px dashed #81B4FF" th:text="${user.phone}"></td>  				
+border-collapse:separate;border-spacing:15px;" cellpadding="1" cellspacing="1" th:each="user : ${users}">
+	<tr>
+		<td style="width:20%;background-color:#81B4FF;">用户名:</td>
+		<td style="width:20%;border-bottom:1px dashed #81B4FF" th:text="${user.username}"></td>
+		<td style="width:20%;background-color: #81B4FF">性&nbsp;别</td>
+		<td style="width:20%;border-bottom:1px dashed #81B4FF" th:text="${user.sex}"></td>
 	</tr>                                                                         				
-	<tr>                                                                 				
+	<tr>
+		<td style="width:20%;background-color:#81B4FF">联系电话:</td>
+		<td style="width:30%;border-bottom:1px dashed #81B4FF" th:text="${user.phone}"></td>
 		<td style="width:20%;background-color:#81B4FF">邮&nbsp;&nbsp;&nbsp;箱:</td>                 				
-		<td style="width:30%;border-bottom:1px dashed #81B4FF" th:text="${user.email}"></td>              				
-		<td style="width:20%;background-color:#81B4FF">角&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色:</td>                 				
-		<td style="width:30%;border-bottom:1px dashed #81B4FF;" >
-			<select id="example-getting-started" name="ttt" multiple="multiple" style="font-size:12px;">
-				<option value="1">管理员</option>
-				<option value="2">普通用户</option>
-				<option value="3">超级管理员</option>
-				<option value="4">VIP客户</option>
-			</select>
-			<input type="hidden" name="morezeng" id="morezeng"/>
-		</td>             				
+		<td style="width:20%;border-bottom:1px dashed #81B4FF" th:text="${user.email}"></td>
 	</tr>
-	<tr>	              		
-		<td style="width:20%;background-color:#81B4FF">注册日期:</td>		
-		<td style="width:20%;border-bottom:1px dashed #81B4FF;" colspan="3" th:text="${user.created}"></td>          				
-	</tr>                                                                         				
+	<tr>
+		<td style="width:20%;background-color:#81B4FF">注册日期:</td>
+		<td style="width:80%;border-bottom:1px dashed #81B4FF;" colspan="2"  th:text="${user.created}"></td>
+	</tr>
+	<tr>
+		<td style="width:20%;background-color:#81B4FF">角   色:</td>
+		<td style="border-bottom:1px dashed #81B4FF;z-index: 999;"  colspan="2">
+			<input id="selectCatalog"  name="selectCatalog" type="text" autocomplete="off" onclick="$('#rolesTree').show()"
+			   style="height: 28px;margin-left: 10px; margin-bottom:0px;width: 250px" tabindex="2"/>
+			<div id="rolesTree" style="position:absolute;display:none;
+				background-color:white; margin-left:10px; width: 250px" onmouseleave="roleTreeClose()">
+			</div>
+		</td>
+	</tr>
 </table>
-<script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
 	$(function(){
-		$("#example-getting-started").multipleSelect({
-			width:200,
-			multipleWidth:55,
-			selectAll:false
+		var roles= [[${users[0].roles}]];
+		var len=roles.length;
+		if(roles==undefined || roles==null || roles==""){
+                $("#selectCatalog").val('');
+		}else{
+                var roleNames="";
+                for(var i=0;i<len;i++){
+                    roleNames+=roles[i].roleName+"|";
+                }
+                $("#selectCatalog").val(roleNames);
+			$("#rolesTree").treeview('selectNode', ["1",{ silent: true }]);
+		}
+	})
+	/*]]>*/
+</script>
+
+<script>
+	function roleTreeClose(){
+		$("#rolesTree").hide();
+	}
+</script>
+
+<script type="text/javascript">
+	$(function(){
+		$.ajax({
+			type: "post",
+			url: "/thy/sys/resource/roleMenu",//对应后台的post
+			contentType:'application/json',
+			dataType:'json',//返回json格式数据
+			async: false,
+			timeout:50000, //请求超时
+			success:function(result){
+				if(result!=null){
+					$("#selectCatalog").click(function() {
+						var options = {
+							data : result,//数据源
+							levels : 2,
+							multiSelect: true,
+							showCheckbox:false,//是否显示复选框
+							highlightSelected:true,//是否高亮选中
+							color:"#81B4FF",
+							expandIcon:'',
+							onNodeChecked : function (event,node) {
+								var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+								if (selectNodes) { //子节点不为空，则选中所有子节点
+									$('#rolesTree').treeview('checkNode', [selectNodes, { silent: true }]);
+								}
+							},
+							onNodeUnchecked : function(event, node) { //取消选中节点
+								var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+								if (selectNodes) { //子节点不为空，则取消选中所有子节点
+									$('#rolesTree').treeview('uncheckNode', [selectNodes, { silent: true }]);
+								}
+							},
+							onNodeSelected : function(event, node) {
+								var v=$("#selectCatalog").val();
+								v=v+node.text+"|";
+								$("#selectCatalog").val(v);
+
+							},
+							onNodeUnselected:function (event,node){
+								var val=$("#selectCatalog").val();
+								var array=val.split("|");
+								console.log(array.length);
+								var v =val.replace(node.text+"|","");
+								$("#selectCatalog").val(v);
+							}
+						};
+						$('#rolesTree').treeview(options);
+					});
+				}
+			},
+			error:function(){
+				parent.alertShow('error','下拉菜单加载失败');
+			}
 		})
 	})
-	
-	function getConfirm()
-    {
-        debugger;
-        alert($('#example-getting-started').multipleSelect('getSelects','value'));
-        var selectValue = $('#example-getting-started').multipleSelect('getSelects','value');
-        console.log(selectValue);
-        $("#morezeng").val(selectValue);
-        $("#selectForm").submit();
-    }
+
+	//选中/取消父节点时选中/取消所有子节点
+	function getChildNodeIdArr(node) {
+		var ts = [];
+		if (node.nodes) {
+			for (x in node.nodes) {
+				ts.push(node.nodes[x].nodeId);
+				if (node.nodes[x].nodes) {
+					var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+					for (j in getNodeDieDai) {
+						ts.push(getNodeDieDai[j]);
+					}
+				}
+			}
+		} else {
+			ts.push(node.nodeId);
+		}
+		return ts;
+	}
+
+	//选中所有子节点时选中父节点
+	function setParentNodeCheck(node) {
+		var parentNode = $("#rolesTree").treeview("getNode", node.parentId);
+		if (parentNode.nodes) {
+			var checkedCount = 0;
+			for (x in parentNode.nodes) {
+				if (parentNode.nodes[x].state.checked) {
+					checkedCount ++;
+				} else {
+					break;
+				}
+			}
+			if (checkedCount === parentNode.nodes.length) {
+				$("#rolesTree").treeview("checkNode", parentNode.nodeId);
+				setParentNodeCheck(parentNode);
+			}
+		}
+	}
 </script>

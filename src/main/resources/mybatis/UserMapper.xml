@@ -5,6 +5,10 @@
 	<resultMap type="User" id="userMap">
 		<id column="ID" jdbcType="VARCHAR" property="id"/>
 		<result column="USERNAME" jdbcType="VARCHAR" property="username"/>
+		<result column="REALNAME" jdbcType="VARCHAR" property="realname"/>
+		<result column="SFZH" jdbcType="VARCHAR" property="sfzh"/>
+		<result column="AGE" jdbcType="INTEGER" property="age"/>
+		<result column="USERTYPE" jdbcType="INTEGER" property="usertype"/>
 		<result column="SEX" jdbcType="VARCHAR" property="sex"/>
 		<result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
 		<result column="PHONE" jdbcType="VARCHAR" property="phone"/>
@@ -16,17 +20,22 @@
 		<collection property="roles" ofType="com.example.demo.domain.Role" javaType="java.util.ArrayList" 
 		select="getRoles" column="ID">
 		</collection>
-		
 	</resultMap>
 	
 	<resultMap type="Role" id="roleMap">
 		<id column="ID" jdbcType="VARCHAR" property="id"/>
 		<result column="ROLENAME" jdbcType="VARCHAR" property="roleName"/>
+		<result column="ROLECODE" jdbcType="VARCHAR" property="roleCode"/>
+		<result column="CREATE_TIME" jdbcType="DATE" property="create_time"/>
 	</resultMap>
 	
 	<sql id="columns">
 		ID,
 		USERNAME,
+		REALNAME,
+		SFZH,
+		AGE,
+		USERTYPE,
 		(CASE SEX
 			WHEN '0' THEN '女'
 			WHEN '1' THEN '男'
@@ -46,6 +55,18 @@
 		</if>
 		<if test="username !=null and username !=''">
 			username=#{username,jdbcType=VARCHAR}
+		</if>
+		<if test="realname !=null and realname !=''">
+			realname=#{realname,jdbcType=VARCHAR}
+		</if>
+		<if test="sfzh !=null and sfzh !=''">
+			sfzh=#{sfzh,jdbcType=VARCHAR}
+		</if>
+		<if test="age !=null and age !=''">
+			sfzh=#{age,jdbcType=INTEGER}
+		</if>
+		<if test="usertype !=null and usertype !=''">
+			usertype=#{usertype,jdbcType=INTEGER}
 		</if>
 		<if test="sex !=null and sex !=''">
 			sex=#{sex,jdbcType=VARCHAR}
@@ -91,6 +112,18 @@
 			<if test="username !=null">
 				USERNAME,
 			</if>
+			<if test="realname !=null">
+				REALNAME,
+			</if>
+			<if test="sfzh !=null">
+				SFZH,
+			</if>
+			<if test="age !=null">
+				AGE,
+			</if>
+			<if test="usertype !=null">
+				USERTYPE,
+			</if>
 			<if test="password !=null">
 				PASSWORD,
 			</if>
@@ -119,6 +152,18 @@
 			</if>
 			<if test="username !=null">
 				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="realname !=null">
+				#{realname,jdbcType=VARCHAR},
+			</if>
+			<if test="sfzh !=null">
+				#{sfzh,jdbcType=INTEGER},
+			</if>
+			<if test="age !=null">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="usertype !=null">
+				#{usertype,jdbcType=INTEGER},
 			</if>
 			<if test="password !=null">
 				#{password,jdbcType=VARCHAR},
@@ -149,6 +194,10 @@
 		INSERT INTO TB_USER(
 		     id,
 			 username,
+			 realname,
+			 sfzh,
+			 age,
+			 usertype,
 			 password,
 			 phone,
 			 email,
@@ -160,6 +209,10 @@
 		VALUES(
 			id=#{id,jdbcType=VARCHAR},
 			username=#{username,jdbcType=VARCHAR},
+			realname=#{realname,jdbcType=VARCHAR},
+			age=#{age,jdbcType=INTEGER},
+			sfzh=#{sfzh,jdbcType=VARCHAR},
+			usertype=#{usertype,jdbcType=INTEGER},
 			password=#{password,jdbcType=VARCHAR},
 			phone =#{phone,jdbcType=VARCHAR},
 			email=#{email,jdbcType=VARCHAR},
@@ -176,6 +229,18 @@
 		<set>
 			<if test="username !=null and username !=''">
 				username=#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="realname !=null and realname !=''">
+				realname=#{realname,jdbcType=VARCHAR},
+			</if>
+			<if test="sfzh !=null and sfzh=!''">
+				sfzh=#{sfzh,jdbcType=VARCHAR},
+			</if>
+			<if test="age !=null and age !=''">
+				age=#{age,jdbcType=INTEGER},
+			</if>
+			<if test="usertype !=null and usertype=!''">
+				usertype=#{usertype,jdbcType=INTEGER},
 			</if>
 			<if test="password !=null and password !=''">
 				password=#{password,jdbcType=VARCHAR},
@@ -200,7 +265,8 @@
 	<select id="getRoles" parameterType="String" resultMap="roleMap">
 		SELECT 
 			r.id,
-			r.roleName 
+			r.roleName,
+			r.roleCode
 		FROM TB_ROLE r LEFT JOIN
 		TB_USER_ROLE ur ON r.id=ur.rid
 		WHERE ur.uid=#{id,jdbcType=VARCHAR}  

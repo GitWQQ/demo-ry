@@ -1,6 +1,5 @@
 package com.example.demo.util;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -194,7 +193,7 @@ public class ExcelUtil2013  {
      * @MethodName          : excelToList 
      * @Description             : 将Excel转化为List 
      * @param in                    ：承载着Excel的输入流 
-     * @param sheetIndex        ：要导入的工作表序号 
+     * @param sheetName        ：要导入的工作表序号
      * @param entityClass       ：List中对象的类型（Excel中的每一行都要转化为该类型的对象） 
      * @param fieldMap          ：Excel中的中文列头和类的英文属性的对应关系Map 
      * @param uniqueFields  ：指定业务主键组合（即复合主键），这些列的组合不能重复 
@@ -559,8 +558,8 @@ public class ExcelUtil2013  {
        
     public static void main(String[] args) throws FileNotFoundException, ExcelException {
 		List<User> lists=new ArrayList<>();
-		lists.add(new User("王权","男","17551066852","1640611853@qq.com"));
-		lists.add(new User("许莹","女","11111111111","1111111111@qq.com"));
+		lists.add(new User("王权","","男","17551066852","1640611853@qq.com"));
+		lists.add(new User("许莹","","女","11111111111","1111111111@qq.com"));
 		System.out.print(lists);
 		LinkedHashMap<String,String> fieldMap=new LinkedHashMap<>();
 		fieldMap.put("username","姓名");

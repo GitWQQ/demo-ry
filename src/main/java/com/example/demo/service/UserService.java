@@ -16,7 +16,7 @@ public interface UserService {
 	 * @param param
 	 * @return
 	 */
-	public  List getUserByParam(Map<String,Object> param);
+	List getUserByParam(Map<String,Object> param);
 	
 	/**
 	 * 获取所有用户信息

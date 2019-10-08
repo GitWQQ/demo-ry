@@ -6,39 +6,59 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @SuppressWarnings("serial")
 @Entity
 public class User implements Serializable{
+	//id 唯一表示主键
 	@Id
 	private String id;
-	
+
+	//用户名(昵称)
 	@Column(unique=true)
 	private String username;
-	
-	private String password;
-	
+
+	//真实姓名
+	private String realname;
+
+	//身份证号
+	private String sfzh;
+
+	//年龄
+	private Integer age;
+
+	//用户类型 0：管理员/超级管理员  1：vip/会员用户  2：普通用户
+	private Integer usertype;
+
+	//性别
 	private String sex;
-	
+
+	//联系电话
 	private String phone;
-	
+
+	//联系邮箱
 	private String email;
-	
-	private String salt;//加密密码的盐
-	
+
+	//密码
+	private String password;
+
+	//加密密码的盐
+	private String salt;
+
+	//创建日期
 	private String created;
-	
+
+	//修改日期
 	private String updated;
-	
+
+	//关于xh
 	private String about_xh;
-	
+
+	//角色集合，一对多，一个用户可以有多个角色
 	@OneToMany(cascade=CascadeType.ALL,mappedBy = "user")
 	private List<Role> roles;
-
 
 	public String getId() {
 		return id;
@@ -62,6 +82,30 @@ public class User implements Serializable{
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getRealname() { return realname; }
+
+	public void setRealname(String realname) { this.realname = realname; }
+
+	public String getSfzh() { return sfzh; }
+
+	public void setSfzh(String sfzh) { this.sfzh = sfzh; }
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Integer getUsertype() {
+		return usertype;
+	}
+
+	public void setUsertype(Integer usertype) {
+		this.usertype = usertype;
 	}
 
 	public String getPhone() {
@@ -129,17 +173,17 @@ public class User implements Serializable{
 		this.about_xh = about_xh;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", phone=" + phone + ", email="
-				+ email + ", salt=" + salt + ", created=" + created + ", updated=" + updated + ", roles=" + roles + "]";
-	}
 
-	public User(String id, String username, String password, String sex, String phone, String email, String salt,
+	public User(String id, String username, String realname,String sfzh,Integer age, Integer usertype,
+				String password, String sex, String phone, String email, String salt,
 			String created, String updated, List<Role> roles) {
 		super();
 		this.id = id;
 		this.username = username;
+		this.realname=realname;
+		this.sfzh=sfzh;
+		this.age=age;
+		this.usertype=usertype;
 		this.password = password;
 		this.sex = sex;
 		this.phone = phone;
@@ -150,9 +194,10 @@ public class User implements Serializable{
 		this.roles = roles;
 	}
 	
-	public User(String username,String sex, String phone, String email) {
+	public User(String username,String realname,String sex, String phone, String email) {
 		super();
 		this.username = username;
+		this.realname=realname;
 		this.sex=sex;
 		this.phone = phone;
 		this.email = email;

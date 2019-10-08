@@ -38,11 +38,22 @@ public class ExportController {
 
 	@Autowired
 	private OrderItemService  orderItemService;
-	
+
+	/**
+	 * 销售排行榜
+	 * @param request
+	 * @param response
+	 * @throws FileNotFoundException
+	 * @throws ExcelException
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/saleRanking")
 	public void exportSaleRanking(HttpServletRequest request,
 			HttpServletResponse response) throws FileNotFoundException, ExcelException{
+		System.out.println("=====export=======");
+		orderItemService.exportSaleRanking().forEach(System.out::println);
+		System.out.println("=====export=======");
+
 		List<Map<String,Object>> list=orderItemService.exportSaleRanking();
 		System.out.println(list);
 		if(list!=null){

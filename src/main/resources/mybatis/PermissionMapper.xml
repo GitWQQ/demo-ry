@@ -23,7 +23,7 @@
 		WHERE
 			r.id = rp.rid
 			AND p.id = rp.pid	
-  		AND r.roleName =#{rolename,jdbcType=VARCHAR}
+  		AND r.roleCode =#{rolename,jdbcType=VARCHAR}
 	</select>
 	
 	<!-- 新增权限信息 -->

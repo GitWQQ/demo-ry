@@ -51,10 +51,10 @@ public class MyShiroRealm extends AuthorizingRealm{
 		List<Permission> permissions=new ArrayList<Permission>();
 		roles=roleService.getRolesByParam(user.getUsername());
 		for (Role role : roles) {
-			authorizationInfo.addRole(role.getRoleName().toString());
-			permissions=permissionService.getPermissionByParam(role.getRoleName().toString());
+			authorizationInfo.addRole(role.getRoleCode());
+			permissions=permissionService.getPermissionByParam(role.getRoleCode());
 			for (Permission permission : permissions) {
-				authorizationInfo.addStringPermission(permission.getPermission().toString());
+				authorizationInfo.addStringPermission(permission.getPermission());
 			}
 		}
 		return authorizationInfo;

@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dao.RoleMapper;
 import com.example.demo.domain.Role;
 import com.example.demo.service.RoleService;
+
+import javax.annotation.Resource;
 
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -30,6 +33,13 @@ public class RoleServiceImpl implements RoleService{
 	 */
 	@Override
 	public List getRoles(Map<String, Object> param) {
+		List result=roleMapper.getRoles(param);
+		return result;
+	}
+
+	@Override
+	public List getRolesMenu() {
+		Map param=new HashMap();
 		List result=roleMapper.getRoles(param);
 		return result;
 	}

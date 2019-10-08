@@ -1,6 +1,9 @@
 package com.example.demo.service.impl;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,12 +85,19 @@ public class UserServiceImpl  implements UserService{
 		aboutMapper.addAbout(aboutMap);
 				
 		//注册信息
+		Calendar calendar=Calendar.getInstance();
 		paramMap.put("id",CommonUtil.getID());
 		paramMap.put("salt",CommonUtil.getSalt().toString());//获取盐
 		String password=paramMap.get("password").toString();
 		if(password !=null && !"".equals(password)){
 			paramMap.put("password",CommonUtil.md5(paramMap.get("salt").toString(),password));
 		}
+		String sfzh=paramMap.get("sfzh").toString();
+		Integer yearNow=calendar.get(Calendar.YEAR);
+		Integer yearBirth=Integer.parseInt(sfzh.substring(6,10));
+		Integer age=(yearNow-yearBirth);
+		paramMap.put("age",(yearNow-yearBirth));
+		paramMap.put("usertype",2);
 		paramMap.put("created",CommonUtil.getNowDate());
 		paramMap.put("updated",CommonUtil.getNowDate());
 		paramMap.put("about_xh",aboutMap.get("xh"));
@@ -155,5 +165,14 @@ public class UserServiceImpl  implements UserService{
 			userRoleMapper.delUserRoleById(paramMap);
 		}
 		
+	}
+
+	public static void main(String[] args) {
+		String sfzh="342222199204026852";
+		String sub=sfzh.substring(6,10);
+		Calendar calendar=Calendar.getInstance();
+		int yearNow=calendar.get(Calendar.YEAR);
+		System.out.println(yearNow);
+		System.out.println(yearNow-Integer.parseInt(sub));
 	}
 }

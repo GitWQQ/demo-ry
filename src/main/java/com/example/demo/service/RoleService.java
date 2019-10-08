@@ -7,8 +7,9 @@ import com.example.demo.domain.Role;
 
 public interface RoleService {
 	
-	public List<Role> getRolesByParam(String username);
+	 List<Role> getRolesByParam(String username);
 	
-	public List getRoles(Map<String,Object> param);
-	
+	 List getRoles(Map<String,Object> param);
+
+	 List getRolesMenu();
 }

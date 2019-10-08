@@ -121,7 +121,6 @@ public class SysController {
 					subject.login(token);
 					User currentUser=(User)subject.getPrincipal();
 					//cookie
-					
 					CookieUtils.createCookie("sso_cookie_U",EncryptUtil.AESencode(username,"666666"),httpRequest,httpResponse);
 					CookieUtils.createCookie("sso_cookie_P",EncryptUtil.AESencode(password,"666666"),httpRequest,httpResponse);
 					//CookieUtils.createCookie("sso_token",token.toString(),httpRequest,httpResponse);
@@ -130,6 +129,7 @@ public class SysController {
 					subject.getSession().setAttribute("username",currentUser.getUsername());
 					subject.getSession().setAttribute("phone",currentUser.getPhone());
 					subject.getSession().setAttribute("email", currentUser.getEmail());
+					subject.getSession().setAttribute("realname",currentUser.getRealname());
 					subject.getSession().setAttribute("user",currentUser);
 					subject.getSession().setTimeout(30*60*1000);//设置session过期时间30分钟
 					subject.getSession().setAttribute("ip",getIpValue(subject.getSession().getHost(),httpRequest));
@@ -387,10 +387,12 @@ public class SysController {
 			if(session.getAttribute("username") !=null &&  session.getTimeout()>0){
 				Map<String,Object> map=new HashMap<>();
 				map.put("username",session.getAttribute("username"));
+				map.put("realname",session.getAttribute("realname"));
 				map.put("ip",session.getAttribute("ip"));
 				map.put("phone",session.getAttribute("phone"));
 				map.put("email",session.getAttribute("email"));
 				map.put("loginTime", CommonUtil.dateToString(session.getStartTimestamp()));
+
 				onlineUsers.add(map);
 			}
 		}

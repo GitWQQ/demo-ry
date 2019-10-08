@@ -5,14 +5,17 @@
 	<resultMap type="Role" id="roleMap">
 		<id column="ID" jdbcType="VARCHAR" property="id"/>
 		<result column="ROLENAME" jdbcType="VARCHAR" property="roleName"/>
+		<result column="ROLECODE" jdbcType="VARCHAR" property="roleCode"/>
+		<result column="CREATE_TIME" jdbcType="DATE" property="create_time" />
 	</resultMap>
 	<sql id="columns">
-		ID,ROLENAME
+		ID,ROLENAME,ROLECODE,CREATE_TIME
 	</sql>
 	
 	<select id="getRoleByParam" parameterType="java.util.Map" resultMap="roleMap">
 		SELECT
-			r.ROLENAME
+			r.ROLENAME,
+			r.ROLECODE
 		FROM
 			TB_ROLE r,
 			TB_USER u,

@@ -169,11 +169,6 @@ public class Node {
 		Node tree=new Node();
 		Node mt=tree.createTree(nodes);
 		System.out.println(tree.iteratorTree(mt));
-		
-		// List  []
-		// list.add("1"); list.add("2");  [1,2]
-		// list.add(new Node());  
-		// [Node[field1,field2.....],Node[field1,field2,....]]
 	}
 	
 }

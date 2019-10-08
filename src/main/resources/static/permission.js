@@ -61,6 +61,11 @@ function initBootStrap_Permission(){
 		        	 width:100,
 		        	 align:'center'
 		         },{
+					field:'realname',
+					title:'姓名',
+					width:100,
+					align:'center'
+				 },{
 		        	 field:'sex',
 		        	 title:'性别',
 		        	 width:100,
@@ -83,22 +88,11 @@ function initBootStrap_Permission(){
 		        		 var role="【";
 		        		 for(var i=0;i<row.roles.length;i++){
 		        			 if(row.roles.length==1){
-		        				 if(row.roles[i].roleName=="admin"){
-		        					 role+="管理员";
-		        				 }else if(row.roles[i].roleName=="customer"){
-		        					 role+="普通客户";
-		        				 }else if(row.roles[i].roleName=="superadmin"){
-		        					 role+="超级管理员";
-		        				 }
+								 role+=row.roles[i].roleName;
 		        			 }else{
-		        				 if(row.roles[i].roleName=="admin"){
-		        					 role+="管理员|";
-		        				 }else if(row.roles[i].roleName=="customer"){
-		        					 role+="普通客户|";
-		        				 }else if(row.roles[i].roleName=="superadmin"){
-		        					 role+="超级管理员|";
-		        				 }
+								 role+=row.roles[i].roleName+"|";
 		        			 }
+
 		        		 }
 		        		 return role+"】";
 		        	 }
@@ -117,7 +111,7 @@ function initBootStrap_Permission(){
 		        	 width:80,
 		        	 formatter:function(value,row,index){
 		        		var btn;
-		        			btn='<button id="btn_edit_ru" class="btn btn-primary btn-sm" onclick="btn_edit_ru(\''+value+'\');">授予角色</button>&nbsp;'+
+		        			btn='<button id="btn_edit_ru" class="btn btn-success btn-sm" onclick="btn_edit_ru(\''+value+'\');">授予角色</button>&nbsp;'+
 		        			 '<button id="btn_delete_ru" class="btn btn-danger btn-sm" onclick="btn_delete_ru(\''+value+'\');">注销</button>&nbsp;';
 			 			return btn;
 		        	 }
@@ -191,18 +185,18 @@ function initBootStrap_Permission(){
 		        	 width:80,
 		        	 formatter:function(value,row,index){
 		        		var btn;
-		        		btn='<button id="btn_edit" class="btn btn-warning btn-sm" onclick="btn_edit_permission('+value+');">修改</button>&nbsp;'		        		
+		        		btn='<button id="btn_edit" class="btn btn-warning btn-sm" onclick="btn_edit_permission('+value+');">修改</button>&nbsp;'
 		        		   +'<button id="btn_delete" class="btn btn-danger btn-sm" onclick="btn_delete_permission('+value+');">删除</button>&nbsp;';
 			 			return btn;
 		        	 }
 		         }
 		]
 	})
-	
+
 	//=======================
 	$("#roles_Tab").bootstrapTable({
 		method:'GET',//服务器数据的请求方式
-		url:'',
+		url:'/role/getRoles',
 		iconSize:'outline',
 		dataType:'json',                                         
 		contentType:'application/x-www-form-urlencoded',
@@ -219,7 +213,7 @@ function initBootStrap_Permission(){
 		singleSelect:false,                                      
 		search:false,                                             
 		buttonsAlign:'right',                                    
-		showRefresh:false,
+		showRefresh:true,
 		showExport:true,
 		exportDataType: "all",
 		pageNumber:1,                                            
@@ -238,22 +232,29 @@ function initBootStrap_Permission(){
 		        	 width:100,
 		        	 align:'center'
 		         },{
-		        	 field:'createtime',
+					field:'roleCode',
+					title:'角色代码',
+					width:100,
+					align:'center'
+				 },{
+					field:'permissions',
+					title:'拥有权限',
+					width:200,
+					align:'center'
+				 },{
+		        	 field:'create_time',
 		        	 title:'创建时间',
 		        	 align:'center',
 		        	 width:100
 		         },{
 		        	 title:'操作',
-		        	 field:'xh',
+		        	 field:'id',
 		        	 align:'center',
 		        	 width:80,
 		        	 formatter:function(value,row,index){
 		        		var btn;
-		        		if(row.status=="0"){
-		        			btn='<button id="btn_edit" class="btn btn-warning btn-sm" onclick="btn_edit_r('+value+');">未阅读</button>&nbsp;';
-		        		}else{
-		        			btn='<button id="btn_edit" class="btn btn-success btn-sm" onclick="btn_delete_r('+value+');">已阅读</button>&nbsp;';
-		        		}
+		        		btn='<button id="btn_add_per" class="btn btn-success btn-sm" onclick="btn_edit_rp(\''+value+'\');">授予权限</button>&nbsp;'
+						 +'<button id="btn_role_del" class="btn btn-danger btn-sm" onclick="btn_role_del(\''+value+'\');">删除</button>&nbsp;';
 			 			return btn;
 		        	 }
 		         }
@@ -281,6 +282,26 @@ function btn_edit_ru(xh){
 	})
 }
 
+
+function btn_edit_rp(xh){
+	var param={"id":xh};
+	$.ajax({
+		type:'POST',
+		url:'/user/getUserByParam',
+		data:param,
+		dataType:'html',
+		success:function(data){
+			$("#rolePermissionModal #rolePermissionBody").html(data);
+		},
+		error:function(e){
+
+		}
+	})
+	$("#rolePermissionModal").modal('show');
+	$("#rolePermissionModal").on('shown.bs.modal',function(){
+		getRoles();
+	})
+}
 
 function btn_delete_ru(xh){
 	layer.confirm('确定注销此用户',{icon:3,title:'提示'},function(index){

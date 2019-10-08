@@ -36,6 +36,7 @@ public class UserController {
 		param=getParamMap(request.getParameterMap());
 		if(param.get("id")!=null && !"".equals(param)){
 			List result=userService.getUserByParam(param);
+			System.out.println("result:"+result);
 			if(result !=null){
 				model.addAttribute("users",result);
 			}

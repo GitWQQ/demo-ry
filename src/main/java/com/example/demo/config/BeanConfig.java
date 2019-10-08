@@ -1,12 +1,10 @@
 package com.example.demo.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.example.demo.util.MyBatisInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.example.demo.util.MyBatisInterceptor;
-
-import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-
 
 @Configuration
 public class BeanConfig {
