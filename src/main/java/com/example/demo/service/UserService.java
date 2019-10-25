@@ -22,7 +22,7 @@ public interface UserService {
 	 * 获取所有用户信息
 	 * @return
 	 */
-	public List getAllUsers();
+	 List getAllUsersByParam(Map paramMap);
 	
 	/**
 	 * 添加用户信息，注册
@@ -31,18 +31,18 @@ public interface UserService {
 	 * @throws AddressException
 	 * @throws MessagingException
 	 */
-	public void addUserInfoselective(Map<String,Object> paramMap) throws IOException, AddressException, MessagingException;
+	 void addUserInfoselective(Map<String,Object> paramMap) throws IOException, AddressException, MessagingException;
 	
 	/**
 	 * 修改指定用户信息
 	 * @param paramMap
 	 */
-	public void updateUserInfoByParam(Map<String,Object> paramMap);
-	
+	 void updateUserInfoByParam(Map<String,Object> paramMap);
+
 	/**
 	 * 根据条件注销用户
 	 * 根据唯一标识ID
 	 * @param paramMap
 	 */
-	public void removeUserById(Map<String,Object> paramMap);
+	 void removeUserById(Map<String,Object> paramMap);
 }

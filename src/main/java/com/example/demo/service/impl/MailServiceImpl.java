@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MailServiceImpl {
-	//@Value("${spring.mail.sender_email}")
+
 	@Value("${spring.mail.username}")
 	private String from;
 	

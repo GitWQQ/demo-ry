@@ -62,8 +62,16 @@ public class UserServiceImpl  implements UserService{
 	 * 获取所有的用户信息(无限制条件)
 	 */
 	@Override
-	public List getAllUsers() {
-		List result=userMapper.getAllUsers();
+	public List getAllUsersByParam(Map paramMap) {
+		System.out.println("paramMap:"+paramMap);
+		System.out.println("========BB=================");
+		if("userSearch".equals(paramMap.get("action"))){
+			System.out.println("=========AA=================");
+			String username_like=paramMap.get("username").toString();
+			paramMap.put("username_like",username_like);
+			paramMap.put("username","");
+		}
+		List result=userMapper.getAllUsersByParam(paramMap);
 		if (result !=null) {
 			return result;
 		}
@@ -85,6 +93,8 @@ public class UserServiceImpl  implements UserService{
 		aboutMapper.addAbout(aboutMap);
 				
 		//注册信息
+		Subject subject=SecurityUtils.getSubject();
+		User user=(User)subject.getPrincipal();
 		Calendar calendar=Calendar.getInstance();
 		paramMap.put("id",CommonUtil.getID());
 		paramMap.put("salt",CommonUtil.getSalt().toString());//获取盐
@@ -96,11 +106,15 @@ public class UserServiceImpl  implements UserService{
 		Integer yearNow=calendar.get(Calendar.YEAR);
 		Integer yearBirth=Integer.parseInt(sfzh.substring(6,10));
 		Integer age=(yearNow-yearBirth);
-		paramMap.put("age",(yearNow-yearBirth));
+		paramMap.put("age",age);
 		paramMap.put("usertype",2);
 		paramMap.put("created",CommonUtil.getNowDate());
 		paramMap.put("updated",CommonUtil.getNowDate());
 		paramMap.put("about_xh",aboutMap.get("xh"));
+		if(user !=null){
+			paramMap.put("lrr",user.getUsername());
+			System.out.println("lrr:"+user.getUsername());
+		}
 		//持久化用户注册信息
 		userMapper.addUserInfoselective(paramMap);
 		
@@ -113,9 +127,9 @@ public class UserServiceImpl  implements UserService{
 		userRoleMapper.addUserRole(p);
 		
 		//发送邮件提示用户注册成功
-		MailTemplate template=new MailTemplate();
 		if(paramMap.get("email")!=null && !"".equals(paramMap.get("email"))){
 			String content=MailTemplate.CONTENT_HEAD+paramMap.get("username")+MailTemplate.CONTENT_FOOT;
+			// 爱的用户【XXX】您已注册成功，欢迎您加入如意劳保，您将获得若干新人积分到您的账户"
 			javaMailUtil.sendTxtMail(MailTemplate.SUBJECT,content,from,paramMap.get("email").toString());
 		}
 		

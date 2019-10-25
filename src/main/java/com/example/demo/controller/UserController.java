@@ -1,14 +1,18 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,19 +28,17 @@ public class UserController {
 	@RequestMapping("/getAllUser")
 	@ResponseBody
 	public List getAllUser(HttpServletRequest request){
-		List result=userService.getAllUsers();
-		System.out.println("result:"+result);
+		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
+		List result=userService.getAllUsersByParam(paramMap);
 		return result; 
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getUserByParam")
 	public String getUserByParam(HttpServletRequest request,Model model){
-		Map<String,Object> param=new HashMap<>();
-		param=getParamMap(request.getParameterMap());
+		Map<String,Object> param=getParamMap(request.getParameterMap());
 		if(param.get("id")!=null && !"".equals(param)){
 			List result=userService.getUserByParam(param);
-			System.out.println("result:"+result);
 			if(result !=null){
 				model.addAttribute("users",result);
 			}
@@ -60,7 +62,24 @@ public class UserController {
 		}
 		return result;
 	}
-	
+
+	@PostMapping("/addUserInfo")
+	@ResponseBody
+	public Map<String,Object> addUserInfo(HttpServletRequest request){
+		//获取参数
+		Map<String,Object> paramMap=getParamMap(request.getParameterMap());
+		try {
+			userService.addUserInfoselective(paramMap);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		Map<String,Object> result=new HashMap<>();
+		result.put("success",true);
+		result.put("msg","添加用户成功");
+		return result;
+	}
 	
 	//获取参数
 	private Map<String, Object> getParamMap(Map<String, String[]> map){
@@ -74,4 +93,5 @@ public class UserController {
 		} 
 		return paramMap;
 	}
+
 }

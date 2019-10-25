@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" >
+<head></head>
+<body>
+<div class="panel panel-primary" style="padding-bottom:0px; display:none;" th:fragment="toolsBar">
+    <div id="userToolsBar" class="row" style="margin-left:10px;">
+        <div class="col-xs-12">
+            <form id="userSearchForm" class="bs-example bs-example-form" role="form">
+                <input type="hidden" th:value="userSearch" name="action"/>
+                <div class="col-xs-1" >
+                    <span class="text-center"><strong>用户名:</strong></span>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group" >
+                        <input th:type="text" class="form-control" id="search_username" name="username"  style="width:100%"/>
+                    </div>
+                </div>
+                <div class="col-xs-1" >
+                    <span class="text-center"><strong>身份证:</strong></span>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group" >
+                        <input th:type="text" class="form-control" id="search_sfzh" name="sfzh" style="width:100%"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <div  class="fixed-table-toolbar">
+                <div class="columns pull-left">
+
+                    <button type="button" class="btn btn-info" onclick="btn_user_add();">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        新增
+                    </button>
+
+                    <button type="button" class="btn btn-primary" onclick="btn_user_search();">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <span class="glyphicon glyphicon-search"></span>
+                        查询
+                    </button>
+
+                    <button type="button" class="btn btn-danger" onclick="btn_user_remove();">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="addUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" th:fragment="userAddModal">
+    <div class="modal-dialog" role="document" style="width:55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" aria-label="Close">
+                    <span aria-hidden="true" style="font-size:40px;">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2"><i class="glyphicon glyphicon-edit"></i>【添加用户信息】</h4>
+            </div>
+            <div id="userAddModalBody" class="modal-body" style="text-align:center">
+                <form id="userAddForm" class="bs-example bs-example-form" role="form">
+                    <div class="input-group" style="margin-top:20px;">
+                        <input name="password" value="123" type="hidden"/>
+                        <span class="input-group-addon text-center">用户名(昵称):</span>
+                        <input th:type="text" class="form-control" id="username" name="username"/>
+                        <span class="input-group-addon text-center">真实姓名:</span>
+                        <input th:type="text" class="form-control" id="realname" name="realname" />
+                    </div>
+                    <div class="input-group" style="margin-top:20px;">
+                        <span class="input-group-addon text-center">用户性别:</span>
+                        <select id="sex" name="sex" class="form-control">
+                            <option></option>
+                        </select>
+                        <span class="input-group-addon text-center">身份证号<font color="red">*</font>:</span>
+                        <input th:type="text" class="form-control" id="sfzh" name="sfzh" required="required"/>
+                    </div>
+                    <div class="input-group" style="margin-top:20px;">
+                        <span class="input-group-addon text-center">联系邮箱<font color="red">*</font>:</span>
+                        <input th:type="text" class="form-control" name="email" id="email" />
+                        <span class="input-group-addon text-center">联系电话<font color="red">*</font>:</span>
+                        <input th:type="text" class="form-control" name="phone" id="phone" required="required" />
+                    </div>
+                    <div class="input-group" style="margin-top:20px;">
+                        <span class="input-group-addon text-center">联系地址<font color="red">*</font>:</span>
+                        <input th:type="text" class="form-control" name="address" id="address" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="btn_user_add_form();">
+                    <span class="glyphicon glyphicon-ok"></span>保存
+                </button>
+                <button type="button" class="btn green" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

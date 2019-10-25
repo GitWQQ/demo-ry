@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ItemService;
+import springfox.documentation.annotations.Cacheable;
 
 @Controller
 @RequestMapping("/item")
 public class ItemController {
-	
+
+	private static final Logger logger= LoggerFactory.getLogger(ItemController.class);
+
 	@Autowired
 	private ItemService itemService;
 	
@@ -84,9 +89,12 @@ public class ItemController {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
+
 	@RequestMapping(value="/getAllItemRecord",method=RequestMethod.GET)
-	@ResponseBody 	
+	@ResponseBody
+	@Cacheable(value="getAllItem")
 	public List getAllItemRecord(HttpServletRequest request){
+		logger.info("没有走缓存");
 		Map<String,Object> resultMap=new HashMap<String,Object>();
     	Map<String, Object> paramMap=getParamMap(request.getParameterMap());
     	List result=itemService.getAllItemRecord(paramMap);

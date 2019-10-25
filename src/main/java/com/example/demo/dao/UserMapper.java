@@ -17,7 +17,7 @@ public interface UserMapper {
 	 * 获取所有的用户信息(无限制条件)
 	 * @return
 	 */
-	 List getAllUsers();
+	 List getAllUsersByParam(Map paramMap);
 	
 	/**
 	 * 添加用户信息

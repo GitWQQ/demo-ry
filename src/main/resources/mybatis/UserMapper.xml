@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.UserMapper">
 	<resultMap type="User" id="userMap">
 		<id column="ID" jdbcType="VARCHAR" property="id"/>
@@ -17,18 +17,20 @@
 		<result column="CREATED" jdbcType="DATE" property="created"/>
 		<result column="UPDATED" jdbcType="DATE" property="updated"/>
 		<result column="ABOUT_XH" jdbcType="VARCHAR" property="about_xh"/>
-		<collection property="roles" ofType="com.example.demo.domain.Role" javaType="java.util.ArrayList" 
-		select="getRoles" column="ID">
+		<result column="ADDRESS" jdbcType="VARCHAR" property="address"/>
+		<result column="LRR" jdbcType="VARCHAR" property="lrr"/>
+		<collection property="roles" ofType="com.example.demo.domain.Role" javaType="java.util.ArrayList"
+					select="getRoles" column="ID">
 		</collection>
 	</resultMap>
-	
+
 	<resultMap type="Role" id="roleMap">
 		<id column="ID" jdbcType="VARCHAR" property="id"/>
 		<result column="ROLENAME" jdbcType="VARCHAR" property="roleName"/>
 		<result column="ROLECODE" jdbcType="VARCHAR" property="roleCode"/>
 		<result column="CREATE_TIME" jdbcType="DATE" property="create_time"/>
 	</resultMap>
-	
+
 	<sql id="columns">
 		ID,
 		USERNAME,
@@ -47,61 +49,77 @@
 		SALT,
 		CREATED,
 		UPDATED,
-		ABOUT_XH
-	</sql>	
+		ABOUT_XH,
+		ADDRESS,
+		LRR
+	</sql>
 	<sql id="queryByParam">
 		<if test="id !=null and id !=''">
-			id=#{id,jdbcType=VARCHAR}
+			and id=#{id,jdbcType=VARCHAR}
 		</if>
 		<if test="username !=null and username !=''">
-			username=#{username,jdbcType=VARCHAR}
+		   and	username=#{username,jdbcType=VARCHAR}
+		</if>
+		<if test="username_like !=null and username_like !=''">
+		   and	username like concat('%', #{ username_like,jdbcType=VARCHAR},'%')
 		</if>
 		<if test="realname !=null and realname !=''">
-			realname=#{realname,jdbcType=VARCHAR}
+		   and 	realname=#{realname,jdbcType=VARCHAR}
 		</if>
 		<if test="sfzh !=null and sfzh !=''">
-			sfzh=#{sfzh,jdbcType=VARCHAR}
+		   and sfzh=#{sfzh,jdbcType=VARCHAR}
 		</if>
 		<if test="age !=null and age !=''">
-			sfzh=#{age,jdbcType=INTEGER}
+			and sfzh=#{age,jdbcType=INTEGER}
 		</if>
 		<if test="usertype !=null and usertype !=''">
-			usertype=#{usertype,jdbcType=INTEGER}
+			and usertype=#{usertype,jdbcType=INTEGER}
 		</if>
 		<if test="sex !=null and sex !=''">
-			sex=#{sex,jdbcType=VARCHAR}
+		   and	sex=#{sex,jdbcType=VARCHAR}
 		</if>
 		<if test="password !=null and password !=''">
-			password=#{password,jdbcType=VARCHAR}
+			and	 password=#{password,jdbcType=VARCHAR}
 		</if>
 		<if test="phone !=null">
-			phone =#{phone,jdbcType=VARCHAR}
+		 	and phone =#{phone,jdbcType=VARCHAR}
 		</if>
 		<if test="email !=null">
-			email=#{email,jdbcType=VARCHAR}
+		 	and email=#{email,jdbcType=VARCHAR}
 		</if>
 		<if test="created !=null">
-			created=#{created,jdbcType=DATE}
+		 	and created=#{created,jdbcType=DATE}
 		</if>
 		<if test="updated !=null">
-			updated=#{updated,jdbcType=DATE}
+		   and	updated=#{updated,jdbcType=DATE}
 		</if>
 		<if test="about_xh !=null">
-			about_xh=#{about_xh,jdbcType=VARCHAR}
+			and  about_xh=#{about_xh,jdbcType=VARCHAR}
+		</if>
+		<if test="address !=null">
+		  and 	address=#{address,jdbcType=VARCHAR}
+		</if>
+		<if test="lrr !=null">
+	     and  lrr=#{lrr,jdbcType=VARCHAR}
 		</if>
 	</sql>
-	
+
 	<select id="getUserByParam" parameterType="java.util.Map" resultMap="userMap">
 		SELECT <include refid="columns"/> FROM TB_USER
 		<where>
 			<include refid="queryByParam"/>
 		</where>
 	</select>
-	
-	<select id="getAllUsers" resultMap="userMap">
+
+	<select id="getAllUsersByParam" resultMap="userMap">
 		SELECT <include refid="columns"/> FROM TB_USER
+		<where>
+			1=1
+			<include refid="queryByParam"/>
+		</where>
+		ORDER BY created desc
 	</select>
-	
+
 	<!-- 添加用户信息 -->
 	<insert id="addUserInfoselective" parameterType="java.util.Map">
 		INSERT INTO TB_USER
@@ -124,6 +142,9 @@
 			<if test="usertype !=null">
 				USERTYPE,
 			</if>
+			<if test="sex !=null">
+				SEX,
+			</if>
 			<if test="password !=null">
 				PASSWORD,
 			</if>
@@ -137,13 +158,19 @@
 				SALT,
 			</if>
 			<if test="created !=null">
-				CREATED,	
+				CREATED,
 			</if>
 			<if test="updated !=null">
 				UPDATED,
 			</if>
 			<if test="about_xh !=null">
 				ABOUT_XH,
+			</if>
+			<if test="address !=null">
+				ADDRESS,
+			</if>
+			<if test="lrr !=null">
+				LRR,
 			</if>
 		</trim>
 		<trim prefix="values(" suffix=")" suffixOverrides=",">
@@ -164,6 +191,9 @@
 			</if>
 			<if test="usertype !=null">
 				#{usertype,jdbcType=INTEGER},
+			</if>
+			<if test="sex !=null">
+				#{sex,jdbcType=VARCHAR},
 			</if>
 			<if test="password !=null">
 				#{password,jdbcType=VARCHAR},
@@ -186,9 +216,15 @@
 			<if test="about_xh !=null">
 				#{about_xh,jdbcType=VARCHAR},
 			</if>
+			<if test="address !=null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="lrr !=null">
+				#{lrr,jdbcType=VARCHAR},
+			</if>
 		</trim>
 	</insert>
-	
+
 	<!--添加新用户-->
 	<insert id="addUserInfo" parameterType="java.util.Map">
 		INSERT INTO TB_USER(
@@ -204,7 +240,9 @@
 			 salt,
 			 created,
 			 updated,
-			 about_xh
+			 about_xh,
+			 address,
+			 lrr
 		)
 		VALUES(
 			id=#{id,jdbcType=VARCHAR},
@@ -219,13 +257,15 @@
 			salt=#{salt,jdbcType=VARCHAR},
 			now(),
 			now(),
-			about_xh
+			about_xh=#{about_xh,jdbcType=VARCHAR},
+			address=#{address,jdbcType=VARCHAR},
+			lrr=#{lrr,jdbcType=VARCHAR}
 		)
 	</insert>
-	
+
 	<!--根据条件修改用户信息修改密码-->
 	<update id="updateUserInfoByParam" parameterType="java.util.Map">
-		UPDATE TB_USER 
+		UPDATE TB_USER
 		<set>
 			<if test="username !=null and username !=''">
 				username=#{username,jdbcType=VARCHAR},
@@ -257,11 +297,17 @@
 			<if test="updated !=null">
 				updated=#{updated,jdbcType=DATE},
 			</if>
+			<if test="address !=null">
+				address=#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="lrr !=null">
+				lrr=#{lrr,jdbcType=VARCHAR},
+			</if>
 		</set>
-		WHERE 
+		WHERE
 		username=#{username,jdbcType=VARCHAR}
 	</update>
-	
+
 	<select id="getRoles" parameterType="String" resultMap="roleMap">
 		SELECT 
 			r.id,
@@ -271,10 +317,10 @@
 		TB_USER_ROLE ur ON r.id=ur.rid
 		WHERE ur.uid=#{id,jdbcType=VARCHAR}  
 	</select>
-	
+
 	<!-- 注销用户信息 -->
 	<delete id="removeUserByParam" parameterType="java.util.Map">
 		DELETE FROM TB_USER WHERE id=#{id,jdbcType=VARCHAR}
 	</delete>
-	
+
 </mapper>

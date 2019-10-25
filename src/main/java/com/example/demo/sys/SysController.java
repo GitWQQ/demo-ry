@@ -169,8 +169,9 @@ public class SysController {
 	@RequestMapping("/checkNameExist")
 	@ResponseBody
 	public String checkNameExist(@RequestParam String username){
+		Map<String,Object> paramMap=new HashMap<>();
 		boolean result=true;
-		List<User> users=userService.getAllUsers();
+		List<User> users=userService.getAllUsersByParam(paramMap);
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
 				result=false;

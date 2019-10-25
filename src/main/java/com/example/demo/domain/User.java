@@ -56,6 +56,11 @@ public class User implements Serializable{
 	//关于xh
 	private String about_xh;
 
+	//地址
+	private String address;
+	//录入人
+	private String lrr;
+
 	//角色集合，一对多，一个用户可以有多个角色
 	@OneToMany(cascade=CascadeType.ALL,mappedBy = "user")
 	private List<Role> roles;
@@ -174,6 +179,7 @@ public class User implements Serializable{
 	}
 
 
+
 	public User(String id, String username, String realname,String sfzh,Integer age, Integer usertype,
 				String password, String sex, String phone, String email, String salt,
 			String created, String updated, List<Role> roles) {
@@ -207,5 +213,20 @@ public class User implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getLrr() {
+		return lrr;
+	}
+
+	public void setLrr(String lrr) {
+		this.lrr = lrr;
+	}
 }
